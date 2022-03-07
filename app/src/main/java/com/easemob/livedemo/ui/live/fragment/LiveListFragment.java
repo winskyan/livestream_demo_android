@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,14 @@ import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.DemoHelper;
 import com.easemob.livedemo.common.OnItemClickListener;
 import com.easemob.livedemo.common.OnResourceParseCallback;
+import com.easemob.livedemo.common.reponsitories.Resource;
 import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.model.ResponseModule;
 import com.easemob.livedemo.ui.base.GridMarginDecoration;
 import com.easemob.livedemo.ui.live.adapter.LiveListAdapter;
 import com.easemob.livedemo.ui.base.BaseFragment;
 import com.easemob.livedemo.ui.live.viewmodels.LiveListViewModel;
+import com.google.android.material.tabs.TabLayout;
 import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
@@ -85,7 +88,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     private void initArgument() {
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             status = bundle.getString("status");
         }
     }
@@ -98,7 +101,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new GridMarginDecoration(mContext,10));
+        recyclerView.addItemDecoration(new GridMarginDecoration(mContext, 10));
         adapter = new LiveListAdapter();
         recyclerView.setAdapter(adapter);
 
@@ -107,45 +110,50 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     protected void initViewModel() {
         viewModel = new ViewModelProvider(this).get(LiveListViewModel.class);
-        viewModel.getAllObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
-                @Override
-                public void onSuccess(ResponseModule<List<LiveRoom>> data) {
-                    cursor = data.cursor;
-                    hasMoreData = true;
-                    if(data.data.size() < pageSize) {
-                        hasMoreData = false;
-                    }
-                    if(isLoadMore) {
-                        adapter.addData(data.data);
-                    }else {
-                        adapter.setData(data.data);
+        viewModel.getAllObservable().observe(getViewLifecycleOwner(), new Observer<Resource<ResponseModule<List<LiveRoom>>>>() {
+            @Override
+            public void onChanged(Resource<ResponseModule<List<LiveRoom>>> response) {
+                LiveListFragment.this.parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
+                    @Override
+                    public void onSuccess(ResponseModule<List<LiveRoom>> data) {
+                        cursor = data.cursor;
+                        hasMoreData = true;
+                        if (data.data.size() < pageSize) {
+                            hasMoreData = false;
+                        }
+                        if (isLoadMore) {
+                            adapter.addData(data.data);
+                        } else {
+                            adapter.setData(data.data);
+                        }
+
                     }
 
-                }
-
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    hideLoadingView(isLoadMore);
-                }
-            });
+                    @Override
+                    public void hideLoading() {
+                        super.hideLoading();
+                        hideLoadingView(isLoadMore);
+                    }
+                });
+            }
         });
     }
 
     private void initListener() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 refreshList();
             }
         });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(newState == RecyclerView.SCROLL_STATE_IDLE
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && hasMoreData
                         && !isLoading
-                        && layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() -1){
+                        && layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1) {
                     showLiveList(true);
                 }
             }
@@ -156,7 +164,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
-                        if(aBoolean != null && aBoolean) {
+                        if (aBoolean != null && aBoolean) {
                             int limit = pageSize;
                             try {
                                 limit = adapter.getData().size();
@@ -181,11 +189,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     /**
      * 加载数据
+     *
      * @param isLoadMore
      */
-    protected void showLiveList(final boolean isLoadMore){
+    protected void showLiveList(final boolean isLoadMore) {
         this.isLoadMore = isLoadMore;
-        if(!isLoadMore) {
+        if (!isLoadMore) {
             cursor = null;
         }
         loadLiveList(pageSize, cursor);
@@ -193,6 +202,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     /**
      * 加载数据
+     *
      * @param limit
      * @param cursor
      */
@@ -200,9 +210,9 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         viewModel.getLiveRoomList(limit, cursor);
     }
 
-    protected void hideLoadingView(boolean isLoadMore){
+    protected void hideLoadingView(boolean isLoadMore) {
         isLoading = false;
-        if(!isLoadMore)
+        if (!isLoadMore)
             swipeRefreshLayout.setRefreshing(false);
         else
             loadmorePB.setVisibility(View.INVISIBLE);
@@ -217,13 +227,13 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         LiveRoom liveRoom = adapter.getItem(position);
         String status = liveRoom.getStatus();
         boolean living = DemoHelper.isLiving(status);
-        if(living) {
-            if(TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
+        if (living) {
+            if (TextUtils.equals(liveRoom.getOwner(), EMClient.getInstance().getCurrentUser())) {
                 // LiveAnchorActivity.actionStart(mContext, liveRoom);
-            }else {
+            } else {
                 showDialog();
             }
-        }else {
+        } else {
             // LiveAnchorActivity.actionStart(mContext, liveRoom);
         }
     }

@@ -19,9 +19,9 @@ public class CdnLivingListFragment extends LiveListFragment {
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        if(DemoHelper.isCdnLiveType(liveRoom.getVideo_type())) {
+        if (DemoHelper.isCdnLiveType(liveRoom.getVideo_type())) {
             CdnLiveAudienceActivity.actionStart(mContext, liveRoom);
-        }else {
+        } else {
             // LiveAudienceActivity.actionStart(mContext, liveRoom);
         }
     }
@@ -52,13 +52,13 @@ public class CdnLivingListFragment extends LiveListFragment {
                     cursor = data.cursor;
                     hasMoreData = true;
                     List<LiveRoom> livingRooms = data.data;
-                    if(livingRooms.size() < pageSize) {
+                    if (livingRooms.size() < pageSize) {
                         hasMoreData = false;
                     }
-                    if(isLoadMore) {
+                    if (isLoadMore) {
                         adapter.addData(livingRooms);
-                    }else {
-                        if(vodList != null && livingRooms != null) {
+                    } else {
+                        if (vodList != null && livingRooms != null) {
                             livingRooms.addAll(0, vodList);
                         }
                         adapter.setData(livingRooms);

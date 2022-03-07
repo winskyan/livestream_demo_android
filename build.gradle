@@ -24,6 +24,13 @@ allprojects {
     google()
     mavenCentral()
     jcenter()
+
+    configurations.all {
+      resolutionStrategy {
+        //强制使用3.34版本sqlite，否则M1环境编译不过
+        force 'org.xerial:sqlite-jdbc:3.34.0'
+      }
+    }
   }
 }
 

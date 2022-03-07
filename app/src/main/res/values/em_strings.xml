@@ -96,7 +96,7 @@
     <string name="em_live_open_video_fail_title">播放失败，是否退出房间？</string>
 
     <string name="em_set_title">设置</string>
-    <string name="em_set_live_room">环信直播聊天室</string>
+    <string name="em_set_live_room">Stream Channels</string>
     <string name="em_set_select_auto">是否切换为访客模式？</string>
     <string name="em_set_select_login">是否切换为登录模式？</string>
     <string name="em_set_select_switch">切换</string>

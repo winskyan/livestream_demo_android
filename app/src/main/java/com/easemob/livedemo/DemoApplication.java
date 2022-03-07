@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
-import com.easemob.custommessage.EmCustomMsgHelper;
 import com.easemob.fastlive.FastLiveHelper;
 import com.easemob.livedemo.common.LiveDataBus;
 import com.easemob.livedemo.common.UserActivityLifecycleCallbacks;

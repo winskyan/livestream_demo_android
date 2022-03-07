@@ -1,7 +1,5 @@
 package com.easemob.cdn.presenter;
 
-import com.easemob.livedemo.data.model.LiveRoom;
-
 public abstract class CdnHostPresenter extends CdnTokenPresenter {
     public ICdnHostView mView;
 

@@ -2,11 +2,15 @@ package com.easemob.livedemo.ui.other;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.easemob.livedemo.R;
@@ -24,6 +28,14 @@ public class SplashActivity extends BaseLiveActivity {
     private ImageView ivIcon;
     private TextView tvWelcome;
     private LoginViewModel viewModel;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -46,7 +58,7 @@ public class SplashActivity extends BaseLiveActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         AlphaAnimation animation = new AlphaAnimation(0, 1f);
-        animation.setDuration(500);
+        animation.setDuration(3 * 1000);//3s
         ivIcon.startAnimation(animation);
         tvWelcome.startAnimation(animation);
 
@@ -71,17 +83,17 @@ public class SplashActivity extends BaseLiveActivity {
 
     private void skipToTarget() {
         //登录过
-        if(EMClient.getInstance().isLoggedInBefore()){
+        if (EMClient.getInstance().isLoggedInBefore()) {
             PreferenceManager.init(mContext, EMClient.getInstance().getCurrentUser());
             DemoHelper.saveUserId();
             DemoHelper.initDb();
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        }else {
-            if(DemoHelper.isCanRegister()) {
+        } else {
+            if (DemoHelper.isCanRegister()) {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
-            }else {
+            } else {
                 //创建临时账号
                 createRandomUser();
             }

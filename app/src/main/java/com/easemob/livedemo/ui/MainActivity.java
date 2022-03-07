@@ -26,6 +26,8 @@ import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.runtimepermissions.PermissionsManager;
 import com.easemob.livedemo.runtimepermissions.PermissionsResultAction;
 import com.easemob.livedemo.ui.base.BaseLiveActivity;
+import com.easemob.livedemo.ui.cdn.CdnLivingListActivity;
+import com.easemob.livedemo.ui.cdn.fragment.CdnLivingListFragment;
 import com.easemob.livedemo.ui.fast.FastLiveHostActivity;
 import com.easemob.livedemo.ui.other.CreateLiveRoomActivity;
 import com.easemob.livedemo.ui.other.LoginActivity;
@@ -34,6 +36,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class MainActivity extends BaseLiveActivity implements View.OnClickListener {
+    private final static String TAG = MainActivity.class.getSimpleName();
     private EaseTitleBar mTitleBar;
     private Fragment mCurrentFragment;
     private Fragment mHomeFragment, mLiveListFragment, mAboutMeFragment;
@@ -70,7 +73,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     protected void initData() {
         super.initData();
         skipToTarget(position);
-        Log.e("TAG", "user = "+EMClient.getInstance().getCurrentUser());
+        Log.e(TAG, "user = " + EMClient.getInstance().getCurrentUser());
         requestPermissions();
     }
 
@@ -91,25 +94,27 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             position = savedInstanceState.getInt("position");
         }
     }
 
-    @Override protected void onNewIntent(Intent intent) {
+    @Override
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         processConflictIntent(intent);
     }
 
     private void processConflictIntent(Intent intent) {
-        if(intent.getBooleanExtra("conflict", false)) {
+        if (intent.getBooleanExtra("conflict", false)) {
             EMClient.getInstance().logout(false, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.prompt)
                     .setMessage("账户已在别处登录！")
                     .setCancelable(false)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override public void onClick(DialogInterface dialog, int which) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             finish();
                             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -124,8 +129,12 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         ivHomeHome.setImageResource(R.drawable.em_live_home_selected);
         ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
         mHomeFragment = getSupportFragmentManager().findFragmentByTag("home");
-        if(mHomeFragment == null) {
-            mHomeFragment = new VideoTypeFragment();
+        if (mHomeFragment == null) {
+            CdnLivingListFragment fragment = new CdnLivingListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("status", "ongoing");
+            fragment.setArguments(bundle);
+            mHomeFragment = fragment;
         }
         replace(mHomeFragment, "home");
     }
@@ -134,7 +143,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
         ivHomeSet.setImageResource(R.drawable.em_live_set_selected);
         mAboutMeFragment = getSupportFragmentManager().findFragmentByTag("about_me");
-        if(mAboutMeFragment == null) {
+        if (mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
         replace(mAboutMeFragment, "about_me");
@@ -147,15 +156,15 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     }
 
     private void replace(Fragment fragment, String tag) {
-        if(mCurrentFragment != fragment) {
+        if (mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            if(mCurrentFragment != null) {
+            if (mCurrentFragment != null) {
                 t.hide(mCurrentFragment);
             }
             mCurrentFragment = fragment;
-            if(!fragment.isAdded()) {
+            if (!fragment.isAdded()) {
                 t.add(R.id.fl_main_fragment, fragment, tag).show(fragment).commit();
-            }else {
+            } else {
                 t.show(fragment).commit();
             }
         }
@@ -164,13 +173,13 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_home_home :
+            case R.id.ll_home_home:
                 skipToTarget(0);
                 break;
-            case R.id.ll_home_set :
+            case R.id.ll_home_set:
                 skipToTarget(1);
                 break;
-            case R.id.rl_home_live :
+            case R.id.rl_home_live:
                 CreateLiveRoomActivity.actionStart(mContext);
                 break;
         }
@@ -180,15 +189,16 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         this.position = position;
         mTitleBar.setVisibility(View.VISIBLE);
         switch (position) {
-            case 0 :
+            case 0:
                 switchToHome();
                 mTitleBar.setTitle(getResources().getString(R.string.em_set_live_room));
+                mTitleBar.setRightImageResource(R.drawable.home_search);
                 break;
 //            case 1 :
 //                switchToLiveList();
 //                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
 //                break;
-            case 1 :
+            case 1:
                 switchToAboutMe();
                 mTitleBar.setTitle(getResources().getString(R.string.em_set_title));
                 break;

@@ -5,7 +5,6 @@ import com.easemob.cdn.presenter.CdnHostPresenter;
 import com.easemob.livedemo.common.ThreadManager;
 import com.easemob.livedemo.data.model.AgoraTokenBean;
 import com.easemob.livedemo.data.model.CdnUrlBean;
-import com.easemob.livedemo.data.model.LiveRoom;
 import com.easemob.livedemo.data.restapi.LiveException;
 import com.easemob.livedemo.data.restapi.LiveManager;
 

@@ -3,6 +3,7 @@ package com.easemob.livedemo.data.model;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class LiveRoom extends BaseBean implements Serializable {
     }
 
     public int getAudienceNum() {
-        return audienceNum == null?0:audienceNum;
+        return audienceNum == null ? 0 : audienceNum;
     }
 
     public void setAudienceNum(Integer audienceNum) {
@@ -176,19 +177,19 @@ public class LiveRoom extends BaseBean implements Serializable {
     }
 
     public LinkedList<String> getMemberList(int max_size) {
-        if(members == null) {
+        if (members == null) {
             return null;
         }
         List<MemberBean> newList = null;
-        if(members.size() > max_size) {
+        if (members.size() > max_size) {
             newList = members.subList(0, max_size);
-        }else {
+        } else {
             newList = members;
         }
         LinkedList<String> list = new LinkedList<>();
-        for(int i = 0; i < members.size(); i++) {
+        for (int i = 0; i < members.size(); i++) {
             MemberBean memberBean = members.get(i);
-            if(!memberBean.isOwner()) {
+            if (!memberBean.isOwner()) {
                 list.add(memberBean.getMember());
             }
         }
@@ -209,5 +210,28 @@ public class LiveRoom extends BaseBean implements Serializable {
 
     public enum Type {
         live, vod, agora_speed_live, agora_cdn_live, agora_interaction_live, agora_vod
+    }
+
+    @Override
+    public String toString() {
+        return "LiveRoom{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", audienceNum=" + audienceNum +
+                ", cover='" + cover + '\'' +
+                ", chatroomId='" + chatroomId + '\'' +
+                ", owner='" + owner + '\'' +
+                ", description='" + description + '\'' +
+                ", livePushUrl='" + livePushUrl + '\'' +
+                ", livePullUrl='" + livePullUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", ext=" + ext +
+                ", maxusers=" + maxusers +
+                ", members=" + members +
+                ", persistent=" + persistent +
+                ", video_type='" + video_type + '\'' +
+                ", mute=" + mute +
+                ", channel='" + channel + '\'' +
+                '}';
     }
 }
