@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     
-    <com.hyphenate.easeui.widget.EaseTitleBar
+    <io.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_title_bar_height"
@@ -115,7 +115,7 @@
 
                 </LinearLayout>
 
-                <com.hyphenate.easeui.widget.EaseImageView
+                <io.hyphenate.easeui.widget.EaseImageView
                     android:id="@+id/img_live_cover"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

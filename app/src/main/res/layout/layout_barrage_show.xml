@@ -8,7 +8,7 @@
     android:layout_marginRight="5dp"
     android:background="@drawable/barrage_show_anim_bg">
 
-    <com.hyphenate.easeui.widget.EaseImageView
+    <io.hyphenate.easeui.widget.EaseImageView
         android:layout_width="36.0dip"
         android:layout_height="36.0dip"
         android:src="@drawable/ease_default_avatar"

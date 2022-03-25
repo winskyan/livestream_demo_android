@@ -1,39 +1,39 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: "config.gradle"
 buildscript {
-  repositories {
+    repositories {
 //    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
 //    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-    google()
-    mavenCentral()
-    jcenter()
-  }
-  dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.2'
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.2.2'
 //    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
-    // NOTE: Do not place your application dependencies here; they belong
-    // in the individual module build.gradle files
-  }
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
 }
 
 allprojects {
-  repositories {
+    repositories {
 //    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
 //    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-    google()
-    mavenCentral()
-    jcenter()
+        google()
+        mavenCentral()
+        jcenter()
 
-    configurations.all {
-      resolutionStrategy {
-        //强制使用3.34版本sqlite，否则M1环境编译不过
-        force 'org.xerial:sqlite-jdbc:3.34.0'
-      }
+        configurations.all {
+            resolutionStrategy {
+                //Force the use of sqlite version 3.34, otherwise the M1 environment will not compile
+                force 'org.xerial:sqlite-jdbc:3.34.0'
+            }
+        }
     }
-  }
 }
 
 task clean(type: Delete) {
-  delete rootProject.buildDir
+    delete rootProject.buildDir
 }

@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.easemob.livedemo.ui.live.fragment.RoomUserManagementFragment"
+    tools:context="io.agora.livedemo.ui.live.fragment.RoomUserManagementFragment"
     >
 
-    <com.easemob.livedemo.ui.widget.MySwipeRefreshLayout
+    <io.agora.livedemo.ui.widget.MySwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe_refresh_layout"
@@ -17,5 +17,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-    </com.easemob.livedemo.ui.widget.MySwipeRefreshLayout>
+    </io.agora.livedemo.ui.widget.MySwipeRefreshLayout>
 </FrameLayout>

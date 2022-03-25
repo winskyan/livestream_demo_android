@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/left_gift_anim_bg">
 
-        <com.hyphenate.easeui.widget.EaseImageView
+        <io.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/avatar"
             android:layout_width="44.0dip"
             android:layout_height="44.0dip"

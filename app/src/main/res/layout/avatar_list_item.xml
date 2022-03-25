@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.hyphenate.easeui.widget.EaseImageView
+    <io.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/avatar"
         android:layout_width="@dimen/item_small_avatar_size"
         android:layout_height="@dimen/item_small_avatar_size"

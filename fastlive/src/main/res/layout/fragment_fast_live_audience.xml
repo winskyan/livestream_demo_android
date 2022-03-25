@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.easemob.fastlive.widgets.VideoGridContainer
+    <io.agora.fastlive.widgets.VideoGridContainer
         android:id="@+id/vg_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

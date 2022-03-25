@@ -16,7 +16,7 @@
         android:paddingEnd="68dp"
         android:background="@drawable/em_live_gift_show_bg_shape">
 
-        <com.hyphenate.easeui.widget.EaseImageView
+        <io.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_icon"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -77,7 +77,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"/>
 
-    <com.easemob.livedemo.ui.widget.MagicTextView
+    <io.agora.livedemo.ui.widget.MagicTextView
         android:id="@+id/tv_gift_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -18,7 +18,7 @@
         android:layout_marginStart="@dimen/em_margin_15"
         android:background="@drawable/em_live_live_anchor_bg_shape">
 
-        <com.hyphenate.easeui.widget.EaseImageView
+        <io.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/item_small_avatar_size"
             android:layout_height="@dimen/item_small_avatar_size"

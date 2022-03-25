@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f2f0eb"
-    tools:context="com.easemob.livedemo.ui.other.fragment.ChatFragment"
     >
 
   <androidx.appcompat.widget.Toolbar
@@ -31,14 +30,14 @@
 
   </androidx.appcompat.widget.Toolbar>
 
-  <com.hyphenate.easeui.widget.EaseChatMessageList
-      android:id="@+id/message_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginTop="1dp"
-      android:layout_above="@+id/container_send"
-      android:layout_below="@+id/toolbar"
-      />
+<!--  <com.hyphenate.easeui.widget.EaseChatMessageList-->
+<!--      android:id="@+id/message_list"-->
+<!--      android:layout_width="match_parent"-->
+<!--      android:layout_height="match_parent"-->
+<!--      android:layout_marginTop="1dp"-->
+<!--      android:layout_above="@+id/container_send"-->
+<!--      android:layout_below="@+id/toolbar"-->
+<!--      />-->
 
   <LinearLayout
       android:id="@+id/container_send"

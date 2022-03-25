@@ -32,7 +32,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/em_size_normal"/>
 
-    <com.hyphenate.easeui.widget.EaseImageView
+    <io.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/img_avatar"
         android:layout_width="@dimen/em_margin_20"
         android:layout_height="@dimen/em_margin_20"

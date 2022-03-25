@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         >
 
-        <com.hyphenate.easeui.widget.EaseImageView
+        <io.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/img_avatar"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"

@@ -25,7 +25,7 @@
         android:paddingRight="15dp"
         />
 
-    <com.hyphenate.easeui.widget.EaseImageView
+    <io.hyphenate.easeui.widget.EaseImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ease_default_avatar"

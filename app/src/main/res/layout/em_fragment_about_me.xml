@@ -36,7 +36,7 @@
         android:background="#fff9f9f9"
         android:layout_marginTop="@dimen/em_margin_30"/>
 
-    <com.easemob.livedemo.ui.widget.ArrowItemView
+    <io.agora.livedemo.ui.widget.ArrowItemView
         android:id="@+id/item_version"
         android:layout_width="0dp"
         android:layout_height="66dp"
@@ -47,7 +47,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_divider"/>
 
-    <com.easemob.livedemo.ui.widget.ArrowItemView
+    <io.agora.livedemo.ui.widget.ArrowItemView
         android:id="@+id/item_about"
         android:layout_width="0dp"
         android:layout_height="66dp"

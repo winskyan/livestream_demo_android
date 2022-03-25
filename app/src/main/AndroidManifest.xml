@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easemob.livedemo">
+    package="io.agora.livedemo">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -26,7 +26,6 @@
     <!-- qiniu need permission end -->
 
     <!--agora need start -->
-    <!-- 如果你使用的是 Android 10.0 及以上设备，还需要添加如下权限： -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <!-- agora need end -->

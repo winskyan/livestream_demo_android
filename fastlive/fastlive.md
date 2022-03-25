@@ -60,8 +60,8 @@ private void initAgora() {
             Bundle bundle = new Bundle();
             bundle.putString("channel", liveRoom.getChannel());
             bundle.putString("roomId", liveRoom.getId());
-            bundle.putString("hxId", EMClient.getInstance().getCurrentUser());
-            bundle.putString("hxAppkey", EMClient.getInstance().getOptions().getAppKey());
+            bundle.putString("hxId", ChatClient.getInstance().getCurrentUser());
+            bundle.putString("hxAppkey", ChatClient.getInstance().getOptions().getAppKey());
             fastFragment.setArguments(bundle);
         }else {
             fastFragment.setPresenter(presenter);
@@ -80,8 +80,8 @@ private void initAgora() {
             Bundle bundle = new Bundle();
             bundle.putString("channel", liveRoom.getChannel());
             bundle.putString("roomId", liveRoom.getId());
-            bundle.putString("hxId", EMClient.getInstance().getCurrentUser());
-            bundle.putString("hxAppkey", EMClient.getInstance().getOptions().getAppKey());
+            bundle.putString("hxId", ChatClient.getInstance().getCurrentUser());
+            bundle.putString("hxAppkey", ChatClient.getInstance().getOptions().getAppKey());
             fastFragment.setArguments(bundle);
         }else {
             fastFragment.setPresenter(presenter);

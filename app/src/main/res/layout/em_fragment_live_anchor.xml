@@ -9,7 +9,7 @@
     <include layout="@layout/layout_live_toolbar"
         android:id="@+id/toolbar"/>
 
-    <com.easemob.livedemo.ui.widget.SingleBarrageView
+    <io.agora.livedemo.ui.widget.SingleBarrageView
         android:id="@+id/barrageView"
         android:layout_width="0dp"
         android:layout_height="120dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_marginTop="@dimen/em_margin_20"/>
 
-    <com.easemob.livedemo.ui.widget.RoomMessagesView
+    <io.agora.livedemo.ui.widget.RoomMessagesView
         android:id="@+id/message_view"
         android:layout_width="0dp"
         android:layout_height="280dp"
@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <com.easemob.livedemo.ui.widget.ShowGiveGiftView
+    <io.agora.livedemo.ui.widget.ShowGiveGiftView
         android:id="@+id/show_gift_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_marginStart="@dimen/em_margin_10"
         android:layout_marginBottom="@dimen/em_margin_40"/>
 
-    <com.easemob.livedemo.ui.widget.PeriscopeLayout
+    <io.agora.livedemo.ui.widget.PeriscopeLayout
         android:id="@+id/periscope_layout"
         android:layout_width="150dp"
         android:layout_height="190dp"

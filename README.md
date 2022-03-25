@@ -51,17 +51,17 @@ EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId);
 ```Java
 EmCustomMsgHelper.getInstance().setOnCustomMsgReceiveListener(new OnCustomMsgReceiveListener() {
     @Override
-    public void onReceiveGiftMsg(EMMessage message) {
+    public void onReceiveGiftMsg(ChatMessage message) {
         //接收到礼物消息的处理逻辑
     }
 
     @Override
-    public void onReceivePraiseMsg(EMMessage message) {
+    public void onReceivePraiseMsg(ChatMessage message) {
         //接收到点赞消息的处理逻辑
     }
 
     @Override
-    public void onReceiveBarrageMsg(EMMessage message) {
+    public void onReceiveBarrageMsg(ChatMessage message) {
         //接收到弹幕消息的处理逻辑
     }
 });
@@ -85,36 +85,36 @@ public void sendBarrageMsg(Map<String, String> params, OnMsgCallBack callBack); 
 //甚至也可以调用如下方法发送自定义消息
 public void sendCustomMsg(String event, Map<String, String> params, OnMsgCallBack callBack);
 
-public void sendCustomMsg(String to, EMMessage.ChatType chatType, String event
+public void sendCustomMsg(String to, ChatMessage.ChatType chatType, String event
 , Map<String, String> params, OnMsgCallBack callBack);
 ```
 #### 5. 解析自定义消息</br>
 （1）如果发送的自定义参数与library中相同，可以直接调用如下方法，获得所传的数据
 ```Java
 //获取礼物消息中礼物的id
-public String getMsgGiftId(EMMessage msg);
+public String getMsgGiftId(ChatMessage msg);
 //获取礼物消息中礼物的数量
-public int getMsgGiftNum(EMMessage msg);
+public int getMsgGiftNum(ChatMessage msg);
 //获取点赞消息中点赞的数目
-public int getMsgPraiseNum(EMMessage msg);
+public int getMsgPraiseNum(ChatMessage msg);
 //获取弹幕消息中的文本内容
-public String getMsgBarrageTxt(EMMessage msg);
+public String getMsgBarrageTxt(ChatMessage msg);
 ```
 （2）如果自定义消息参数与library中不同，可以调用如下方法，获取消息中的参数
 ```Java
-public Map<String, String> getCustomMsgParams(EMMessage message);
+public Map<String, String> getCustomMsgParams(ChatMessage message);
 ```
 #### 6. library中还提供了，判断自定义消息类型的方法
 ```Java
-public boolean isGiftMsg(EMMessage msg);    //礼物消息判断
+public boolean isGiftMsg(ChatMessage msg);    //礼物消息判断
 
-public boolean isPraiseMsg(EMMessage msg);  //点赞消息判断
+public boolean isPraiseMsg(ChatMessage msg);  //点赞消息判断
 
-public boolean isBarrageMsg(EMMessage msg); //弹幕消息判断
+public boolean isBarrageMsg(ChatMessage msg); //弹幕消息判断
 ```
 ## 环信直播聊天室架构介绍
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)</br>
-环信聊天室中有两个repository，EmClientRepository及AppServerRepository。其中EmClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
+环信聊天室中有两个repository，ChatClientRepository及AppServerRepository。其中ChatClientRepository用户处理环信SDK提供     的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管    理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
 
 ## 集成视频直播SDK
 环信聊天室提供了多种直播类型：

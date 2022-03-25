@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.hyphenate:hyphenate-chat:3.8.0'
-//    implementation project(path: ':emclient-android')
-//    api project(path: ':emclient-android:hyphenatechatsdk')
+    api 'io.agora.rtc:chat-sdk:1.0.1'
+//    implementation project(path: ':ChatClient-android')
+//    api project(path: ':ChatClient-android:hyphenatechatsdk')
 }
