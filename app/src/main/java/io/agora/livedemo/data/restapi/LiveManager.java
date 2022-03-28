@@ -1,13 +1,12 @@
 package io.agora.livedemo.data.restapi;
 
+import java.io.IOException;
+
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.BuildConfig;
 import io.agora.livedemo.common.LoggerInterceptor;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.CdnUrlBean;
-
-import java.io.IOException;
-
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -28,7 +27,7 @@ public class LiveManager {
 
     private static LiveManager instance;
 
-    private LiveManager(){
+    private LiveManager() {
 
         LoggerInterceptor logger = new LoggerInterceptor("LoggerInterceptor", true, true);
         OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -50,7 +49,8 @@ public class LiveManager {
 
     static class RequestInterceptor implements Interceptor {
 
-        @Override public okhttp3.Response intercept(Chain chain) throws IOException {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
             Request original = chain.request();
             Request request = original.newBuilder()
                     .header("Authorization", "Bearer " + ChatClient.getInstance().getAccessToken())
@@ -58,13 +58,13 @@ public class LiveManager {
                     .header("Content-Type", "application/json")
                     .method(original.method(), original.body())
                     .build();
-            okhttp3.Response response =  chain.proceed(request);
+            okhttp3.Response response = chain.proceed(request);
             return response;
         }
     }
 
-    public static LiveManager getInstance(){
-        if(instance == null){
+    public static LiveManager getInstance() {
+        if (instance == null) {
             instance = new LiveManager();
         }
         return instance;
@@ -92,10 +92,10 @@ public class LiveManager {
         apiService.deleteLiveRoom(roomId);
     }
 
-    private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException{
+    private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException {
         try {
             Response<T> response = responseCall.execute();
-            if(!response.isSuccessful()){
+            if (!response.isSuccessful()) {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
             return response;
@@ -104,7 +104,7 @@ public class LiveManager {
         }
     }
 
-    private RequestBody jsonToRequestBody(String jsonStr){
+    private RequestBody jsonToRequestBody(String jsonStr) {
         return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr);
     }
 }

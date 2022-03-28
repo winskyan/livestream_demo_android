@@ -16,15 +16,15 @@ import java.util.Map;
  * 替代EventBus及RxBus
  * 代码源自：Android消息总线的演进之路：用LiveDataBus替代RxBus、EventBus
  * https://mp.weixin.qq.com/s?__biz=MjM5NjQ5MTI5OA==&mid=2651748475&idx=4&sn=8feb14dd49ce79726ecf12eb6c243740&chksm=bd12a1368a652820df7c556182d3494d84ae38d4aee4e84c48c227aa5083ebf2b1a0150cf1b5&mpshare=1&scene=1&srcid=1010fzmNILeVVxi5HsAG8R17#rd
- *
+ * <p>
  * 基本使用：
  * 注册订阅：
  * LiveDataBus.get().getChannel("key_test", Boolean.class)
- *         .observe(this, new Observer<Boolean>() {
- *             @Override
- *             public void onChanged(@Nullable Boolean aBoolean) {
- *             }
- *         });
+ * .observe(this, new Observer<Boolean>() {
+ *
+ * @Override public void onChanged(@Nullable Boolean aBoolean) {
+ * }
+ * });
  * 发送消息：
  * LiveDataBus.get().getChannel("key_test").setValue(true);
  */

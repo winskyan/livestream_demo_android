@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.util.List;
+
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.BuildConfig;
@@ -18,9 +20,6 @@ import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.ui.base.BaseLiveFragment;
 import io.agora.livedemo.ui.other.LoginActivity;
 import io.agora.livedemo.ui.widget.ArrowItemView;
-
-
-import java.util.List;
 
 public class AboutMeFragment extends BaseLiveFragment implements View.OnClickListener, View.OnLongClickListener {
     private ArrowItemView itemVersion;
@@ -58,7 +57,7 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.item_about :
+            case R.id.item_about:
                 startToAbout();
                 break;
             case R.id.btn_out:
@@ -76,7 +75,7 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_logo :
+            case R.id.iv_logo:
                 showSelectDialog();
                 return true;
         }
@@ -132,14 +131,14 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
     }
 
     private void skipToLogin() {
-        DemoHelper.clearUserId();
+        DemoHelper.clearUser();
         Intent intent = new Intent(mContext, LoginActivity.class);
         startActivity(intent);
 
         List<Activity> activities = DemoApplication.getInstance().getActivityLifecycle().getActivityList();
-        if(activities != null && !activities.isEmpty()) {
+        if (activities != null && !activities.isEmpty()) {
             for (Activity activity : activities) {
-                if(!(activity instanceof LoginActivity)) {
+                if (!(activity instanceof LoginActivity)) {
                     activity.finish();
                 }
             }

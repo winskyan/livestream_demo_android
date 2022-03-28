@@ -3,6 +3,8 @@ package io.agora.livedemo.ui.live;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.List;
+
 import io.agora.ChatRoomChangeListener;
 import io.agora.Error;
 import io.agora.MessageListener;
@@ -16,8 +18,6 @@ import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
-
-import java.util.List;
 
 public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListener {
     private BaseActivity mContext;

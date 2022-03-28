@@ -1,19 +1,12 @@
 package io.agora.livedemo.common.reponsitories;
 
+import static io.agora.cloud.HttpClientManager.Method_POST;
+
+import android.text.TextUtils;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-
-import io.agora.CallBack;
-import io.agora.ValueCallBack;
-import io.agora.chat.ChatClient;
-import io.agora.chat.ChatRoom;
-import io.agora.cloud.EMCloudOperationCallback;
-import io.agora.cloud.EMHttpClient;
-import io.agora.exceptions.ChatException;
-import io.agora.livedemo.common.ThreadManager;
-import io.agora.livedemo.data.UserRepository;
-import io.agora.livedemo.data.model.User;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +15,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.agora.CallBack;
+import io.agora.Error;
+import io.agora.ValueCallBack;
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatRoom;
+import io.agora.cloud.EMCloudOperationCallback;
+import io.agora.cloud.EMHttpClient;
+import io.agora.cloud.HttpClientManager;
+import io.agora.cloud.HttpResponse;
+import io.agora.exceptions.ChatException;
+import io.agora.livedemo.BuildConfig;
+import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.data.model.LoginBean;
+import io.agora.livedemo.data.model.User;
 
 public class EmClientRepository extends BaseEMRepository {
 
@@ -69,16 +77,16 @@ public class EmClientRepository extends BaseEMRepository {
     }
 
     /**
-     * 登录
+     * log in by id and nickname
      *
      * @param user
      * @return
      */
-    public LiveData<Resource<User>> Login(User user) {
+    public LiveData<Resource<User>> log(User user) {
         return new NetworkOnlyResource<User, User>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
-                ChatClient.getInstance().login(user.getUsername(), UserRepository.getInstance().getDefaultPsw(), new CallBack() {
+                ChatClient.getInstance().login(user.getId(), user.getNickName(), new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(user));
@@ -98,27 +106,86 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 注册
-     *
-     * @param user
-     * @return
-     */
-    public LiveData<Resource<User>> register(User user) {
-        return new NetworkOnlyResource<User, User>() {
+    public LiveData<Resource<Boolean>> loginByAppServer(String username, String nickname) {
+        return new NetworkOnlyResource<Boolean, Boolean>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
-                    try {
-                        ChatClient.getInstance().createAccount(user.getUsername(), UserRepository.getInstance().getDefaultPsw());
-                        callBack.onSuccess(createLiveData(user));
-                    } catch (ChatException e) {
-                        e.printStackTrace();
-                        callBack.onError(e.getErrorCode(), e.getMessage());
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                loginToAppServer(username, nickname, new ResultCallBack<LoginBean>() {
+                    @Override
+                    public void onSuccess(LoginBean value) {
+                        if (value != null && !TextUtils.isEmpty(value.getAccessToken())) {
+                            ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    success(nickname, callBack);
+                                }
+
+                                @Override
+                                public void onError(int code, String error) {
+                                    callBack.onError(code, error);
+
+                                }
+
+                                @Override
+                                public void onProgress(int progress, String status) {
+
+                                }
+                            });
+                        } else {
+                            callBack.onError(Error.GENERAL_ERROR, "AccessToken is null!");
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
                     }
                 });
             }
         }.asLiveData();
+    }
+
+    private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {
+        runOnIOThread(() -> {
+            try {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+
+                JSONObject request = new JSONObject();
+                request.putOpt("userAccount", username);
+                request.putOpt("userNickname", nickname);
+
+                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
+                HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
+                int code = response.code;
+                String responseInfo = response.content;
+                if (code == 200) {
+                    if (responseInfo != null && responseInfo.length() > 0) {
+                        JSONObject object = new JSONObject(responseInfo);
+                        String token = object.getString("accessToken");
+                        LoginBean bean = new LoginBean();
+                        bean.setAccessToken(token);
+                        bean.setUserNickname(nickname);
+                        if (callBack != null) {
+                            callBack.onSuccess(bean);
+                        }
+                    } else {
+                        callBack.onError(code, responseInfo);
+                    }
+                } else {
+                    callBack.onError(code, responseInfo);
+                }
+            } catch (Exception e) {
+                //e.printStackTrace();
+                callBack.onError(Error.NETWORK_ERROR, e.getMessage());
+            }
+        });
+    }
+
+    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        // ** manually load all local groups and conversation
+        callBack.onSuccess(createLiveData(true));
     }
 
     /**

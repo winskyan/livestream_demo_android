@@ -15,38 +15,70 @@
 
     <RelativeLayout
         android:id="@+id/left_layout"
-        android:layout_width="50dip"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/ease_common_tab_bg">
+        android:background="@drawable/ease_common_tab_bg"
+        android:minWidth="50dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/left_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            tools:src="@drawable/ease_mm_title_back" />
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/title"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/em_toolbar_color_title"
-        android:textSize="@dimen/em_toolbar_title_size"
-        tools:text="标题" />
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:visibility="gone"
+            app:ease_shape_type="round"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ease_toolbar_color_title"
+            android:textSize="@dimen/ease_toolbar_title_size"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginStart="0dp"
+            tools:text="Title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/right_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ease_common_tab_bg"
+        android:foreground="@drawable/ease_ripple_click_gray"
         android:minWidth="50dp">
 
         <ImageView
@@ -60,9 +92,14 @@
             android:id="@+id/right_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/em_toolbar_color_title_right"
-            android:textSize="@dimen/em_toolbar_title_right_size" />
+            android:layout_centerVertical="true"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/ease_toolbar_color_title_right"
+            android:textSize="@dimen/ease_toolbar_title_right_size"
+            tools:text="cancel" />
 
     </RelativeLayout>
 

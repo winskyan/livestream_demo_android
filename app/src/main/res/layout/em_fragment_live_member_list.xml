@@ -23,7 +23,7 @@
         android:drawablePadding="6dp"
         tools:text="观众298人"
         android:textColor="@color/white"
-        android:textSize="@dimen/em_size_normal"/>
+        android:textSize="@dimen/em_size_normal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
@@ -32,6 +32,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_member_num"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

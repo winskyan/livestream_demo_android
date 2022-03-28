@@ -9,11 +9,12 @@ import java.security.NoSuchAlgorithmException;
 public class MD5 {
     /**
      * 进行MD5加密
+     *
      * @param str
      * @return
      */
     public static String encrypt2MD5(String str) {
-        if(TextUtils.isEmpty(str)) {
+        if (TextUtils.isEmpty(str)) {
             return "";
         }
         String hexStr = "";
@@ -22,7 +23,7 @@ public class MD5 {
             //对生成的16字节数组进行补零操作
             StringBuilder hex = new StringBuilder(hash.length * 2);
             for (byte b : hash) {
-                if ((b & 0xFF) < 0x10){
+                if ((b & 0xFF) < 0x10) {
                     hex.append("0");
                 }
                 hex.append(Integer.toHexString(b & 0xFF));

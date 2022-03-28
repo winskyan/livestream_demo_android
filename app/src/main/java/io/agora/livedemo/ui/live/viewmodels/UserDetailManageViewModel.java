@@ -2,12 +2,11 @@ package io.agora.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
 
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MediatorLiveData;
+
+import java.util.List;
 
 import io.agora.chat.ChatRoom;
 import io.agora.livedemo.common.reponsitories.EmClientRepository;
@@ -35,6 +34,7 @@ public class UserDetailManageViewModel extends AndroidViewModel {
 
     /**
      * 加入白名单
+     *
      * @param chatRoomId
      * @param members
      */
@@ -45,6 +45,7 @@ public class UserDetailManageViewModel extends AndroidViewModel {
 
     /**
      * 将用户从白名单中移除
+     *
      * @param chatRoomId
      * @param members
      */
@@ -55,6 +56,7 @@ public class UserDetailManageViewModel extends AndroidViewModel {
 
     /**
      * 禁止聊天室成员发言
+     *
      * @param chatRoomId
      * @param members
      * @param duration
@@ -66,6 +68,7 @@ public class UserDetailManageViewModel extends AndroidViewModel {
 
     /**
      * 取消禁言
+     *
      * @param chatRoomId
      * @param members
      */

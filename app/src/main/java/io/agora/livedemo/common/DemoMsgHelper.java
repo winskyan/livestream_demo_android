@@ -10,13 +10,16 @@ import io.agora.custommessage.OnMsgCallBack;
 
 public class DemoMsgHelper {
     private static DemoMsgHelper instance;
-    private DemoMsgHelper(){}
+
+    private DemoMsgHelper() {
+    }
+
     private String chatroomId;
 
     public static DemoMsgHelper getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             synchronized (DemoMsgHelper.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new DemoMsgHelper();
                 }
             }
@@ -26,6 +29,7 @@ public class DemoMsgHelper {
 
     /**
      * 需要在直播页面开始的时候初始化，防止chatroomId为空或不正确
+     *
      * @param chatroomId
      */
     public void init(String chatroomId) {
@@ -55,20 +59,22 @@ public class DemoMsgHelper {
 
     /**
      * 发送文本消息
+     *
      * @param content
      * @param isBarrageMsg
      * @param callBack
      */
     public void sendMsg(String content, boolean isBarrageMsg, OnMsgCallBack callBack) {
-        if(isBarrageMsg) {
+        if (isBarrageMsg) {
             sendBarrageMsg(content, callBack);
-        }else {
+        } else {
             sendTxtMsg(content, callBack);
         }
     }
 
     /**
      * 发送文本消息
+     *
      * @param content
      * @param callBack
      */
@@ -98,6 +104,7 @@ public class DemoMsgHelper {
 
     /**
      * 发送礼物消息
+     *
      * @param giftId
      * @param num
      * @param callBack
@@ -107,7 +114,7 @@ public class DemoMsgHelper {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveGiftInfo(message);
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onSuccess();
                     callBack.onSuccess(message);
                 }
@@ -116,14 +123,14 @@ public class DemoMsgHelper {
             @Override
             public void onProgress(int i, String s) {
                 super.onProgress(i, s);
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onProgress(i, s);
                 }
             }
 
             @Override
             public void onError(String messageId, int code, String error) {
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onError(code, error);
                     callBack.onError(messageId, code, error);
                 }
@@ -133,6 +140,7 @@ public class DemoMsgHelper {
 
     /**
      * 发送点赞消息
+     *
      * @param num
      * @param callBack
      */
@@ -141,7 +149,7 @@ public class DemoMsgHelper {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveLikeInfo(message);
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onSuccess(message);
                 }
             }
@@ -149,14 +157,14 @@ public class DemoMsgHelper {
             @Override
             public void onProgress(int i, String s) {
                 super.onProgress(i, s);
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onProgress(i, s);
                 }
             }
 
             @Override
             public void onError(String messageId, int code, String error) {
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onError(code, error);
                     callBack.onError(messageId, code, error);
                 }
@@ -166,6 +174,7 @@ public class DemoMsgHelper {
 
     /**
      * 发送弹幕消息
+     *
      * @param content
      * @param callBack
      */
@@ -175,6 +184,7 @@ public class DemoMsgHelper {
 
     /**
      * 获取礼物消息中礼物的id
+     *
      * @param msg
      * @return
      */
@@ -184,6 +194,7 @@ public class DemoMsgHelper {
 
     /**
      * 获取礼物消息中礼物的数量
+     *
      * @param msg
      * @return
      */
@@ -193,6 +204,7 @@ public class DemoMsgHelper {
 
     /**
      * 获取点赞消息中点赞的数目
+     *
      * @param msg
      * @return
      */
@@ -202,6 +214,7 @@ public class DemoMsgHelper {
 
     /**
      * 获取弹幕消息中的文本
+     *
      * @param msg
      * @return
      */
@@ -212,6 +225,7 @@ public class DemoMsgHelper {
 
     /**
      * 判断是否是礼物消息
+     *
      * @param msg
      * @return
      */
@@ -221,6 +235,7 @@ public class DemoMsgHelper {
 
     /**
      * 判断是否是点赞消息
+     *
      * @param msg
      * @return
      */
@@ -230,6 +245,7 @@ public class DemoMsgHelper {
 
     /**
      * 判断是否是弹幕消息
+     *
      * @param msg
      * @return
      */

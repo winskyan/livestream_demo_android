@@ -11,8 +11,8 @@
     <RelativeLayout
         style="@style/ToolbarNormal"
         android:orientation="vertical"
-        android:gravity="center_vertical"
-        >
+        android:gravity="center_vertical">
+
         <EditText
             android:layout_toLeftOf="@+id/btn_cancel"
             android:id="@+id/edit_text"
@@ -24,8 +24,7 @@
             android:background="#E6E6EB"
             android:imeOptions="actionSearch"
             android:paddingLeft="5dp"
-            android:layout_centerVertical="true"
-            />
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/btn_cancel"
@@ -39,15 +38,13 @@
             android:textColor="@color/common_white"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
     </RelativeLayout>
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/empty_view"
@@ -58,14 +55,13 @@
             android:text="没有搜索到相关信息"
             android:textColor="@color/gray_normal"
             android:layout_marginTop="80dp"
-            android:layout_gravity="center_horizontal"
-        />
+            android:layout_gravity="center_horizontal" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recView"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
-            />
+            app:spanCount="2" />
     </FrameLayout>
 </LinearLayout>

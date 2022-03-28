@@ -1,35 +1,38 @@
 package io.agora.livedemo;
 
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
-
-import io.agora.ConnectionListener;
-import io.agora.Error;
-import io.agora.chat.ChatClient;
-import io.agora.chat.ChatOptions;
-import io.agora.fastlive.FastLiveHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.UserActivityLifecycleCallbacks;
-import io.agora.livedemo.ui.MainActivity;
-
-import java.util.Iterator;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
+import io.agora.ConnectionListener;
+import io.agora.Error;
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatOptions;
+import io.agora.chat.uikit.EaseUIKit;
+import io.agora.fastlive.FastLiveHelper;
+import io.agora.livedemo.common.LiveDataBus;
+import io.agora.livedemo.common.UserActivityLifecycleCallbacks;
+import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.ui.MainActivity;
+import io.agora.util.EMLog;
+
 
 public class DemoApplication extends Application implements Thread.UncaughtExceptionHandler {
     private static final String TAG = DemoApplication.class.getSimpleName();
     private static DemoApplication instance;
-    private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
+    private final UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
+    public boolean isSDKInit;
 
     static {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -43,12 +46,8 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         instance = this;
         registerActivityLifecycleCallbacks();
         registerUncaughtExceptionHandler();
-        initChatSdk();
+        initChatSdk(this.getApplicationContext());
         initAgora();
-
-        //UEasyStreaming.initStreaming("publish3-key");
-
-//    UStreamingContext.init(getApplicationContext(), "publish3-key");
     }
 
     private void initAgora() {
@@ -64,98 +63,88 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         return instance;
     }
 
-    private void initChatSdk() {
-        ChatOptions options = new ChatOptions();
-//    options.enableDNSConfig(false);
-//    options.setRestServer("a1-hsb.easemob.com");
-//    options.setIMServer("106.75.100.247");
-//    options.setImPort(6717);
+    private void initChatSdk(Context context) {
+        if (initSDK(context)) {
+            ChatClient.getInstance().setDebugMode(BuildConfig.DEBUG);
 
-        ChatClientInit(this, options);
-
-        ChatClient.getInstance().setDebugMode(BuildConfig.DEBUG);
-
-        ChatClient.getInstance().addConnectionListener(new ConnectionListener() {
-            @Override
-            public void onConnected() {
-                LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED).postValue(true);
-            }
-
-            @Override
-            public void onDisconnected(int errorCode) {
-                if (errorCode == Error.USER_LOGIN_ANOTHER_DEVICE) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("conflict", true);
-                    startActivity(intent);
+            ChatClient.getInstance().addConnectionListener(new ConnectionListener() {
+                @Override
+                public void onConnected() {
+                    LiveDataBus.get().with(DemoConstants.NETWORK_CONNECTED).postValue(true);
                 }
-            }
-        });
-    }
 
-    private void ChatClientInit(DemoApplication context, ChatOptions options) {
-        int pid = Process.myPid();
-        String processAppName = getAppName(context, pid);
-
-        Log.d("", "process app name : " + processAppName);
-
-        // if there is application has remote service, application:onCreate() maybe called twice
-        // this check is to make sure SDK will initialized only once
-        // return if process name is not application's name since the package name is the default process name
-        if (processAppName == null || !processAppName.equalsIgnoreCase(context.getPackageName())) {
-            Log.e(TAG, "enter the service process!");
-            return;
+                @Override
+                public void onDisconnected(int errorCode) {
+                    if (errorCode == Error.USER_LOGIN_ANOTHER_DEVICE) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("conflict", true);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
-        if (options == null) {
-            ChatClient.getInstance().init(context, initChatOptions());
-        } else {
-            ChatClient.getInstance().init(context, options);
-        }
-
-    }
-
-    private ChatOptions initChatOptions() {
-        Log.d(TAG, "init HuanXin Options");
-
-        ChatOptions options = new ChatOptions();
-        // change to need confirm contact invitation
-        options.setAcceptInvitationAlways(false);
-        // set if need read ack
-        options.setRequireAck(true);
-        // set if need delivery ack
-        options.setRequireDeliveryAck(false);
-
-        return options;
     }
 
     /**
-     * check the application process name if process name is not qualified, then we think it is a service process and we will not init SDK
+     * Initialize Agora Chat SDK
      *
-     * @param pID
+     * @param context
      * @return
      */
-    private String getAppName(Context context, int pID) {
-        String processName = null;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List l = am.getRunningAppProcesses();
-        Iterator i = l.iterator();
-        PackageManager pm = context.getPackageManager();
-        while (i.hasNext()) {
-            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
-            try {
-                if (info.pid == pID) {
-                    CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(info.processName, PackageManager.GET_META_DATA));
-                    // Log.d("Process", "Id: "+ info.pid +" ProcessName: "+
-                    // info.processName +"  Label: "+c.toString());
-                    // processName = c.toString();
-                    processName = info.processName;
-                    return processName;
-                }
-            } catch (Exception e) {
-                // Log.d("Process", "Error>> :"+ e.toString());
-            }
+    private boolean initSDK(Context context) {
+        // Set Chat Options
+        ChatOptions options = initChatOptions(context);
+        if (options == null) {
+            return false;
         }
-        return processName;
+
+        // Configure custom rest server and im server
+        //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
+        //options.setIMServer("106.75.100.247");
+        //options.setImPort(6717);
+        options.setUsingHttpsOnly(false);
+        isSDKInit = EaseUIKit.getInstance().init(context, options);
+        return isSDKInit();
+    }
+
+
+    private ChatOptions initChatOptions(Context context) {
+        Log.d(TAG, "init Agora Chat Options");
+
+        ChatOptions options = new ChatOptions();
+        // You can set your AppKey by options.setAppKey(appkey)
+        if (!checkAgoraChatAppKey(context)) {
+            EMLog.e(TAG, "no agora chat app key and return");
+            return null;
+        }
+        options.setAutoLogin(true);
+        return options;
+    }
+
+    private boolean checkAgoraChatAppKey(Context context) {
+        String appPackageName = context.getPackageName();
+        ApplicationInfo ai = null;
+        try {
+            ai = context.getPackageManager().getApplicationInfo(appPackageName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (ai != null) {
+            Bundle metaData = ai.metaData;
+            if (metaData == null) {
+                return false;
+            }
+            // read appkey
+            String appKeyFromConfig = metaData.getString("EASEMOB_APPKEY");
+            return !TextUtils.isEmpty(appKeyFromConfig) && appKeyFromConfig.contains("#");
+        }
+        return false;
+    }
+
+    public boolean isSDKInit() {
+        return ChatClient.getInstance().isSdkInited();
     }
 
     private void registerActivityLifecycleCallbacks() {

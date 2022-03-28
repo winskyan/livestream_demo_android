@@ -19,6 +19,7 @@ public enum EmCustomMsgType {
     CHATROOM_BARRAGE("chatroom_barrage");
 
     private String name;
+
     private EmCustomMsgType(String name) {
         this.name = name;
     }
@@ -29,7 +30,7 @@ public enum EmCustomMsgType {
 
     public static EmCustomMsgType fromName(String name) {
         for (EmCustomMsgType type : EmCustomMsgType.values()) {
-            if(TextUtils.equals(type.getName(), name)) {
+            if (TextUtils.equals(type.getName(), name)) {
                 return type;
             }
         }

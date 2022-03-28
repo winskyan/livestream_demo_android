@@ -1,57 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.MainActivity"
-    >
-  <androidx.appcompat.widget.Toolbar
-      style="@style/ToolbarNormal"
-      android:id="@+id/toolbar_actionbar"
-      app:navigationIcon="@drawable/home_search"
-      >
-    <TextView
-        style="@style/TitleNormal"
-        android:text="环信直播"
-        />
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarDisplayHomeAsUpEnabled="false"
+        app:titleBarTitle="@string/live_room_title"
+        app:titleBarTitlePosition="left"
+        app:titleBarTitleTextColor="@color/white" />
+
+    <FrameLayout
+        android:id="@+id/fl_main_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar_main" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bottom"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <LinearLayout
+            android:id="@+id/ll_home_home"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/ll_home_middle"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_home_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/em_live_home_selected" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_home_middle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintLeft_toRightOf="@id/ll_home_home"
+            app:layout_constraintRight_toLeftOf="@id/ll_home_set"
+            app:layout_constraintTop_toTopOf="parent">
 
 
-    <TextView
-        android:id="@+id/txt_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:layout_gravity="right"
-        android:gravity="center"
-        android:background="@null"
-        android:text="登出"
-        android:textSize="18sp"
-        android:textColor="@color/common_white"
-        />
-  </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:id="@+id/fragment_container"
-      android:layout_below="@id/toolbar_actionbar"
-      >
-  </FrameLayout>
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:clickable="true"
-      app:fabSize="normal"
-      app:backgroundTint="#19A3FF"
-      android:id="@+id/floatingActionButton"
-      android:src="@drawable/live_start_img"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentRight="true"
-      android:layout_margin="20dp"
-      />
-  <!--app:srcCompat="@color/holo_blue_bright"-->
+        <LinearLayout
+            android:id="@+id/ll_home_set"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ll_home_middle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_home_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/em_live_set_unselected" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_home_live"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/em_live_home_live_bg_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@drawable/em_live" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

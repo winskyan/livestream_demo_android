@@ -1,7 +1,11 @@
 package io.agora.livedemo.common;
 
 import android.text.TextUtils;
-import android.util.Log;
+
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
@@ -13,24 +17,19 @@ import io.agora.fastlive.FastLiveHelper;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
+import io.agora.livedemo.common.db.DemoDbHelper;
+import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
+import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 import io.agora.livedemo.data.TestGiftRepository;
 import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.model.User;
-import io.agora.livedemo.common.db.DemoDbHelper;
-import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
-import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class DemoHelper {
 
     /**
-     * 判断房间状态
+     * is living
      *
      * @param status
      * @return
@@ -40,7 +39,7 @@ public class DemoHelper {
     }
 
     /**
-     * 判断是不是房主
+     * is owner
      *
      * @param username
      * @return
@@ -69,7 +68,7 @@ public class DemoHelper {
     }
 
     /**
-     * 是否显示登陆注册
+     * is can register
      *
      * @return
      */
@@ -82,52 +81,61 @@ public class DemoHelper {
     }
 
     /**
-     * 获取用户的昵称
+     * get nick name
      *
      * @param username
      * @return
      */
     public static String getNickName(String username) {
-        User user = UserRepository.getInstance().getUserByUsername(username);
+        /*User user = UserRepository.getInstance().getUserByUsername(username);
         if (user == null) {
             return username;
         }
-        return user.getNickname();
+        return user.getNickname();*/
+        return "";
     }
 
     /**
-     * 获取当前用户数据（模拟数据）
+     * get current user
      *
      * @return
      */
     public static User getCurrentDemoUser() {
-        User user = UserRepository.getInstance().getCurrentUser();
-        if (user == null) {
-            user = UserRepository.getInstance().getUserByUsername(ChatClient.getInstance().getCurrentUser());
-        }
-        return user;
+        return UserRepository.getInstance().getCurrentUser();
     }
 
     /**
-     * 保存当前用户相关联的id
+     * save current user
      */
-    public static void saveUserId() {
-        PreferenceManager.getInstance().saveUserId(getCurrentDemoUser().getId());
+    public static void saveCurrentUser() {
+        PreferenceManager.getInstance().saveAgoraId(getCurrentDemoUser().getId());
+        PreferenceManager.getInstance().saveNickname(getCurrentDemoUser().getNickName());
+        PreferenceManager.getInstance().saveAvatarResource(getCurrentDemoUser().getAvatarResource());
     }
 
     /**
-     * 清除用户id
+     * clear agora id
      */
-    public static void clearUserId() {
-        PreferenceManager.getInstance().saveUserId("");
+    public static void clearUser() {
+        PreferenceManager.getInstance().saveAgoraId("");
+        PreferenceManager.getInstance().saveNickname("");
+        PreferenceManager.getInstance().saveAvatarResource(-1);
     }
 
-    public static String getUserId() {
-        return PreferenceManager.getInstance().getUserId();
+    public static String getAgoraId() {
+        return PreferenceManager.getInstance().getAgoraId();
+    }
+
+    public static String getNickName() {
+        return PreferenceManager.getInstance().getNickname();
+    }
+
+    public static int getAvatarResource() {
+        return PreferenceManager.getInstance().getAvatarResource();
     }
 
     /**
-     * 获取用户头像信息
+     * get user avatar
      *
      * @param username
      * @return
@@ -137,13 +145,13 @@ public class DemoHelper {
     }
 
     /**
-     * 获取用户头像信息
+     * get user avatar
      *
      * @param username
      * @return
      */
     public static int getAvatarResource(String username, int defaultDrawable) {
-        User user = UserRepository.getInstance().getUserByUsername(username);
+        User user = UserRepository.getInstance().getCurrentUser();
         if (user == null) {
             return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
         }
@@ -153,7 +161,7 @@ public class DemoHelper {
     }
 
     /**
-     * 通过id获取gift对象
+     * get gift
      *
      * @param giftId
      * @return
@@ -162,15 +170,12 @@ public class DemoHelper {
         return TestGiftRepository.getGiftById(giftId);
     }
 
-    /**
-     * 初始化数据库
-     */
     public static void initDb() {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
     }
 
     /**
-     * 获取ReceiveGiftDao
+     * get receive gift
      *
      * @return
      */
@@ -179,7 +184,7 @@ public class DemoHelper {
     }
 
     /**
-     * 保存礼物消息到本地
+     * save gift to local
      *
      * @param message
      */
@@ -210,9 +215,7 @@ public class DemoHelper {
             entity.setGift_num(Integer.valueOf(gift_num));
             List<Long> list = getReceiveGiftDao().insert(entity);
             if (list.size() <= 0) {
-                Log.e("TAG", "保存数据失败！");
             } else {
-                Log.i("TAG", "保存数据成功");
                 LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST).postValue(true);
             }
         }
@@ -242,7 +245,7 @@ public class DemoHelper {
             num = params.get(MsgConstant.CUSTOM_PRAISE_KEY_NUM);
         }
         if (!TextUtils.isEmpty(num)) {
-            int like_num = Integer.valueOf(num);
+            int like_num = Integer.parseInt(num);
             int total = getLikeNum(message.getTo()) + like_num;
             saveLikeNum(message.getTo(), total);
             LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM).postValue(true);
@@ -258,12 +261,6 @@ public class DemoHelper {
         return PreferenceManager.getInstance().getLikeNum(roomId);
     }
 
-    /**
-     * 格式化数字
-     *
-     * @param num
-     * @return
-     */
     public static String formatNum(double num) {
         if (num < 10000) {
             return String.valueOf((int) num);
@@ -271,42 +268,22 @@ public class DemoHelper {
         return new DecimalFormat("#0.0").format(num / 10000) + "万";
     }
 
-    /**
-     * 判断是否是极速直播
-     *
-     * @param videoType
-     * @return
-     */
+
     public static boolean isFastLiveType(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.agora_speed_live.name());
     }
 
-    /**
-     * 判断是否是互动直播
-     *
-     * @param videoType
-     * @return
-     */
+
     public static boolean isInteractionLiveType(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.agora_interaction_live.name());
     }
 
-    /**
-     * 判断是否是CDN直播
-     *
-     * @param videoType
-     * @return
-     */
+
     public static boolean isCdnLiveType(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.agora_cdn_live.name());
     }
 
-    /**
-     * 判断是否是点播
-     *
-     * @param videoType
-     * @return
-     */
+
     public static boolean isVod(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.vod.name()) || TextUtils.equals(videoType, LiveRoom.Type.agora_vod.name());
     }

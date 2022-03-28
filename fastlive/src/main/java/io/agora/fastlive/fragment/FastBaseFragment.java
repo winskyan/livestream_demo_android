@@ -46,6 +46,7 @@ public abstract class FastBaseFragment extends Fragment {
 
     /**
      * 获取布局id
+     *
      * @return
      */
     protected abstract int getLayoutId();
@@ -53,34 +54,40 @@ public abstract class FastBaseFragment extends Fragment {
     /**
      * 获取传递参数
      */
-    protected void initArgument() {}
+    protected void initArgument() {
+    }
 
     /**
      * 初始化布局相关
+     *
      * @param savedInstanceState
      */
     protected void initView(Bundle savedInstanceState) {
-        Log.e("TAG", "fragment = "+this.getClass().getSimpleName());
+        Log.e("TAG", "fragment = " + this.getClass().getSimpleName());
     }
 
 
     /**
      * 初始化ViewModel相关
      */
-    protected void initViewModel() {}
+    protected void initViewModel() {
+    }
 
     /**
      * 初始化监听等
      */
-    protected void initListener() {}
+    protected void initListener() {
+    }
 
     /**
      * 初始化数据相关
      */
-    protected void initData() {}
+    protected void initData() {
+    }
 
     /**
      * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     *
      * @param id
      * @param <T>
      * @return

@@ -17,17 +17,24 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.custommessage.OnCustomMsgReceiveListener;
+import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnItemClickListener;
-import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
@@ -43,23 +50,13 @@ import io.agora.livedemo.ui.widget.RoomMessagesView;
 import io.agora.livedemo.ui.widget.ShowGiveGiftView;
 import io.agora.livedemo.ui.widget.SingleBarrageView;
 import io.agora.livedemo.utils.Utils;
-
 import io.agora.util.EMLog;
-import io.hyphenate.easeui.utils.EaseCommonUtils;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * 基本介绍：
  * 1、{@link com.hyphenate.EMChatRoomChangeListener}和{@link com.hyphenate.ChatMessageListener}均放在{@link ChatRoomPresenter}中实现。
  * 2、发送消息的逻辑均放在{@link DemoMsgHelper}这个单例中。
  * 3、消息列表展示在{@link RoomMessagesView}中。
- *
  */
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
@@ -126,7 +123,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     private long joinTime;
 
     public Handler handler = new Handler() {
-        @Override public void handleMessage(Message msg) {
+        @Override
+        public void handleMessage(Message msg) {
             handleHandlerMessage(msg);
         }
     };
@@ -137,7 +135,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             liveRoom = (LiveRoom) bundle.getSerializable("liveroom");
         }
     }
@@ -166,7 +164,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         viewModel = new ViewModelProvider(mContext).get(LivingViewModel.class);
         userManageViewModel = new ViewModelProvider(this).get(UserManageViewModel.class);
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT, Boolean.class).observe(getViewLifecycleOwner(), event -> {
-            if(event != null && event) {
+            if (event != null && event) {
                 viewModel.getRoomMemberNumber(chatroomId);
             }
         });
@@ -194,6 +192,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 检查直播状态
+     *
      * @param data
      */
     protected void checkLiveStatus(LiveRoom data) {
@@ -221,13 +220,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_member_num :
+            case R.id.tv_member_num:
                 skipToListDialog();
                 break;
-            case R.id.toolbar :
+            case R.id.toolbar:
                 AnchorClick();
                 break;
-            case R.id.live_receive_gift :
+            case R.id.live_receive_gift:
                 onGiftClick();
                 break;
         }
@@ -236,7 +235,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onResume() {
         super.onResume();
-        if(isStartCycleRefresh) {
+        if (isStartCycleRefresh) {
             startCycleRefresh();
         }
     }
@@ -244,20 +243,20 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onPause() {
         super.onPause();
-        if(isStartCycleRefresh) {
+        if (isStartCycleRefresh) {
             stopCycleRefresh();
         }
     }
 
     protected void startCycleRefresh() {
-        if(handler != null) {
+        if (handler != null) {
             handler.removeMessages(CYCLE_REFRESH);
             handler.sendEmptyMessageDelayed(CYCLE_REFRESH, CYCLE_REFRESH_TIME);
         }
     }
 
     protected void stopCycleRefresh() {
-        if(handler != null) {
+        if (handler != null) {
             handler.removeMessages(CYCLE_REFRESH);
         }
     }
@@ -265,7 +264,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onStop() {
         super.onStop();
-        if(mContext != null && mContext.isFinishing()) {
+        if (mContext != null && mContext.isFinishing()) {
             handler.removeCallbacksAndMessages(null);
             isStartCycleRefresh = false;
         }
@@ -273,12 +272,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 处理handler消息
+     *
      * @param msg
      */
     public void handleHandlerMessage(Message msg) {
         switch (msg.what) {
-            case CYCLE_REFRESH :
-                if(!TextUtils.isEmpty(chatroomId)) {
+            case CYCLE_REFRESH:
+                if (!TextUtils.isEmpty(chatroomId)) {
                     isStartCycleRefresh = true;
                     viewModel.getRoomMemberNumber(chatroomId);
                 }
@@ -286,7 +286,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    @OnClick(R.id.comment_image) void onCommentImageClick() {
+    @OnClick(R.id.comment_image)
+    void onCommentImageClick() {
         showInputView();
     }
 
@@ -296,7 +297,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         messageView.getInputView().requestFocus();
         messageView.getInputView().requestFocusFromTouch();
         handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Utils.showKeyboard(messageView.getInputView());
             }
         }, 200);
@@ -305,17 +307,20 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     /**
      * 点击礼物的事件
      */
-    protected void onGiftClick() {}
+    protected void onGiftClick() {
+    }
 
     /**
      * 点击头像
      */
-    protected void AnchorClick(){ }
+    protected void AnchorClick() {
+    }
 
     /**
      * 跳转到member列表
      */
-    protected void skipToListDialog() {}
+    protected void skipToListDialog() {
+    }
 
     /**
      * 展示观众列表（主播）
@@ -323,19 +328,19 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void showUserList() {
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
         RoomUserManagementDialog dialog = (RoomUserManagementDialog) getChildFragmentManager().findFragmentByTag("RoomUserManagementDialog");
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = new RoomUserManagementDialog(chatroomId);
         }
-        if(dialog.isAdded()) {
+        if (dialog.isAdded()) {
             return;
         }
         dialog.show(getChildFragmentManager(), "RoomUserManagementDialog");
     }
 
-    protected void showPraise(final int count){
+    protected void showPraise(final int count) {
         requireActivity().runOnUiThread(() -> {
-            for(int i = 0; i < count; i++){
-                if(!mContext.isFinishing())
+            for (int i = 0; i < count; i++) {
+                if (!mContext.isFinishing())
                     periscopeLayout.addHeart();
             }
         });
@@ -347,7 +352,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void addChatRoomChangeListener() {
         ChatClient.getInstance().chatroomManager().addChatRoomChangeListener(presenter);
     }
-    
+
     private synchronized void onRoomMemberChange(LiveRoom room) {
         watchedCount = room.getAudienceNum();
         memberList = room.getMemberList(MAX_SIZE);
@@ -361,16 +366,17 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         watchedCount++;
         if (!memberList.contains(name)) {
             membersCount++;
-            if(memberList.size() >= MAX_SIZE)
+            if (memberList.size() >= MAX_SIZE)
                 memberList.removeLast();
             memberList.addFirst(name);
             presenter.showMemberChangeEvent(name, getString(R.string.em_live_msg_member_add));
             EMLog.d(TAG, name + "added");
             ThreadManager.getInstance().runOnMainThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     audienceNumView.setText(String.valueOf(membersCount));
                     tvMemberNum.setText(String.valueOf(watchedCount));
-                    if(name.equals(chatroom.getOwner())){
+                    if (name.equals(chatroom.getOwner())) {
                         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
                     }
                     notifyDataSetChanged();
@@ -379,10 +385,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    private void notifyDataSetChanged(){
-        if(memberList.size() > 6){
+    private void notifyDataSetChanged() {
+        if (memberList.size() > 6) {
             layoutManager.setStackFromEnd(false);
-        }else{
+        } else {
             layoutManager.setStackFromEnd(true);
         }
         avatarAdapter.setData(memberList);
@@ -395,8 +401,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             memberList.remove(name);
         }
         ThreadManager.getInstance().runOnMainThread(new Runnable() {
-            @Override public void run() {
-                if(name.equals(chatroom.getOwner())){
+            @Override
+            public void run() {
+                if (name.equals(chatroom.getOwner())) {
                     //mContext.showLongToast("主播已结束直播");
                     LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
@@ -407,7 +414,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     protected void onMessageListInit() {
         requireActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 messageView.init(chatroomId);
                 messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
                     @Override
@@ -418,7 +426,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                                 //刷新消息列表
                                 messageView.refreshSelectLast();
 
-                                if(isBarrageMsg) {
+                                if (isBarrageMsg) {
                                     barrageView.addData(message);
                                 }
                             }
@@ -441,7 +449,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 });
                 messageView.setVisibility(View.VISIBLE);
                 bottomBar.setVisibility(View.VISIBLE);
-                if(!chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())
+                if (!chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())
                         && !chatroom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
                     userManagerView.setVisibility(View.INVISIBLE);
                 }
@@ -454,19 +462,21 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     protected void showUserDetailsDialog(String username) {
         RoomUserDetailsDialog dialog = (RoomUserDetailsDialog) getChildFragmentManager().findFragmentByTag("RoomUserDetailsDialog");
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = RoomUserDetailsDialog.newInstance(username, liveRoom);
         }
-        if(dialog.isAdded()) {
+        if (dialog.isAdded()) {
             return;
         }
         dialog.show(getChildFragmentManager(), "RoomUserDetailsDialog");
         dialog.setManageEventListener(new RoomUserDetailsDialog.RoomManageEventListener() {
-            @Override public void onKickMember(String username) {
+            @Override
+            public void onKickMember(String username) {
                 onRoomMemberExited(username);
             }
 
-            @Override public void onAddBlacklist(String username) {
+            @Override
+            public void onAddBlacklist(String username) {
                 onRoomMemberExited(username);
             }
         });
@@ -496,7 +506,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         horizontalRecyclerView.setAdapter(avatarAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(mContext, DividerItemDecoration.HORIZONTAL);
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setSize((int) EaseCommonUtils.dip2px(mContext, 5), 0);
+        drawable.setSize((int) EaseUtils.dip2px(mContext, 5), 0);
         decoration.setDrawable(drawable);
         horizontalRecyclerView.addItemDecoration(decoration);
         avatarAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -516,18 +526,18 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     if (haveOwner) {
                         data.remove(chatroom.getOwner());
                     }
-                    if(data.size() > MAX_SIZE) {
-                        for (int i = 0; i < MAX_SIZE; i++){
+                    if (data.size() > MAX_SIZE) {
+                        for (int i = 0; i < MAX_SIZE; i++) {
                             memberList.add(i, data.get(i));
                         }
-                    }else {
+                    } else {
                         memberList.addAll(data);
                     }
                     int size = chatroom.getMemberCount();
-                    if(haveOwner) {
+                    if (haveOwner) {
                         size--;
                     }
-                    if(size < data.size()) {
+                    if (size < data.size()) {
                         size = data.size();
                     }
                     audienceNumView.setText(String.valueOf(size));
@@ -546,6 +556,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 向左滑动屏幕
+     *
      * @param startX
      * @param endX
      */
@@ -555,6 +566,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 向右滑动屏幕
+     *
      * @param startX
      * @param endX
      */
@@ -563,17 +575,17 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     protected void startAnimation(View target, float startX, float endX) {
-        if(target == null) {
+        if (target == null) {
             return;
         }
-        if(target instanceof ViewGroup) {
+        if (target instanceof ViewGroup) {
             float x = ((ViewGroup) target).getChildAt(0).getX();
-            if(x != startX) {
+            if (x != startX) {
                 return;
             }
             int childCount = ((ViewGroup) target).getChildCount();
-            if(childCount > 0) {
-                for(int i = 0; i < childCount; i++) {
+            if (childCount > 0) {
+                for (int i = 0; i < childCount; i++) {
                     View child = ((ViewGroup) target).getChildAt(i);
                     ObjectAnimator animator = ObjectAnimator.ofFloat(child, "translationX", startX, endX);
                     animator.setDuration(500);
@@ -586,7 +598,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public boolean onTouch(View v, MotionEvent ev) {
         switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN :
+            case MotionEvent.ACTION_DOWN:
                 preX = ev.getX();
                 preY = ev.getY();
                 hideSoftKeyBoard();
@@ -596,11 +608,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 float curY = ev.getY();
                 float x = curX - preX;
                 float y = curY - preY;
-                if(Math.abs(x) > Math.abs(y) && Math.abs(x) > 20) {
-                    float[] screenInfo = EaseCommonUtils.getScreenInfo(mContext);
-                    if(x > 0) {// 向右滑动
+                if (Math.abs(x) > Math.abs(y) && Math.abs(x) > 20) {
+                    float[] screenInfo = EaseUtils.getScreenInfo(mContext);
+                    if (x > 0) {// 向右滑动
                         slideToLeft(0, screenInfo[0]);
-                    }else {// 向左滑动
+                    } else {// 向左滑动
                         slideToRight(screenInfo[0], 0);
                     }
                 }
@@ -640,8 +652,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onMessageSelectLast() {
-        if(mContext != null && !mContext.isFinishing()) {
-            mContext.runOnUiThread(()-> messageView.refreshSelectLast());
+        if (mContext != null && !mContext.isFinishing()) {
+            mContext.runOnUiThread(() -> messageView.refreshSelectLast());
         }
     }
 
@@ -655,26 +667,26 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceiveGiftMsg(ChatMessage message) {
         //加入直播间之后才统计相关点赞信息
-        if(message.getMsgTime() >= joinTime) {
+        if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveGiftInfo(message);
         }
         //加入直播间之前的礼物消息不再展示
-        if(message.getMsgTime() < joinTime - 2000) {
+        if (message.getMsgTime() < joinTime - 2000) {
             return;
         }
         String giftId = DemoMsgHelper.getInstance().getMsgGiftId(message);
-        if(TextUtils.isEmpty(giftId)) {
+        if (TextUtils.isEmpty(giftId)) {
             return;
         }
         GiftBean bean = DemoHelper.getGiftById(giftId);
-        if(bean == null) {
+        if (bean == null) {
             return;
         }
         User user = new User();
-        user.setUsername(message.getFrom());
+        user.setNickName(message.getFrom());
         bean.setUser(user);
         bean.setNum(DemoMsgHelper.getInstance().getMsgGiftNum(message));
-        ThreadManager.getInstance().runOnMainThread(()-> {
+        ThreadManager.getInstance().runOnMainThread(() -> {
             barrageLayout.showGift(bean);
         });
     }
@@ -682,11 +694,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onReceivePraiseMsg(ChatMessage message) {
         //加入直播间之后才统计相关点赞信息
-        if(message.getMsgTime() >= joinTime) {
+        if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveLikeInfo(message);
         }
         int likeNum = DemoMsgHelper.getInstance().getMsgPraiseNum(message);
-        if(likeNum <= 0) {
+        if (likeNum <= 0) {
             return;
         }
         showPraise(likeNum);
@@ -694,11 +706,12 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     /**
      * 收到弹幕消息
+     *
      * @param message
      */
     @Override
     public void onReceiveBarrageMsg(ChatMessage message) {
-        ThreadManager.getInstance().runOnMainThread(()-> {
+        ThreadManager.getInstance().runOnMainThread(() -> {
             barrageView.addData(message);
         });
     }
@@ -706,7 +719,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(barrageLayout != null) {
+        if (barrageLayout != null) {
             barrageLayout.destroy();
         }
         RoomUserDetailsDialog.sAttentionClicked = false;

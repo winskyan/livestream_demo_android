@@ -30,7 +30,7 @@ public class BaseFragment extends Fragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
                     onBackPressed();
                     return true;
                 }
@@ -45,18 +45,20 @@ public class BaseFragment extends Fragment {
 
     /**
      * 解析Resource<T>
+     *
      * @param response
      * @param callback
      * @param <T>
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext != null) {
+        if (mContext != null) {
             mContext.parseResource(response, callback);
         }
     }
 
     /**
      * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     *
      * @param id
      * @param <T>
      * @return

@@ -19,15 +19,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Arrays;
+import java.util.List;
 
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.OnItemClickListener;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.BaseDialogFragment;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class DemoListDialogFragment extends BaseDialogFragment {
     private TextView tvTitle;
@@ -59,7 +58,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        if(animations != 0) {
+        if (animations != 0) {
             try {
                 getDialog().getWindow().setWindowAnimations(animations);
             } catch (Exception e) {
@@ -72,22 +71,22 @@ public class DemoListDialogFragment extends BaseDialogFragment {
         rvDialogList = findViewById(R.id.rv_dialog_list);
         btnCancel = findViewById(R.id.btn_cancel);
 
-        if(TextUtils.isEmpty(title)) {
+        if (TextUtils.isEmpty(title)) {
             tvTitle.setVisibility(View.GONE);
             viewDivider.setVisibility(View.GONE);
-        }else {
+        } else {
             tvTitle.setVisibility(View.VISIBLE);
             viewDivider.setVisibility(View.VISIBLE);
             tvTitle.setText(title);
         }
 
-        if(TextUtils.isEmpty(cancel)) {
+        if (TextUtils.isEmpty(cancel)) {
             btnCancel.setText(getString(R.string.cancel));
-        }else {
+        } else {
             btnCancel.setText(cancel);
         }
 
-        if(cancelColor != 0) {
+        if (cancelColor != 0) {
             btnCancel.setTextColor(cancelColor);
         }
     }
@@ -99,7 +98,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if(cancelClickListener != null) {
+                if (cancelClickListener != null) {
                     cancelClickListener.OnCancel(v);
                 }
             }
@@ -110,7 +109,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     public void initData() {
         super.initData();
         rvDialogList.setLayoutManager(new LinearLayoutManager(mContext));
-        if(adapter == null) {
+        if (adapter == null) {
             adapter = getDefaultAdapter();
         }
         rvDialogList.setAdapter(adapter);
@@ -123,7 +122,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             @Override
             public void onItemClick(View view, int position) {
                 dismiss();
-                if(itemClickListener != null) {
+                if (itemClickListener != null) {
                     itemClickListener.OnItemClick(view, position);
                 }
             }
@@ -143,7 +142,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
         private Bundle bundle;
         private int animations;//进出动画
 
-        public Builder(BaseActivity context){
+        public Builder(BaseActivity context) {
             this.context = context;
         }
 
@@ -223,7 +222,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             return fragment;
         }
 
-        public DemoListDialogFragment  show() {
+        public DemoListDialogFragment show() {
             DemoListDialogFragment fragment = build();
             FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragment.show(transaction, null);

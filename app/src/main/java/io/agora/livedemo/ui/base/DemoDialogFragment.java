@@ -7,12 +7,11 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.Group;
 
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DialogSet;
-
-import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.Group;
 
 public class DemoDialogFragment extends BaseDialogFragment implements View.OnClickListener, DialogSet {
     public TextView mTvDialogTitle;
@@ -33,9 +32,9 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     public void setChildView(View view) {
         super.setChildView(view);
         int layoutId = getMiddleLayoutId();
-        if(layoutId > 0) {
+        if (layoutId > 0) {
             RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
-            if(middleParent != null) {
+            if (middleParent != null) {
                 View child = LayoutInflater.from(mContext).inflate(layoutId, middleParent, false);
                 //同时使middleParent可见
                 view.findViewById(R.id.group_middle).setVisibility(View.VISIBLE);
@@ -50,6 +49,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     /**
      * 获取中间布局的id
+     *
      * @return
      */
     public int getMiddleLayoutId() {
@@ -68,12 +68,13 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         mBtnDialogConfirm.setOnClickListener(this);
     }
 
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_dialog_cancel :
+            case R.id.btn_dialog_cancel:
                 onCancelClick(v);
                 break;
             case R.id.btn_dialog_confirm:
@@ -84,6 +85,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     /**
      * 点击了取消按钮
+     *
      * @param v
      */
     public void onCancelClick(View v) {
@@ -92,6 +94,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     /**
      * 点击了确认按钮
+     *
      * @param v
      */
     public void onConfirmClick(View v) {

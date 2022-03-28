@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
 
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -19,12 +18,14 @@ public class ThreadManager {
     private Executor mIOThreadExecutor;
     private Handler mMainThreadHandler;
 
-    private ThreadManager() { init();}
+    private ThreadManager() {
+        init();
+    }
 
     public static ThreadManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             synchronized (ThreadManager.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new ThreadManager();
                 }
             }
@@ -39,15 +40,16 @@ public class ThreadManager {
         BlockingQueue<Runnable> taskQueue = new LinkedBlockingDeque<>();
         mIOThreadExecutor = new ThreadPoolExecutor(NUMBER_OF_CORES,
                 NUMBER_OF_CORES * 2,
-                                KEEP_ALIVE_TIME,
-                                KEEP_ALIVE_TIME_UNIT,
-                                taskQueue,
-                                new BackgroundThreadFactory(Process.THREAD_PRIORITY_BACKGROUND));
+                KEEP_ALIVE_TIME,
+                KEEP_ALIVE_TIME_UNIT,
+                taskQueue,
+                new BackgroundThreadFactory(Process.THREAD_PRIORITY_BACKGROUND));
         mMainThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     /**
      * 在异步线程执行
+     *
      * @param runnable
      */
     public void runOnIOThread(Runnable runnable) {
@@ -56,6 +58,7 @@ public class ThreadManager {
 
     /**
      * 在UI线程执行
+     *
      * @param runnable
      */
     public void runOnMainThread(Runnable runnable) {
@@ -64,6 +67,7 @@ public class ThreadManager {
 
     /**
      * 判断是否是主线程
+     *
      * @return true is main thread
      */
     public boolean isMainThread() {

@@ -6,7 +6,7 @@ import android.view.View;
  * 弹幕视图的接口
  * <p>
  * Created by wangjie on 2019/3/15.
- *
+ * <p>
  * 项目地址：https://github.com/mCyp/Muti-Barrage
  */
 

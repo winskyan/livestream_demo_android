@@ -3,15 +3,14 @@ package io.agora.livedemo.common.reponsitories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.model.LiveRoomUrlBean;
 import io.agora.livedemo.data.restapi.ApiService;
 import io.agora.livedemo.data.restapi.LiveManager;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
-
-import java.util.List;
-
 import okhttp3.RequestBody;
 
 /**

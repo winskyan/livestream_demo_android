@@ -14,15 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.User;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 动画效果：每个动画展示最长时间为2000ms, 数字变动的时间为200ms。
@@ -63,7 +63,7 @@ public class ShowGiveGiftView extends LinearLayout {
 
     public void showGift(GiftBean bean) {
         clearTiming();
-        if(this.getChildCount() > maxShowView) {
+        if (this.getChildCount() > maxShowView) {
             // 获取前2个元素的最后更新时间
             View giftView01 = getChildAt(0);
             ImageView iv_gift01 = giftView01.findViewById(R.id.iv_gift);
@@ -111,7 +111,7 @@ public class ShowGiveGiftView extends LinearLayout {
 
     private void showGiftAnimation(MagicTextView tvGiftNum, GiftBean bean) {
         int num = bean.getNum();
-        if(num > 0) {
+        if (num > 0) {
             startGiftTimer(tvGiftNum, bean);
         }
     }
@@ -123,16 +123,16 @@ public class ShowGiveGiftView extends LinearLayout {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ThreadManager.getInstance().runOnMainThread(()-> {
+                ThreadManager.getInstance().runOnMainThread(() -> {
                     int tag = (int) tvGiftNum.getTag();
-                    if(tag >= bean.getNum()) {
+                    if (tag >= bean.getNum()) {
                         timer.cancel();
                         return;
                     }
-                    if(tag + increment > bean.getNum()) {
+                    if (tag + increment > bean.getNum()) {
                         tvGiftNum.setTag(bean.getNum());
                         tvGiftNum.setText(String.valueOf(bean.getNum()));
-                    }else {
+                    } else {
                         tvGiftNum.setTag(tag + increment);
                         tvGiftNum.setText(String.valueOf(tag + increment));
                     }
@@ -146,19 +146,20 @@ public class ShowGiveGiftView extends LinearLayout {
 
     /**
      * 计算增长的数值
+     *
      * @param bean
      * @return
      */
     private int calculateIncrease(GiftBean bean) {
         int increment = 1;
-        if(bean.getNum() * duration > maxExitTime) {
+        if (bean.getNum() * duration > maxExitTime) {
             increment = (int) Math.ceil(bean.getNum() * 1f * duration / maxExitTime);
         }
         return increment;
     }
 
     private int calculateDuration(GiftBean bean) {
-        if(bean.getNum() * duration > maxExitTime) {
+        if (bean.getNum() * duration > maxExitTime) {
             return maxExitTime;
         }
         return bean.getNum() * duration;
@@ -168,13 +169,13 @@ public class ShowGiveGiftView extends LinearLayout {
      * 定时清理礼物列表信息
      */
     private void clearTiming() {
-        if(timer == null) {
+        if (timer == null) {
             timer = new Timer();
             timer.schedule(new TimerTask() {
 
                 @Override
                 public void run() {
-                    ThreadManager.getInstance().runOnMainThread(()-> {
+                    ThreadManager.getInstance().runOnMainThread(() -> {
                         int childCount = getChildCount();
                         long nowTime = System.currentTimeMillis();
                         for (int i = 0; i < childCount; i++) {
@@ -196,10 +197,10 @@ public class ShowGiveGiftView extends LinearLayout {
     }
 
     public void destroy() {
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
         }
-        if(giftNumberAnim != null && giftNumberAnim.lastAnimator != null && giftNumberAnim.lastAnimator.isRunning()) {
+        if (giftNumberAnim != null && giftNumberAnim.lastAnimator != null && giftNumberAnim.lastAnimator.isRunning()) {
             giftNumberAnim.lastAnimator.cancel();
         }
     }
@@ -209,7 +210,7 @@ public class ShowGiveGiftView extends LinearLayout {
      */
     private void removeGiftView(final View removeGiftView) {
         Animation animation = removeGiftView.getAnimation();
-        if(animation == null) {
+        if (animation == null) {
             // 移除列表，外加退出动画
             TranslateAnimation outAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.em_gift_out); // 礼物退出时动画
             outAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -250,9 +251,9 @@ public class ShowGiveGiftView extends LinearLayout {
         TextView tvName = giftView.findViewById(R.id.tv_username);
         EaseImageView ivIcon = giftView.findViewById(R.id.iv_icon);
         User user = gift.getUser();
-        if(user != null) {
-            tvName.setText(DemoHelper.getNickName(user.getUsername()));
-            ivIcon.setImageResource(DemoHelper.getAvatarResource(user.getUsername()));
+        if (user != null) {
+            tvName.setText(DemoHelper.getNickName(user.getNickName()));
+            ivIcon.setImageResource(DemoHelper.getAvatarResource(user.getNickName()));
         }
 
         // 添加标识，记录礼物个数

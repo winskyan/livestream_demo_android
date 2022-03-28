@@ -11,31 +11,31 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easemob.fastlive.R;
+
 import io.agora.fastlive.FastLiveHelper;
 import io.agora.fastlive.FastPrefManager;
-import com.easemob.fastlive.R;
 import io.agora.fastlive.presenter.FastHostPresenter;
 import io.agora.fastlive.presenter.IFastHostView;
+import io.agora.fastlive.rtc.RtcEventHandler;
 import io.agora.fastlive.stats.LocalStatsData;
 import io.agora.fastlive.widgets.VideoGridContainer;
-
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
-import io.agora.fastlive.rtc.RtcEventHandler;
 
 /**
  * 一、主播开始直播的流程如下：
  * （1）初始化 RtcEngine。一般放置在程序入口处即可，见DemoApplication中的initAgora()方法，具体调用为{@link FastLiveHelper#init(Context, String)}
  * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
- *      直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
+ * 直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
  * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
  * （4）加入channel并设置用户角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
- *      加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
+ * 加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
  * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer, int)} 。
- *      上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
+ * 上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
  * 二、开始直播的两个条件：
  * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartBroadcast()}
- *  (2) 获取声网token(如果需要的话)成功，并加入channel，具体方法为{@link #joinRtcChannel(String)}
+ * (2) 获取声网token(如果需要的话)成功，并加入channel，具体方法为{@link #joinRtcChannel(String)}
  */
 public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastHostView {
     private static final int RESTART_VIDEO = 10;
@@ -50,7 +50,7 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case RESTART_VIDEO :
+                case RESTART_VIDEO:
                     restart_video_times++;
                     startBroadcast();
                     break;
@@ -68,8 +68,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         //将presenter与生命周期等关联
-        if(this.presenter != null) {
-            if(context instanceof AppCompatActivity) {
+        if (this.presenter != null) {
+            if (context instanceof AppCompatActivity) {
                 ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);
             }
             this.presenter.attachView(this);
@@ -87,7 +87,7 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
         mVideoGridContainer = findViewById(R.id.vg_container);
         role = Constants.CLIENT_ROLE_BROADCASTER;
         int fastUid = FastPrefManager.getPreferences(mContext).getInt(roomId, -1);
-        if(fastUid >= 1) {
+        if (fastUid >= 1) {
             uid = fastUid;
         }
     }
@@ -111,22 +111,22 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
 
     @Override
     public void onRtcWarning(int warn) {
-        Log.e(RtcEventHandler.TAG, "onRtcWarning warn: "+warn);
+        Log.e(RtcEventHandler.TAG, "onRtcWarning warn: " + warn);
     }
 
     @Override
     public void onRtcError(int err) {
-        Log.e(RtcEventHandler.TAG, "onRtcError err: "+err);
+        Log.e(RtcEventHandler.TAG, "onRtcError err: " + err);
     }
 
     @Override
     public void onRtcLocalVideoStats(IRtcEngineEventHandler.LocalVideoStats stats) {
-        Log.i(RtcEventHandler.TAG, "onRtcLocalVideoStats stats: "+stats.sentBitrate + " sentFrameRate: "+stats.sentFrameRate);
+        Log.i(RtcEventHandler.TAG, "onRtcLocalVideoStats stats: " + stats.sentBitrate + " sentFrameRate: " + stats.sentFrameRate);
     }
 
     @Override
     public void onRtcJoinChannelSuccess(String channel, int uid, int elapsed) {
-        Log.i(RtcEventHandler.TAG, "onRtcJoinChannelSuccess channel: "+channel + " uid: "+uid);
+        Log.i(RtcEventHandler.TAG, "onRtcJoinChannelSuccess channel: " + channel + " uid: " + uid);
         try {
             FastPrefManager.getPreferences(mContext).edit().putInt(roomId, uid).commit();
         } catch (Exception e) {
@@ -134,10 +134,10 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
         }
         //加入channel后，开始进行直播
         synchronized (this) {
-            if(!isTokenReady) {
+            if (!isTokenReady) {
                 isTokenReady = true;
             }
-            if(isRoomReady) {
+            if (isRoomReady) {
                 startBroadcast();
             }
         }
@@ -169,24 +169,24 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     @Override
     public void onRtcConnectionStateChanged(int state, int reason) {
         super.onRtcConnectionStateChanged(state, reason);
-        Log.e("TAG", "onRtcConnectionStateChanged state: " + state + " reason: "+reason);
+        Log.e("TAG", "onRtcConnectionStateChanged state: " + state + " reason: " + reason);
         //如果是连接失败，那么需要进行重试
-        if(state == Constants.CONNECTION_STATE_FAILED) {
-            if(restart_video_times >= MAX_RESTART_TIMES) {
+        if (state == Constants.CONNECTION_STATE_FAILED) {
+            if (restart_video_times >= MAX_RESTART_TIMES) {
                 handler.removeCallbacksAndMessages(null);
                 this.presenter.runOnUI(() -> showDialog(R.string.fast_live_host_fail));
                 return;
             }
-            Log.e("TAG", "restart_video_times = "+restart_video_times);
+            Log.e("TAG", "restart_video_times = " + restart_video_times);
             handler.sendEmptyMessageDelayed(RESTART_VIDEO, restart_video_times == 0 ? 0 : RETRY_TIME);
         }
     }
 
     @Override
     public void onRtcLocalVideoStateChanged(int localVideoState, int error) {
-        Log.e("TAG", "onRtcLocalVideoStateChanged localVideoState: " + localVideoState + " error: "+error);
+        Log.e("TAG", "onRtcLocalVideoStateChanged localVideoState: " + localVideoState + " error: " + error);
         // 出错原因不明确
-        if(error == Constants.LOCAL_VIDEO_STREAM_ERROR_FAILURE) {
+        if (error == Constants.LOCAL_VIDEO_STREAM_ERROR_FAILURE) {
             this.presenter.runOnUI(() -> showRestartVideoDialog(R.string.fast_live_host_local_video_fail));
         }
     }
@@ -205,26 +205,26 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     public void onGetTokenSuccess(String token, int uid, boolean isRenew) {
         this.uid = uid;
         rtcToken = token;
-        if(isRenew) {
+        if (isRenew) {
             renewToken(token);
-        }else {
+        } else {
             joinRtcChannel(token);
         }
     }
 
     @Override
     public void onGetTokenFail(String message) {
-        Log.e(RtcEventHandler.TAG, "onGetTokenFail: "+message);
+        Log.e(RtcEventHandler.TAG, "onGetTokenFail: " + message);
         joinRtcChannel(null);
     }
 
     @Override
     public void onStartBroadcast() {
         synchronized (this) {
-            if(!isRoomReady) {
+            if (!isRoomReady) {
                 isRoomReady = true;
             }
-            if(isTokenReady) {
+            if (isTokenReady) {
                 startBroadcast();
             }
         }
@@ -257,8 +257,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
 
     public void setPresenter(FastHostPresenter presenter) {
         this.presenter = presenter;
-        if(presenter != null && mContext != null && !mContext.isFinishing()) {
-            if(mContext instanceof AppCompatActivity) {
+        if (presenter != null && mContext != null && !mContext.isFinishing()) {
+            if (mContext instanceof AppCompatActivity) {
                 ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);
             }
             presenter.attachView(this);
@@ -266,8 +266,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     }
 
     private void showDialog(int title) {
-        if(this.presenter != null && this.presenter.isActive()) {
-            if(dialog != null && dialog.isShowing()) {
+        if (this.presenter != null && this.presenter.isActive()) {
+            if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
             dialog = new AlertDialog.Builder(mContext)
@@ -295,8 +295,8 @@ public class FastLiveHostFragment extends FastLiveBaseFragment implements IFastH
     }
 
     private void showRestartVideoDialog(int title) {
-        if(this.presenter != null && this.presenter.isActive()) {
-            if(localVideoDialog != null && localVideoDialog.isShowing()) {
+        if (this.presenter != null && this.presenter.isActive()) {
+            if (localVideoDialog != null && localVideoDialog.isShowing()) {
                 localVideoDialog.dismiss();
             }
             localVideoDialog = new AlertDialog.Builder(mContext)

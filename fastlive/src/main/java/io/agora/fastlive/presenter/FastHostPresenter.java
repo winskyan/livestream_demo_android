@@ -1,6 +1,6 @@
 package io.agora.fastlive.presenter;
 
-public abstract class FastHostPresenter extends FastTokenPresenter{
+public abstract class FastHostPresenter extends FastTokenPresenter {
     public IFastHostView mView;
 
     @Override

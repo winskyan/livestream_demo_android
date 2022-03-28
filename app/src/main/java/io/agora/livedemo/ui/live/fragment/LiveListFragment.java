@@ -1,6 +1,12 @@
 package io.agora.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,15 +15,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.DemoConstants;
@@ -33,9 +34,6 @@ import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.base.GridMarginDecoration;
 import io.agora.livedemo.ui.live.adapter.LiveListAdapter;
 import io.agora.livedemo.ui.live.viewmodels.LiveListViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.

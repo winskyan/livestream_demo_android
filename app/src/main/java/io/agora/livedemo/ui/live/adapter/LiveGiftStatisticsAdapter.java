@@ -6,14 +6,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import androidx.annotation.NonNull;
 
 public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<ReceiveGiftEntity> {
 
@@ -45,7 +45,7 @@ public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<Recei
         public void setData(ReceiveGiftEntity item, int position) {
             String giftId = item.getGift_id();
             GiftBean giftBean = DemoHelper.getGiftById(giftId);
-            if(giftBean != null) {
+            if (giftBean != null) {
                 ivGiftIcon.setImageResource(giftBean.getResource());
             }
             tvGiftInfo.setText(mContext.getString(R.string.em_live_gift_gift_info, item.getGift_num()));

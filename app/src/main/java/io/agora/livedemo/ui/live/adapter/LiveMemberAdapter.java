@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import androidx.annotation.NonNull;
 
 public class LiveMemberAdapter extends EaseBaseRecyclerViewAdapter<String> {
 

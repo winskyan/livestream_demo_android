@@ -11,11 +11,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.fastlive.R;
-import io.agora.fastlive.stats.StatsData;
-import io.agora.fastlive.stats.StatsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.agora.fastlive.stats.StatsData;
+import io.agora.fastlive.stats.StatsManager;
 
 
 public class VideoGridContainer extends RelativeLayout implements Runnable {

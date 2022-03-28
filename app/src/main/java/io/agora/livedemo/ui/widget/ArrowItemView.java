@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.agora.livedemo.R;
-import io.hyphenate.easeui.widget.EaseImageView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+
+import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.livedemo.R;
 
 public class ArrowItemView extends ConstraintLayout {
     private EaseImageView avatar;
@@ -53,42 +53,42 @@ public class ArrowItemView extends ConstraintLayout {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ArrowItemView);
         int titleResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitle, -1);
         title = a.getString(R.styleable.ArrowItemView_arrowItemTitle);
-        if(titleResourceId != -1) {
+        if (titleResourceId != -1) {
             title = getContext().getString(titleResourceId);
         }
         tvTitle.setText(title);
 
         int titleColorId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitleColor, -1);
         titleColor = a.getColor(R.styleable.ArrowItemView_arrowItemTitleColor, ContextCompat.getColor(getContext(), R.color.em_color_common_text_black));
-        if(titleColorId != -1) {
+        if (titleColorId != -1) {
             titleColor = ContextCompat.getColor(getContext(), titleColorId);
         }
         tvTitle.setTextColor(titleColor);
 
         int titleSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitleSize, -1);
         titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, 16);
-        if(titleSizeId != -1) {
+        if (titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);
         }
         tvTitle.setTextSize(titleSize);
 
         int contentResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemContent, -1);
         content = a.getString(R.styleable.ArrowItemView_arrowItemContent);
-        if(contentResourceId != -1) {
+        if (contentResourceId != -1) {
             content = getContext().getString(contentResourceId);
         }
         tvContent.setText(content);
 
         int contentColorId = a.getResourceId(R.styleable.ArrowItemView_arrowItemContentColor, -1);
         contentColor = a.getColor(R.styleable.ArrowItemView_arrowItemContentColor, ContextCompat.getColor(getContext(), R.color.em_color_common_text_gray));
-        if(contentColorId != -1) {
+        if (contentColorId != -1) {
             contentColor = ContextCompat.getColor(getContext(), contentColorId);
         }
         tvContent.setTextColor(contentColor);
 
         int contentSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemContentSize, -1);
         contentSize = a.getDimension(R.styleable.ArrowItemView_arrowItemContentSize, 14);
-        if(contentSizeId != -1) {
+        if (contentSizeId != -1) {
             contentSize = getResources().getDimension(contentSizeId);
         }
         tvContent.setTextSize(contentSize);
@@ -103,27 +103,27 @@ public class ArrowItemView extends ConstraintLayout {
         avatar.setVisibility(showAvatar ? VISIBLE : GONE);
 
         int avatarSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarSrc, -1);
-        if(avatarSrcResourceId != -1) {
+        if (avatarSrcResourceId != -1) {
             avatar.setImageResource(avatarSrcResourceId);
         }
 
         int avatarHeightId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarHeight, -1);
         float height = a.getDimension(R.styleable.ArrowItemView_arrowItemAvatarHeight, 0);
-        if(avatarHeightId != -1) {
+        if (avatarHeightId != -1) {
             height = getResources().getDimension(avatarHeightId);
         }
 
         int avatarWidthId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarWidth, -1);
         float width = a.getDimension(R.styleable.ArrowItemView_arrowItemAvatarWidth, 0);
-        if(avatarWidthId != -1) {
+        if (avatarWidthId != -1) {
             width = getResources().getDimension(avatarWidthId);
         }
 
         a.recycle();
 
         ViewGroup.LayoutParams params = avatar.getLayoutParams();
-        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)height;
-        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)width;
+        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) height;
+        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) width;
     }
 
     public TextView getTvContent() {
@@ -134,5 +134,7 @@ public class ArrowItemView extends ConstraintLayout {
         return tvTitle;
     }
 
-    public EaseImageView getAvatar() { return avatar; }
+    public EaseImageView getAvatar() {
+        return avatar;
+    }
 }

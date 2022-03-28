@@ -1,15 +1,10 @@
 package io.agora.livedemo.ui.live.fragment;
 
+import static io.agora.livedemo.ui.live.fragment.RoomUserManagementFragment.ManagementType.BLACKLIST;
+import static io.agora.livedemo.ui.live.fragment.RoomUserManagementFragment.ManagementType.MUTE;
+
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,28 +12,31 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.exceptions.ChatException;
 import io.agora.livedemo.R;
 import io.agora.livedemo.ThreadPoolManager;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.ui.base.BaseFragment;
-import io.hyphenate.easeui.widget.EaseImageView;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.agora.livedemo.ui.live.fragment.RoomUserManagementFragment.ManagementType.BLACKLIST;
-import static io.agora.livedemo.ui.live.fragment.RoomUserManagementFragment.ManagementType.MUTE;
 
 /**
  * A simple {@link Fragment} subclass.

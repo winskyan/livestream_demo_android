@@ -7,20 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.List;
+
 import io.agora.livedemo.DemoConstants;
+import io.agora.livedemo.R;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
+import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.adapter.FragmentAdapter;
-import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
-import com.google.android.material.tabs.TabLayout;
-
-import io.agora.livedemo.R;
-
-import java.util.List;
 
 /**
  * Created by wei on 2017/3/3.
@@ -34,9 +34,10 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private FragmentAdapter adapter;
     private UserManageViewModel viewModel;
 
-    public RoomUserManagementDialog(){}
+    public RoomUserManagementDialog() {
+    }
 
-    public RoomUserManagementDialog(String chatroomId){
+    public RoomUserManagementDialog(String chatroomId) {
         this.chatroomId = chatroomId;
     }
 
@@ -96,7 +97,7 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
             });
         });
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
-            if(event != null && event) {
+            if (event != null && event) {
                 getDataFromServer();
             }
         });

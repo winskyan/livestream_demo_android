@@ -1,5 +1,10 @@
 package io.agora.fastlive;
 
+import static android.content.ContentValues.TAG;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -9,7 +14,6 @@ import io.agora.fastlive.rtc.AgoraRtcHandler;
 import io.agora.fastlive.rtc.RtcEventHandler;
 import io.agora.fastlive.stats.StatsManager;
 import io.agora.fastlive.widgets.VideoGridContainer;
-
 import io.agora.mediaplayer.IMediaPlayer;
 import io.agora.mediaplayer.IMediaPlayerObserver;
 import io.agora.mediaplayer.data.PlayerUpdatedInfo;
@@ -24,11 +28,6 @@ import io.agora.rtc2.IDirectCdnStreamingEventHandler;
 import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
-
-import static android.content.ContentValues.TAG;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
-import static io.agora.rtc2.video.VideoEncoderConfiguration.VD_640x360;
 
 /**
  * Agora极速直播的帮助类
@@ -53,9 +52,9 @@ public class FastLiveHelper {
         @Override
         public void onDirectCdnStreamingStateChanged(DirectCdnStreamingState directCdnStreamingState, DirectCdnStreamingError directCdnStreamingError, String s) {
             Log.d(TAG, String.format("Stream Publish(DirectCdnStreaming): onDirectCdnStreamingStateChanged directCdnStreamingState=%s directCdnStreamingError=%s", directCdnStreamingState.toString(), directCdnStreamingError.toString()));
-            switch (directCdnStreamingState){
+            switch (directCdnStreamingState) {
                 case STOPPED:
-                    if(pendingDirectCDNStoppedRun != null){
+                    if (pendingDirectCDNStoppedRun != null) {
                         pendingDirectCDNStoppedRun.run();
                         pendingDirectCDNStoppedRun = null;
                     }
@@ -72,7 +71,9 @@ public class FastLiveHelper {
     private static class FastLiveHelperInstance {
         private static final FastLiveHelper instance = new FastLiveHelper();
     }
-    private FastLiveHelper(){}
+
+    private FastLiveHelper() {
+    }
 
     public static FastLiveHelper getInstance() {
         return FastLiveHelperInstance.instance;
@@ -82,7 +83,8 @@ public class FastLiveHelper {
      * 初始化
      * （1）初始化对象{@link AgoraEngine},并在其中将{@link RtcEngine#setChannelProfile(int)}设置为了直播模式{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
      * （2）初始化对象{@link StatsManager},用于展示各状态信息
-     *  (3) 初始化配置对象{@link EngineConfig}
+     * (3) 初始化配置对象{@link EngineConfig}
+     *
      * @param context
      * @param appId
      */
@@ -96,6 +98,7 @@ public class FastLiveHelper {
 
     /**
      * 是否在直播页面展示视频参数等状态
+     *
      * @param showStats
      */
     public void showVideoStats(boolean showStats) {
@@ -104,6 +107,7 @@ public class FastLiveHelper {
 
     /**
      * 获取直播状态管理类
+     *
      * @return
      */
     public StatsManager getStatsManager() {
@@ -112,6 +116,7 @@ public class FastLiveHelper {
 
     /**
      * 获取rtcEngine
+     *
      * @return
      */
     public RtcEngine rtcEngine() {
@@ -120,6 +125,7 @@ public class FastLiveHelper {
 
     /**
      * 获取极速直播中的配置
+     *
      * @return
      */
     public EngineConfig getEngineConfig() {
@@ -128,6 +134,7 @@ public class FastLiveHelper {
 
     /**
      * 获取极速直播中的SP
+     *
      * @return
      */
     public SharedPreferences getFastSPreferences() {
@@ -136,6 +143,7 @@ public class FastLiveHelper {
 
     /**
      * 注册rtc事件
+     *
      * @param handler
      */
     public void registerRtcHandler(RtcEventHandler handler) {
@@ -144,6 +152,7 @@ public class FastLiveHelper {
 
     /**
      * 移除rtc事件
+     *
      * @param handler
      */
     public void removeRtcHandler(RtcEventHandler handler) {
@@ -154,7 +163,7 @@ public class FastLiveHelper {
      * 生命周期可见时调用
      */
     public void onResume() {
-        if(isPaused) {
+        if (isPaused) {
             isPaused = false;
             isLiving = true;
             setVideoMuted(false);
@@ -166,7 +175,7 @@ public class FastLiveHelper {
      * 生命周期pause时调用
      */
     public void onPause() {
-        if(isLiving) {
+        if (isLiving) {
             isLiving = false;
             isPaused = true;
             setVideoMuted(true);
@@ -176,6 +185,7 @@ public class FastLiveHelper {
 
     /**
      * 结束直播的时候调用
+     *
      * @param handler
      */
     public void onDestroy(RtcEventHandler handler) {
@@ -187,24 +197,26 @@ public class FastLiveHelper {
 
     /**
      * 设置用户角色
+     *
      * @param role
      */
     public void setClientRole(int role) {
-        if(role == Constants.CLIENT_ROLE_AUDIENCE) {
+        if (role == Constants.CLIENT_ROLE_AUDIENCE) {
             // ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
             // clientRoleOptions.audienceLatencyLevel = getEngineConfig().isLowLatency() ? Constants.AUDIENCE_LATENCY_LEVEL_ULTRA_LOW_LATENCY : Constants.AUDIENCE_LATENCY_LEVEL_LOW_LATENCY;
             rtcEngine().setClientRole(role);
-        }else {
+        } else {
             rtcEngine().setClientRole(role);
         }
     }
 
     /**
      * 加入channel
-     * @param role 用户角色
+     *
+     * @param role  用户角色
      * @param token 传入用于鉴权的 Token。一般在你的服务器端生成的 Token。
-     * @param uid uid为本地用户的 ID。数据类型为整型，且频道内每个用户的 uid 必须是唯一的。
-     *            若将 uid 设为 0，则 SDK 会自动分配一个 uid，并在 {@link AgoraRtcHandler#onJoinChannelSuccess(String, int, int)}回调中报告。
+     * @param uid   uid为本地用户的 ID。数据类型为整型，且频道内每个用户的 uid 必须是唯一的。
+     *              若将 uid 设为 0，则 SDK 会自动分配一个 uid，并在 {@link AgoraRtcHandler#onJoinChannelSuccess(String, int, int)}回调中报告。
      */
     public void joinRtcChannel(int role, String token, int uid) {
         setClientRole(role);
@@ -220,6 +232,7 @@ public class FastLiveHelper {
 
     /**
      * 更新token
+     *
      * @param token
      */
     public void renewRtcToken(String token) {
@@ -239,6 +252,7 @@ public class FastLiveHelper {
 
     /**
      * 主播开始直播
+     *
      * @param container
      */
     public void startBroadcast(VideoGridContainer container, int uid) {
@@ -265,7 +279,7 @@ public class FastLiveHelper {
         DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
         directCdnStreamingMediaOptions.publishCameraTrack = true;
         directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
-        rtcEngine().startDirectCdnStreaming(iDirectCdnStreamingEventHandler , url, directCdnStreamingMediaOptions);
+        rtcEngine().startDirectCdnStreaming(iDirectCdnStreamingEventHandler, url, directCdnStreamingMediaOptions);
         isLiving = true;
     }
 
@@ -273,7 +287,7 @@ public class FastLiveHelper {
         setClientRole(Constants.CLIENT_ROLE_AUDIENCE);
         rtcEngine().enableAudio();
         rtcEngine().enableVideo();
-        if(mMediaPlayer == null){
+        if (mMediaPlayer == null) {
             mMediaPlayer = rtcEngine().createMediaPlayer();
             mMediaPlayer.registerPlayerObserver(new IMediaPlayerObserver() {
                 @Override
@@ -337,11 +351,11 @@ public class FastLiveHelper {
         mMediaPlayer.stop();
         mMediaPlayer.openWithAgoraCDNSrc(url, uid);
 
-        if(lastUid != -1 && lastUid != uid) {
+        if (lastUid != -1 && lastUid != uid) {
             removeRemoteVideo(lastUid, container);
         }
         lastUid = uid;
-        if(!container.containUid(uid)) {
+        if (!container.containUid(uid)) {
             SurfaceView surface = RtcEngine.CreateRendererView(mContext);
             rtcEngine().setupLocalVideo(new VideoCanvas(surface, Constants.RENDER_MODE_HIDDEN,
                     Constants.VIDEO_MIRROR_MODE_AUTO,
@@ -371,6 +385,7 @@ public class FastLiveHelper {
 
     /**
      * 设置视频是否停止推流
+     *
      * @param muted
      */
     public void setVideoMuted(boolean muted) {
@@ -380,6 +395,7 @@ public class FastLiveHelper {
 
     /**
      * 设置是否静音
+     *
      * @param muted
      */
     public void setAudioMuted(boolean muted) {
@@ -389,7 +405,8 @@ public class FastLiveHelper {
 
     /**
      * 设置远端主播视图
-     * @param uid  远端用户的 UID
+     *
+     * @param uid 远端用户的 UID
      */
     public void setupRemoteVideo(int uid, VideoGridContainer container) {
         SurfaceView surface = prepareRtcVideo(uid, false);
@@ -398,26 +415,28 @@ public class FastLiveHelper {
 
     /**
      * 只展示一个主播视图
+     *
      * @param uid
      * @param container
      * @param onlyOne
      */
     public void setupRemoteVideo(int uid, VideoGridContainer container, boolean onlyOne) {
-        if(onlyOne) {
-            if(lastUid != -1 && lastUid != uid) {
+        if (onlyOne) {
+            if (lastUid != -1 && lastUid != uid) {
                 removeRemoteVideo(lastUid, container);
             }
-            if(!container.containUid(uid)) {
+            if (!container.containUid(uid)) {
                 setupRemoteVideo(uid, container);
             }
             lastUid = uid;
-        }else {
+        } else {
             setupRemoteVideo(uid, container);
         }
     }
 
     /**
      * 移除远端主播视图
+     *
      * @param uid
      * @param container
      */
@@ -435,6 +454,7 @@ public class FastLiveHelper {
 
     /**
      * 准备rtc直播
+     *
      * @param uid
      * @param local
      * @return
@@ -467,6 +487,7 @@ public class FastLiveHelper {
 
     /**
      * 移除rtc video
+     *
      * @param uid
      * @param local
      */

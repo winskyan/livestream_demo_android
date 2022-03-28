@@ -41,9 +41,9 @@ public class ImageGroupView extends ConstraintLayout {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ImageGroupView);
-        if(ta != null) {
+        if (ta != null) {
             imageSrcId = ta.getResourceId(R.styleable.ImageGroupView_image_group_src, -1);
-            if(imageSrcId != -1) {
+            if (imageSrcId != -1) {
                 ivIcon.setImageResource(imageSrcId);
             }
         }

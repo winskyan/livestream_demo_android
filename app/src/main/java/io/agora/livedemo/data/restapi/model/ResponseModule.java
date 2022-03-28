@@ -1,7 +1,8 @@
 package io.agora.livedemo.data.restapi.model;
 
-import io.agora.livedemo.data.model.BaseBean;
 import com.google.gson.annotations.SerializedName;
+
+import io.agora.livedemo.data.model.BaseBean;
 
 /**
  * Created by wei on 2017/3/8.

@@ -7,11 +7,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
-
-import androidx.annotation.NonNull;
 
 public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.OnClickListener, LiveGiftInputNumDialog.OnConfirmClickListener {
     private TextView tvGiftName;
@@ -46,7 +46,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     public void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             giftBean = (GiftBean) bundle.getSerializable("gift");
         }
     }
@@ -60,7 +60,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
         ivGiftPlus = findViewById(R.id.iv_gift_plus);
         btnSend = findViewById(R.id.btn_send);
 
-        if(giftBean != null) {
+        if (giftBean != null) {
             tvGiftName.setText(giftBean.getName());
         }
         tvGiftNum.setText(giftNum + "");
@@ -78,22 +78,22 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_gift_minus :
+            case R.id.iv_gift_minus:
                 giftNum = getNum();
-                if(giftNum > 1) {
+                if (giftNum > 1) {
                     giftNum--;
                 }
                 tvGiftNum.setText(String.valueOf(giftNum));
                 break;
-            case R.id.iv_gift_plus :
+            case R.id.iv_gift_plus:
                 giftNum = getNum();
-                giftNum ++;
+                giftNum++;
                 tvGiftNum.setText(String.valueOf(giftNum));
                 break;
-            case R.id.btn_send :
+            case R.id.btn_send:
                 dismiss();
                 giftNum = getNum();
-                if(this.clickListener != null) {
+                if (this.clickListener != null) {
                     clickListener.onGiftNum(v, giftNum);
                 }
                 break;
@@ -105,10 +105,10 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
 
     private void showInputNumDialog() {
         LiveGiftInputNumDialog dialog = (LiveGiftInputNumDialog) getChildFragmentManager().findFragmentByTag("gift_input_num");
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = LiveGiftInputNumDialog.getNewInstance(Integer.valueOf(tvGiftNum.getText().toString().trim()));
         }
-        if(dialog.isAdded()) {
+        if (dialog.isAdded()) {
             return;
         }
         dialog.setOnConfirmClickListener(this);
@@ -118,7 +118,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(dismissListener != null) {
+        if (dismissListener != null) {
             dismissListener.onDismiss(dialog);
         }
     }

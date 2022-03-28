@@ -3,17 +3,17 @@ package io.agora.livedemo.ui.live.fragment;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.adapter.LiveGiftStatisticsAdapter;
 import io.agora.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;
-
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
     private RecyclerView rvList;
@@ -55,19 +55,19 @@ public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
         super.initViewModel();
         viewModel = new ViewModelProvider(this).get(GiftStatisticsViewModel.class);
         viewModel.getGiftObservable().observe(getViewLifecycleOwner(), response -> {
-            if(response != null) {
+            if (response != null) {
                 tvGiftNum.setText(getString(R.string.em_live_gift_total, response.size()));
                 adapter.setData(response);
             }
         });
         viewModel.getSenderNumObservable().observe(getViewLifecycleOwner(), response -> {
-            if(response != null) {
+            if (response != null) {
                 tvSenderNum.setText(getString(R.string.em_live_gift_send_total, response));
             }
         });
         LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
-                    if(response != null && response) {
+                    if (response != null && response) {
                         getData();
                     }
                 });

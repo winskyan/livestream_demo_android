@@ -8,13 +8,12 @@
     android:layout_marginRight="5dp"
     android:background="@drawable/barrage_show_anim_bg">
 
-    <io.hyphenate.easeui.widget.EaseImageView
+    <io.agora.chat.uikit.widget.EaseImageView
         android:layout_width="36.0dip"
         android:layout_height="36.0dip"
         android:src="@drawable/ease_default_avatar"
         app:ease_shape_type="round"
-        android:id="@+id/avatar"
-        />
+        android:id="@+id/avatar" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,6 +23,7 @@
         android:minWidth="60dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,8 +31,7 @@
             android:text="张三"
             android:textColor="#fff"
             android:lines="1"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/content"
@@ -40,8 +39,7 @@
             android:layout_height="wrap_content"
             android:textColor="#4d73ff"
             android:textSize="13sp"
-            android:text="你好你好啊"
-            />
+            android:text="你好你好啊" />
 
     </LinearLayout>
 

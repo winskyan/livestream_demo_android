@@ -12,7 +12,7 @@ import retrofit2.Retrofit;
 public class LiveDataCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?, ?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
-        if(getRawType(returnType) != LiveData.class) {
+        if (getRawType(returnType) != LiveData.class) {
             return null;
         }
         Type bodyType = getParameterUpperBound(0, (ParameterizedType) returnType);

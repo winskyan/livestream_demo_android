@@ -10,17 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
+
+import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-import io.hyphenate.easeui.utils.EaseCommonUtils;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.Group;
-import androidx.core.content.ContextCompat;
 
 public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
     private String status;
@@ -64,17 +65,17 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
         public void setData(LiveRoom liveRoom, int position) {
             author.setVisibility(View.VISIBLE);
             audienceNum.setVisibility(View.VISIBLE);
-            if(isOngoing) {
+            if (isOngoing) {
                 tvOngoingStatus.setVisibility(View.VISIBLE);
                 tvStatus.setVisibility(View.GONE);
-            }else {
+            } else {
                 tvOngoingStatus.setVisibility(View.GONE);
                 tvStatus.setVisibility(View.VISIBLE);
                 String status = liveRoom.getStatus();
-                if(DemoHelper.isLiving(status)) {
+                if (DemoHelper.isLiving(status)) {
 //                    if(!TextUtils.equals(liveRoom.getOwner(), ChatClient.getInstance().getCurrentUser())) {
-                        groupLived.setVisibility(View.VISIBLE);
-                        tvStatus.setVisibility(View.GONE);
+                    groupLived.setVisibility(View.VISIBLE);
+                    tvStatus.setVisibility(View.GONE);
 //                    }else {
 //                        groupLived.setVisibility(View.GONE);
 //                        tvStatus.setVisibility(View.VISIBLE);
@@ -82,7 +83,7 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
 //                        tvStatus.setTextColor(ContextCompat.getColor(mContext, R.color.em_color_warning));
 //                    }
 
-                }else {
+                } else {
                     groupLived.setVisibility(View.GONE);
                     tvStatus.setVisibility(View.VISIBLE);
                     tvStatus.setText(R.string.em_live_list_item_open);
@@ -94,7 +95,7 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
             author.setText(liveRoom.getName());
             String content = liveRoom.getAudienceNum() + "正在看";
             SpannableStringBuilder builder = new SpannableStringBuilder(content);
-            builder.setSpan(new AbsoluteSizeSpan((int) EaseCommonUtils.dip2px(mContext, 18)), 0, content.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new AbsoluteSizeSpan((int) EaseUtils.dip2px(mContext, 18)), 0, content.length() - 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             audienceNum.setText(builder);
 
             Glide.with(mContext)

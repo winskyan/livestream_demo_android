@@ -2,7 +2,7 @@ package io.agora.fastlive.presenter;
 
 import android.util.Log;
 
-public abstract class FastAudiencePresenter extends FastTokenPresenter{
+public abstract class FastAudiencePresenter extends FastTokenPresenter {
     public IFastAudienceView mView;
 
     @Override

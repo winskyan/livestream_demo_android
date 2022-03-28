@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
-
-import io.agora.livedemo.R;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,6 +20,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+
+import io.agora.livedemo.R;
 
 /**
  * 弹幕视图
@@ -123,26 +122,26 @@ public class BarrageView extends ViewGroup implements IBarrageView {
         mAdapter.setBarrageView(this);
     }
 
-    public void setOptions(Options options){
-        if(options != null){
-            if(options.config.gravity != -1){
+    public void setOptions(Options options) {
+        if (options != null) {
+            if (options.config.gravity != -1) {
                 this.gravity = options.config.gravity;
             }
 
-            if(options.config.interval > 0){
+            if (options.config.interval > 0) {
                 this.interval = options.config.interval;
             }
 
-            if(options.config.speed != 0 && options.config.waveSpeed != 0){
+            if (options.config.speed != 0 && options.config.waveSpeed != 0) {
                 this.speed = options.config.speed;
                 this.speedWaveValue = options.config.waveSpeed;
             }
 
-            if(options.config.model != 0){
+            if (options.config.model != 0) {
                 this.model = options.config.model;
             }
 
-            if(options.config.repeat != 0){
+            if (options.config.repeat != 0) {
                 this.repeat = options.config.repeat;
             }
 
@@ -267,17 +266,17 @@ public class BarrageView extends ViewGroup implements IBarrageView {
         // 获取最佳的行数
         final int line = getBestLine(itemHeight);
         int curSpeed = getSpeed(line, itemWidth);
-        long duration = (int)((float)(width+itemWidth)/(float)curSpeed+1) * 1000;
+        long duration = (int) ((float) (width + itemWidth) / (float) curSpeed + 1) * 1000;
         //Log.i(TAG,"duration:"+duration);
         valueAnimator.setDuration(duration);
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float value =  animation.getAnimatedFraction();
+                float value = animation.getAnimatedFraction();
                 //animation.getAnimatedValue()
                 //Log.e(TAG, "value:" + value);
-                if(cancel){
+                if (cancel) {
                     valueAnimator.cancel();
                     BarrageView.this.removeView(view);
                 }
@@ -314,7 +313,7 @@ public class BarrageView extends ViewGroup implements IBarrageView {
     /**
      * 获取速度
      *
-     * @param line 最佳弹道
+     * @param line      最佳弹道
      * @param itemWidth 子View的宽度
      * @return 速度
      */
@@ -338,7 +337,7 @@ public class BarrageView extends ViewGroup implements IBarrageView {
                 return lastSpeed;
             }
             // 得到上个View剩下的滑动时间
-            int lastLeavedSlidingTime = (int) ((view.getX() + view.getWidth() ) / (float) lastSpeed)+1;
+            int lastLeavedSlidingTime = (int) ((view.getX() + view.getWidth()) / (float) lastSpeed) + 1;
             //Log.e(TAG,"lastLeavedSlidingTime:"+lastLeavedSlidingTime+",lastLeavedSlidingTime:"+);
             int fastestSpeed = (width) / lastLeavedSlidingTime;
             fastestSpeed = Math.min(fastestSpeed, speed + speedWaveValue);
@@ -503,7 +502,7 @@ public class BarrageView extends ViewGroup implements IBarrageView {
         int repeat = 1;
     }
 
-    public static class Options{
+    public static class Options {
 
         Config config;
 
@@ -516,7 +515,7 @@ public class BarrageView extends ViewGroup implements IBarrageView {
          *
          * @param gravity 布局位置
          */
-        public Options setGravity(int gravity){
+        public Options setGravity(int gravity) {
             this.config.gravity = gravity;
             return this;
         }

@@ -19,31 +19,33 @@ import io.agora.chat.MessageBody;
  * （1）初始化 {@link #init()}，添加消息监听，根据业务需求，选择合适的地方初始化。
  * （2）设置聊天室信息 {@link #setChatRoomInfo(String)} 设置聊天室的id，用于筛选聊天室消息
  * （3）设置自定义消息监听{@link #setOnCustomMsgReceiveListener(OnCustomMsgReceiveListener)}
- *      用于接收不同的自定义消息类型（目前仅礼物，点赞及弹幕消息）。
+ * 用于接收不同的自定义消息类型（目前仅礼物，点赞及弹幕消息）。
  * （4）发送自定义消息：
- *      a、如果自定义消息类型与library相同，且所传参数相同或者相近，可以直接调用如下方法：
- *      {@link #sendGiftMsg(String, int, OnMsgCallBack)},
- *      {@link #sendPraiseMsg(int, OnMsgCallBack)},
- *      {@link #sendBarrageMsg(String, OnMsgCallBack)} 或者
- *      {@link #sendGiftMsg(Map, OnMsgCallBack)},
- *      {@link #sendPraiseMsg(Map, OnMsgCallBack)},
- *      {@link #sendBarrageMsg(Map, OnMsgCallBack)}
- *      b、如果有其他自定义消息类型，可以调用如下方法：
- *      {@link #sendCustomMsg(String, Map, OnMsgCallBack)},
- *      {@link #sendCustomMsg(String, ChatMessage.ChatType, String, Map, OnMsgCallBack)}。
+ * a、如果自定义消息类型与library相同，且所传参数相同或者相近，可以直接调用如下方法：
+ * {@link #sendGiftMsg(String, int, OnMsgCallBack)},
+ * {@link #sendPraiseMsg(int, OnMsgCallBack)},
+ * {@link #sendBarrageMsg(String, OnMsgCallBack)} 或者
+ * {@link #sendGiftMsg(Map, OnMsgCallBack)},
+ * {@link #sendPraiseMsg(Map, OnMsgCallBack)},
+ * {@link #sendBarrageMsg(Map, OnMsgCallBack)}
+ * b、如果有其他自定义消息类型，可以调用如下方法：
+ * {@link #sendCustomMsg(String, Map, OnMsgCallBack)},
+ * {@link #sendCustomMsg(String, ChatMessage.ChatType, String, Map, OnMsgCallBack)}。
  * （5）自定义消息类型枚举{@link EmCustomMsgType} 定义了礼物，点赞及弹幕消息类型（以event区分）
  */
 public class EmCustomMsgHelper implements MessageListener {
     private static EmCustomMsgHelper instance;
-    private EmCustomMsgHelper(){}
+
+    private EmCustomMsgHelper() {
+    }
 
     private String chatRoomId;
     private OnCustomMsgReceiveListener listener;
 
     public static EmCustomMsgHelper getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             synchronized (EmCustomMsgHelper.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new EmCustomMsgHelper();
                 }
             }
@@ -60,6 +62,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 设置聊天室id
+     *
      * @param chatRoomId
      */
     public void setChatRoomInfo(String chatRoomId) {
@@ -68,6 +71,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 设置接收消息的监听
+     *
      * @param listener
      */
     public void setOnCustomMsgReceiveListener(OnCustomMsgReceiveListener listener) {
@@ -85,43 +89,43 @@ public class EmCustomMsgHelper implements MessageListener {
     public void onMessageReceived(List<ChatMessage> messages) {
         for (ChatMessage message : messages) {
             // 先判断是否自定义消息
-            if(message.getType() != ChatMessage.Type.CUSTOM) {
+            if (message.getType() != ChatMessage.Type.CUSTOM) {
                 continue;
             }
             // 再排除单聊
-            if(message.getChatType() != ChatMessage.ChatType.GroupChat && message.getChatType() != ChatMessage.ChatType.ChatRoom) {
+            if (message.getChatType() != ChatMessage.ChatType.GroupChat && message.getChatType() != ChatMessage.ChatType.ChatRoom) {
                 continue;
             }
             String username = message.getTo();
             // 判断是否同一个聊天室或者群组
-            if(!TextUtils.equals(username, chatRoomId)) {
+            if (!TextUtils.equals(username, chatRoomId)) {
                 continue;
             }
             // 判断是否是自定消息，然后区分礼物，点赞及弹幕消息
             CustomMessageBody body = (CustomMessageBody) message.getBody();
             String event = body.event();
             // 如果event为空，则不处理
-            if(TextUtils.isEmpty(event)) {
+            if (TextUtils.isEmpty(event)) {
                 continue;
             }
             EmCustomMsgType msgType = getCustomMsgType(event);
-            if(msgType == null) {
+            if (msgType == null) {
                 continue;
             }
             // 最后返回各自的消息类型
             switch (msgType) {
                 case CHATROOM_GIFT:
-                    if(listener != null) {
+                    if (listener != null) {
                         listener.onReceiveGiftMsg(message);
                     }
                     break;
                 case CHATROOM_PRAISE:
-                    if(listener != null) {
+                    if (listener != null) {
                         listener.onReceivePraiseMsg(message);
                     }
                     break;
                 case CHATROOM_BARRAGE:
-                    if(listener != null) {
+                    if (listener != null) {
                         listener.onReceiveBarrageMsg(message);
                     }
                     break;
@@ -156,6 +160,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送礼物消息
+     *
      * @param giftId
      * @param num
      * @param callBack
@@ -169,11 +174,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送礼物消息(多参数)
+     *
      * @param params
      * @param callBack
      */
     public void sendGiftMsg(Map<String, String> params, final OnMsgCallBack callBack) {
-        if(params.size() <= 0) {
+        if (params.size() <= 0) {
             return;
         }
         sendCustomMsg(EmCustomMsgType.CHATROOM_GIFT.getName(), params, callBack);
@@ -181,11 +187,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送点赞消息
+     *
      * @param num
      * @param callBack
      */
     public void sendPraiseMsg(int num, OnMsgCallBack callBack) {
-        if(num <= 0) {
+        if (num <= 0) {
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -195,11 +202,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送点赞消息(多参数)
+     *
      * @param params
      * @param callBack
      */
     public void sendPraiseMsg(Map<String, String> params, final OnMsgCallBack callBack) {
-        if(params.size() <= 0) {
+        if (params.size() <= 0) {
             return;
         }
         sendCustomMsg(EmCustomMsgType.CHATROOM_PRAISE.getName(), params, callBack);
@@ -207,11 +215,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送弹幕消息
+     *
      * @param content
      * @param callBack
      */
     public void sendBarrageMsg(String content, final OnMsgCallBack callBack) {
-        if(TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(content)) {
             return;
         }
         Map<String, String> params = new HashMap<>();
@@ -221,11 +230,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送弹幕消息(多参数)
+     *
      * @param params
      * @param callBack
      */
     public void sendBarrageMsg(Map<String, String> params, final OnMsgCallBack callBack) {
-        if(params.size() <= 0) {
+        if (params.size() <= 0) {
             return;
         }
         sendCustomMsg(EmCustomMsgType.CHATROOM_BARRAGE.getName(), params, callBack);
@@ -233,6 +243,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送自定义消息
+     *
      * @param event
      * @param params
      * @param callBack
@@ -243,6 +254,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 发送自定义消息
+     *
      * @param to
      * @param chatType
      * @param event
@@ -259,7 +271,7 @@ public class EmCustomMsgHelper implements MessageListener {
         sendMessage.setMessageStatusCallback(new CallBack() {
             @Override
             public void onSuccess() {
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onSuccess();
                     callBack.onSuccess(sendMessage);
                 }
@@ -267,7 +279,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
             @Override
             public void onError(int i, String s) {
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onError(i, s);
                     callBack.onError(sendMessage.getMsgId(), i, s);
                 }
@@ -275,7 +287,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
             @Override
             public void onProgress(int i, String s) {
-                if(callBack != null) {
+                if (callBack != null) {
                     callBack.onProgress(i, s);
                 }
             }
@@ -285,15 +297,16 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取礼物消息中礼物的id
+     *
      * @param msg
      * @return
      */
     public String getMsgGiftId(ChatMessage msg) {
-        if(!isGiftMsg(msg)) {
+        if (!isGiftMsg(msg)) {
             return null;
         }
         Map<String, String> params = getCustomMsgParams(msg);
-        if(params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
+        if (params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_ID)) {
             return params.get(MsgConstant.CUSTOM_GIFT_KEY_ID);
         }
         return null;
@@ -301,17 +314,18 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取礼物消息中礼物的数量
+     *
      * @param msg
      * @return
      */
     public int getMsgGiftNum(ChatMessage msg) {
-        if(!isGiftMsg(msg)) {
+        if (!isGiftMsg(msg)) {
             return 0;
         }
         Map<String, String> params = getCustomMsgParams(msg);
-        if(params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
+        if (params.containsKey(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
             String num = params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM);
-            if(TextUtils.isEmpty(num)) {
+            if (TextUtils.isEmpty(num)) {
                 return 0;
             }
             try {
@@ -325,17 +339,18 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取点赞消息中点赞的数目
+     *
      * @param msg
      * @return
      */
     public int getMsgPraiseNum(ChatMessage msg) {
-        if(!isPraiseMsg(msg)) {
+        if (!isPraiseMsg(msg)) {
             return 0;
         }
         Map<String, String> params = getCustomMsgParams(msg);
-        if(params.containsKey(MsgConstant.CUSTOM_PRAISE_KEY_NUM)) {
+        if (params.containsKey(MsgConstant.CUSTOM_PRAISE_KEY_NUM)) {
             String num = params.get(MsgConstant.CUSTOM_PRAISE_KEY_NUM);
-            if(TextUtils.isEmpty(num)) {
+            if (TextUtils.isEmpty(num)) {
                 return 0;
             }
             try {
@@ -349,15 +364,16 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取弹幕消息中的文本
+     *
      * @param msg
      * @return
      */
     public String getMsgBarrageTxt(ChatMessage msg) {
-        if(!isBarrageMsg(msg)) {
+        if (!isBarrageMsg(msg)) {
             return null;
         }
         Map<String, String> params = getCustomMsgParams(msg);
-        if(params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
+        if (params.containsKey(MsgConstant.CUSTOM_BARRAGE_KEY_TXT)) {
             return params.get(MsgConstant.CUSTOM_BARRAGE_KEY_TXT);
         }
         return null;
@@ -365,6 +381,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 判断是否是礼物消息
+     *
      * @param msg
      * @return
      */
@@ -374,6 +391,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 判断是否是点赞消息
+     *
      * @param msg
      * @return
      */
@@ -383,6 +401,7 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 判断是否是弹幕消息
+     *
      * @param msg
      * @return
      */
@@ -392,14 +411,15 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取自定义消息中的event字段
+     *
      * @param message
      * @return
      */
     public String getCustomEvent(ChatMessage message) {
-        if(message == null) {
+        if (message == null) {
             return null;
         }
-        if(!(message.getBody() instanceof  CustomMessageBody)) {
+        if (!(message.getBody() instanceof CustomMessageBody)) {
             return null;
         }
         return ((CustomMessageBody) message.getBody()).event();
@@ -407,15 +427,16 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取自定义消息中的参数
+     *
      * @param message
      * @return
      */
     public Map<String, String> getCustomMsgParams(ChatMessage message) {
-        if(message == null) {
+        if (message == null) {
             return null;
         }
         MessageBody body = message.getBody();
-        if(!(body instanceof CustomMessageBody)) {
+        if (!(body instanceof CustomMessageBody)) {
             return null;
         }
         return ((CustomMessageBody) body).getParams();
@@ -423,11 +444,12 @@ public class EmCustomMsgHelper implements MessageListener {
 
     /**
      * 获取自定义消息类型
+     *
      * @param event
      * @return
      */
     public EmCustomMsgType getCustomMsgType(String event) {
-        if(TextUtils.isEmpty(event)) {
+        if (TextUtils.isEmpty(event)) {
             return null;
         }
         return EmCustomMsgType.fromName(event);

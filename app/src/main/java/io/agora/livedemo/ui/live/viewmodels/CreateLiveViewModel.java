@@ -35,16 +35,17 @@ public class CreateLiveViewModel extends AndroidViewModel {
 
     /**
      * 创建房间
+     *
      * @param name
      * @param description
      * @param localPath
      */
-    public void createLiveRoom(String name, String description,String localPath) {
+    public void createLiveRoom(String name, String description, String localPath) {
         LiveData<Resource<LiveRoom>> liveData = null;
-        if(TextUtils.isEmpty(localPath)) {
+        if (TextUtils.isEmpty(localPath)) {
             LiveRoom liveRoom = getLiveRoom(name, description, null);
             liveData = repository.createLiveRoom(liveRoom);
-        }else {
+        } else {
             liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
                 if (input.status == Status.ERROR) {
                     return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));
@@ -61,17 +62,18 @@ public class CreateLiveViewModel extends AndroidViewModel {
 
     /**
      * 创建房间
+     *
      * @param name
      * @param description
      * @param localPath
      * @param videoType
      */
-    public void createLiveRoom(String name, String description,String localPath, String videoType) {
+    public void createLiveRoom(String name, String description, String localPath, String videoType) {
         LiveData<Resource<LiveRoom>> liveData = null;
-        if(TextUtils.isEmpty(localPath)) {
+        if (TextUtils.isEmpty(localPath)) {
             LiveRoom liveRoom = getLiveRoom(name, description, videoType, null);
             liveData = repository.createLiveRoom(liveRoom);
-        }else {
+        } else {
             liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
                 if (input.status == Status.ERROR) {
                     return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));

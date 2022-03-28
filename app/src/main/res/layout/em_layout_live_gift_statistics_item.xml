@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="@dimen/em_margin_15"
         android:layout_marginStart="@dimen/em_margin_15"
-        android:src="@drawable/gift_default_1"/>
+        android:src="@drawable/gift_default_1" />
 
     <TextView
         android:id="@+id/tv_gift_info"
@@ -30,9 +30,9 @@
         android:layout_marginLeft="@dimen/em_margin_10"
         android:layout_marginStart="@dimen/em_margin_10"
         android:textColor="@color/white"
-        android:textSize="@dimen/em_size_normal"/>
+        android:textSize="@dimen/em_size_normal" />
 
-    <io.hyphenate.easeui.widget.EaseImageView
+    <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/img_avatar"
         android:layout_width="@dimen/em_margin_20"
         android:layout_height="@dimen/em_margin_20"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="150dp"
         android:layout_marginStart="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/txt_usernick"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@id/img_avatar"
         app:layout_constraintBottom_toBottomOf="@id/img_avatar"
         android:layout_marginLeft="@dimen/em_margin_10"
-        android:layout_marginStart="@dimen/em_margin_10"/>
+        android:layout_marginStart="@dimen/em_margin_10" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

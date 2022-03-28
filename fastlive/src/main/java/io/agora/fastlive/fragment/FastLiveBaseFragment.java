@@ -6,7 +6,6 @@ import android.util.Log;
 import io.agora.fastlive.FastLiveHelper;
 import io.agora.fastlive.rtc.RtcEventHandler;
 import io.agora.fastlive.widgets.VideoGridContainer;
-
 import io.agora.rtc2.Constants;
 
 public abstract class FastLiveBaseFragment extends FastBaseFragment implements RtcEventHandler {
@@ -25,7 +24,7 @@ public abstract class FastLiveBaseFragment extends FastBaseFragment implements R
     protected void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             channel = bundle.getString("channel");
             roomId = bundle.getString("roomId");
             hxId = bundle.getString("hxId");
@@ -54,7 +53,7 @@ public abstract class FastLiveBaseFragment extends FastBaseFragment implements R
 //        if(BuildConfig.DEBUG) {
 //            joinRtcChannel(null);
 //        }else {
-            getAgoraToken();
+        getAgoraToken();
 //        }
         initRtc();
     }
@@ -67,11 +66,11 @@ public abstract class FastLiveBaseFragment extends FastBaseFragment implements R
 
     @Override
     public void onRtcConnectionStateChanged(int state, int reason) {
-        Log.i("fast", "onRtcConnectionStateChanged state: "+state + " reason: "+reason);
+        Log.i("fast", "onRtcConnectionStateChanged state: " + state + " reason: " + reason);
         //如果token无效
-        if(reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN) {
+        if (reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN) {
             Log.i("fast", "connection_changed_invalid_token");
-        }else if(reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
+        } else if (reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
             //token过期
             onTokenExpired();
         }
@@ -94,6 +93,7 @@ public abstract class FastLiveBaseFragment extends FastBaseFragment implements R
 
     /**
      * 加入channel
+     *
      * @param token
      */
     public void joinRtcChannel(String token) {
@@ -109,7 +109,7 @@ public abstract class FastLiveBaseFragment extends FastBaseFragment implements R
     public void onDestroyView() {
         super.onDestroyView();
         Log.i("fast", "onDestroyView");
-        if(!preLeave) {
+        if (!preLeave) {
             helper.onDestroy(this);
         }
 

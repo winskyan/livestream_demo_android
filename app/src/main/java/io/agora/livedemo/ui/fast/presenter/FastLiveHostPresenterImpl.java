@@ -11,8 +11,8 @@ import retrofit2.Response;
 public class FastLiveHostPresenterImpl extends FastHostPresenter {
     @Override
     public void onStartCamera() {
-        runOnUI(()-> {
-            if(isActive()) {
+        runOnUI(() -> {
+            if (isActive()) {
                 mView.onStartBroadcast();
             }
         });
@@ -20,8 +20,8 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
 
     @Override
     public void switchCamera() {
-        runOnUI(()-> {
-            if(isActive()) {
+        runOnUI(() -> {
+            if (isActive()) {
                 mView.switchCamera();
             }
         });
@@ -29,8 +29,8 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
 
     @Override
     public void leaveChannel() {
-        runOnUI(()-> {
-            if(isActive()) {
+        runOnUI(() -> {
+            if (isActive()) {
                 mView.onLeaveChannel();
             }
         });
@@ -38,18 +38,18 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
 
     @Override
     public void getFastToken(String hxId, String channel, String hxAppkey, int uid, boolean isRenew) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        ThreadManager.getInstance().runOnIOThread(() -> {
             try {
                 Response<AgoraTokenBean> response = LiveManager.getInstance().getAgoraToken(hxId, channel, hxAppkey, uid);
-                runOnUI(()-> {
-                    if(isActive()) {
+                runOnUI(() -> {
+                    if (isActive()) {
                         mView.onGetTokenSuccess(response.body().getAccessToken(), response.body().getAgoraUserId(), isRenew);
                     }
                 });
             } catch (LiveException e) {
                 e.printStackTrace();
-                runOnUI(()-> {
-                    if(isActive()) {
+                runOnUI(() -> {
+                    if (isActive()) {
                         mView.onGetTokenFail(e.getDescription());
                     }
                 });
@@ -59,7 +59,7 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
 
     @Override
     public void deleteRoom(String chatroomId) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        ThreadManager.getInstance().runOnIOThread(() -> {
             LiveManager.getInstance().deleteRoom(chatroomId);
         });
     }

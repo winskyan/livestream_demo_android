@@ -2,14 +2,14 @@ package io.agora.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
 
-import io.agora.livedemo.common.reponsitories.AppServerRepository;
-import io.agora.livedemo.common.reponsitories.Resource;
-import io.agora.livedemo.data.model.LiveRoomUrlBean;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+
+import io.agora.livedemo.common.reponsitories.AppServerRepository;
+import io.agora.livedemo.common.reponsitories.Resource;
+import io.agora.livedemo.data.model.LiveRoomUrlBean;
 
 public class StreamViewModel extends AndroidViewModel {
     private AppServerRepository repository;

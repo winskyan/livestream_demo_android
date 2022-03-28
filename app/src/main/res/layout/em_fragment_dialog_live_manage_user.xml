@@ -17,7 +17,7 @@
         android:textColor="#ffffc700"
         android:textSize="@dimen/em_size_big"
         android:background="#99000000"
-        android:foreground="@drawable/em_ripple_click_gray"/>
+        android:foreground="@drawable/em_ripple_click_gray" />
 
     <TextView
         android:id="@+id/tv_white"
@@ -32,7 +32,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/em_size_big"
         android:background="#99000000"
-        android:foreground="@drawable/em_ripple_click_gray"/>
+        android:foreground="@drawable/em_ripple_click_gray" />
 
     <TextView
         android:id="@+id/tv_cancel"
@@ -47,6 +47,6 @@
         android:textColor="@color/white"
         android:textSize="@dimen/em_size_big"
         android:background="#99000000"
-        android:foreground="@drawable/em_ripple_click_gray"/>
+        android:foreground="@drawable/em_ripple_click_gray" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

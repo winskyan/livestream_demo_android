@@ -24,10 +24,12 @@ public class BezierEvaluator implements TypeEvaluator<PointF> {
 
     private PointF pointF1;
     private PointF pointF2;
-    public BezierEvaluator(PointF pointF1,PointF pointF2){
+
+    public BezierEvaluator(PointF pointF1, PointF pointF2) {
         this.pointF1 = pointF1;
         this.pointF2 = pointF2;
     }
+
     @Override
     public PointF evaluate(float time, PointF startValue,
                            PointF endValue) {

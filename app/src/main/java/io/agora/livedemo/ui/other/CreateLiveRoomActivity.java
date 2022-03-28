@@ -20,7 +20,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
@@ -32,17 +42,6 @@ import io.agora.livedemo.ui.live.fragment.DemoListDialogFragment;
 import io.agora.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import io.agora.util.PathUtil;
 import io.agora.util.VersionUtils;
-import io.hyphenate.easeui.utils.EaseCommonUtils;
-import io.hyphenate.easeui.widget.EaseImageView;
-import io.hyphenate.easeui.widget.EaseTitleBar;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class CreateLiveRoomActivity extends BaseActivity {
 
@@ -97,9 +96,9 @@ public class CreateLiveRoomActivity extends BaseActivity {
             parseResource(response, new OnResourceParseCallback<LiveRoom>(true) {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    if(DemoHelper.isFastLiveType(data.getVideo_type())) {
+                    if (DemoHelper.isFastLiveType(data.getVideo_type())) {
                         FastLiveHostActivity.actionStart(mContext, data);
-                    }else {
+                    } else {
                         // LiveAnchorActivity.actionStart(mContext, data);
                         CdnLiveHostActivity.actionStart(mContext, data);
                     }
@@ -131,7 +130,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
         RelativeLayout rightLayout = titleBar.getRightLayout();
         ViewGroup.LayoutParams params = rightLayout.getLayoutParams();
         if (params instanceof RelativeLayout.LayoutParams) {
-            ((RelativeLayout.LayoutParams) params).rightMargin = (int) EaseCommonUtils.dip2px(mContext, 5);
+            ((RelativeLayout.LayoutParams) params).rightMargin = (int) EaseUtils.dip2px(mContext, 5);
         }
     }
 
@@ -202,7 +201,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 break;
             case REQUEST_CODE_CUTTING:
                 // if (data != null) {
-                    setPicToView(data);
+                setPicToView(data);
                 // }
                 break;
             case REQUEST_CODE_CAMERA:
@@ -285,7 +284,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
      * @return
      */
     private boolean checkSdCardExist() {
-        return EaseCommonUtils.isSdcardExist();
+        return EaseUtils.isSdcardExist();
     }
 
     private void startPhotoZoom(Uri uri) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ImageGroupView">
-        <attr name="image_group_src" format="reference"/>
+        <attr name="image_group_src" format="reference" />
         <attr name="image_group_width" format="dimension">
             <!-- The view should be as big as its parent (minus padding).
                  This constant is deprecated starting from API Level 8 and
@@ -27,18 +27,18 @@
     </declare-styleable>
 
     <declare-styleable name="ArrowItemView">
-        <attr name="arrowItemTitle" format="string|reference"/>
-        <attr name="arrowItemTitleColor" format="color|reference"/>
-        <attr name="arrowItemTitleSize" format="dimension|reference"/>
-        <attr name="arrowItemContent" format="string|reference"/>
-        <attr name="arrowItemContentColor" format="color|reference"/>
-        <attr name="arrowItemContentSize" format="dimension|reference"/>
-        <attr name="arrowItemShowDivider" format="boolean"/>
-        <attr name="arrowItemShowArrow" format="boolean"/>
-        <attr name="arrowItemShowAvatar" format="boolean"/>
-        <attr name="arrowItemAvatarSrc" format="reference"/>
-        <attr name="arrowItemAvatarHeight" format="dimension|reference"/>
-        <attr name="arrowItemAvatarWidth" format="dimension|reference"/>
+        <attr name="arrowItemTitle" format="string|reference" />
+        <attr name="arrowItemTitleColor" format="color|reference" />
+        <attr name="arrowItemTitleSize" format="dimension|reference" />
+        <attr name="arrowItemContent" format="string|reference" />
+        <attr name="arrowItemContentColor" format="color|reference" />
+        <attr name="arrowItemContentSize" format="dimension|reference" />
+        <attr name="arrowItemShowDivider" format="boolean" />
+        <attr name="arrowItemShowArrow" format="boolean" />
+        <attr name="arrowItemShowAvatar" format="boolean" />
+        <attr name="arrowItemAvatarSrc" format="reference" />
+        <attr name="arrowItemAvatarHeight" format="dimension|reference" />
+        <attr name="arrowItemAvatarWidth" format="dimension|reference" />
     </declare-styleable>
 
     <declare-styleable name="MagicTextView">
@@ -61,17 +61,4 @@
             <enum name="round" value="2" />
         </attr>
     </declare-styleable>
-
-    <declare-styleable name="EaseTitleBar">
-        <attr name="titleBarTitle" format="reference|string"/>
-        <attr name="titleBarLeftImage" format="reference"/>
-        <attr name="titleBarRightImage" format="reference"/>
-        <attr name="titleBarRightTitle" format="reference|string"/>
-        <attr name="titleBarBackground" format="reference|color"/>
-        <attr name="titleBarArrowColor" format="reference|color"/>
-        <attr name="titleBarMenuResource" format="reference"/>
-        <attr name="titleBarRightVisible" format="boolean"/>
-        <attr name="titleBarDisplayHomeAsUpEnabled" format="boolean"/>
-    </declare-styleable>
-
 </resources>

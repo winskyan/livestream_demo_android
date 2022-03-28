@@ -1,53 +1,26 @@
 package io.agora.livedemo.data.model;
 
-import android.text.TextUtils;
-
 import java.io.Serializable;
 
-/**
- * Created by wei on 2017/2/14.
- */
-
 public class User implements Serializable {
-    private String username;
-    private String nick;
-    private String avatar;
-    private int avatarResource;
     private String id;
+    private String nickName;
+    private int avatarResource;
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getNick() {
-        return nick;
+    public String getNickName() {
+        return nickName;
     }
 
-    public String getNickname() {
-        if(TextUtils.isEmpty(nick)) {
-            return username;
-        }
-        return nick;
-    }
-
-    public void setNickname(String nick) {
-        this.nick = nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public int getAvatarResource() {
@@ -58,11 +31,12 @@ public class User implements Serializable {
         this.avatarResource = avatarResource;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", avatarResource=" + avatarResource +
+                '}';
     }
 }

@@ -2,15 +2,15 @@ package io.agora.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
 
-import io.agora.chat.ChatRoom;
-import io.agora.livedemo.common.reponsitories.EmClientRepository;
-import io.agora.livedemo.common.reponsitories.Resource;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MediatorLiveData;
+
+import java.util.List;
+
+import io.agora.chat.ChatRoom;
+import io.agora.livedemo.common.reponsitories.EmClientRepository;
+import io.agora.livedemo.common.reponsitories.Resource;
 
 public class UserManageViewModel extends AndroidViewModel {
     private EmClientRepository repository;
@@ -40,6 +40,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 获取白名单
+     *
      * @param roomId
      */
     public void getWhiteList(String roomId) {
@@ -48,6 +49,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 获取成员列表
+     *
      * @param roomId
      */
     public void getMembers(String roomId) {
@@ -60,6 +62,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 获取禁言列表
+     *
      * @param roomId
      */
     public void getMuteList(String roomId) {
@@ -72,6 +75,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 加入白名单
+     *
      * @param chatRoomId
      * @param members
      */
@@ -82,6 +86,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 将用户从白名单中移除
+     *
      * @param chatRoomId
      * @param members
      */
@@ -96,6 +101,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 检查是否在白名单中
+     *
      * @param username
      */
     public void checkIfInGroupWhiteList(String username) {
@@ -105,6 +111,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 禁止聊天室成员发言
+     *
      * @param chatRoomId
      * @param members
      * @param duration
@@ -116,6 +123,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 取消禁言
+     *
      * @param chatRoomId
      * @param members
      */
@@ -126,6 +134,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 一键禁言
+     *
      * @param chatRoomId
      */
     public void muteAllMembers(String chatRoomId) {
@@ -135,6 +144,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     /**
      * 一键解除禁言
+     *
      * @param chatRoomId
      */
     public void unMuteAllMembers(String chatRoomId) {

@@ -1,6 +1,6 @@
 package io.agora.livedemo.data.model;
 
-public class LiveRoomUrlBean extends BaseBean{
+public class LiveRoomUrlBean extends BaseBean {
     private String data;
 
     public String getData() {

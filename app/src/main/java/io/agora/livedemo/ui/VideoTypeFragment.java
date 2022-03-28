@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.R;
-import io.hyphenate.easeui.utils.EaseCommonUtils;
 import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.cdn.CdnLivingListActivity;
 import io.agora.livedemo.ui.fast.FastLivingListActivity;
@@ -44,16 +44,16 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void setImageDimen() {
-        float[] screenInfo = EaseCommonUtils.getScreenInfo(mContext);
+        float[] screenInfo = EaseUtils.getScreenInfo(mContext);
         float width = screenInfo[0];
-        if(width <= 0) {
+        if (width <= 0) {
             return;
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         BitmapFactory.decodeResource(getResources(), R.drawable.live_normal_bg, options);
         int imageWidth = options.outWidth;
         int imageHeight = options.outHeight;
-        if(imageWidth <= 0 || imageHeight <= 0) {
+        if (imageWidth <= 0 || imageHeight <= 0) {
             return;
         }
         //获取条目控件在当前屏幕上的宽和高
@@ -83,10 +83,10 @@ public class VideoTypeFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cl_live :
+            case R.id.cl_live:
                 CdnLivingListActivity.actionStart(mContext);
                 break;
-            case R.id.cl_fast_live :
+            case R.id.cl_fast_live:
                 FastLivingListActivity.actionStart(mContext, true);
                 break;
             case R.id.cl_interaction_live:

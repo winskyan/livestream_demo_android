@@ -3,6 +3,7 @@ package io.agora.livedemo.common.reponsitories;
 
 /**
  * 结果基础类
+ *
  * @param <T> 请求结果的实体类
  */
 public class Result<T> {
@@ -10,7 +11,7 @@ public class Result<T> {
     public T result;
     public String message;
 
-    public Result(){
+    public Result() {
     }
 
     public Result(int code, T result) {
@@ -23,7 +24,7 @@ public class Result<T> {
         this.message = message;
     }
 
-    public Result(int code){
+    public Result(int code) {
         this.code = code;
     }
 
@@ -43,7 +44,7 @@ public class Result<T> {
         this.result = result;
     }
 
-    public boolean isSuccess(){
+    public boolean isSuccess() {
         return code == ErrorCode.EM_NO_ERROR;
     }
 

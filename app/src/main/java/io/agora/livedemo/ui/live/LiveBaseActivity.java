@@ -1,13 +1,13 @@
 package io.agora.livedemo.ui.live;
 
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
@@ -20,10 +20,11 @@ public abstract class LiveBaseActivity extends BaseActivity {
     protected ImageView coverImage;
     protected LiveRoom liveRoom;
 
-    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         liveRoom = (LiveRoom) getIntent().getSerializableExtra("liveroom");
-        if(liveRoom == null) {
+        if (liveRoom == null) {
             finish();
             return;
         }
@@ -44,7 +45,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 .into(coverImage);
     }
 
-    protected void initListener() {}
+    protected void initListener() {
+    }
 
     protected void initData() {
     }

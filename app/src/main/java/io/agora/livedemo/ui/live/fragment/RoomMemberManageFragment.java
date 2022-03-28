@@ -4,17 +4,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
 
+import androidx.core.content.ContextCompat;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import androidx.core.content.ContextCompat;
 
 
 public class RoomMemberManageFragment extends RoomUserManagementFragment {
@@ -28,8 +28,8 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
                 public void onSuccess(LiveRoom data) {
                     isAllMuted = data.isMute();
                     LinkedList<String> memberList = data.getMemberList(DemoConstants.MAX_SHOW_MEMBERS_COUNT);
-                    if(TextUtils.equals(data.getOwner(), ChatClient.getInstance().getCurrentUser())) {
-                        if(memberList == null) {
+                    if (TextUtils.equals(data.getOwner(), ChatClient.getInstance().getCurrentUser())) {
+                        if (memberList == null) {
                             memberList = new LinkedList<>();
                         }
                         memberList.add(0, ChatClient.getInstance().getCurrentUser());
@@ -56,13 +56,13 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
         String username = userList.get(position);
         boolean isAnchor = DemoHelper.isOwner(username);
         boolean isMemberMuted = false;
-        if(isAnchor){
+        if (isAnchor) {
             holder.switchMute.setVisibility(View.VISIBLE);
             holder.switchMute.setChecked(isAllMuted);
             holder.tvLabel.setVisibility(View.VISIBLE);
             holder.tvLabel.setText(getString(R.string.em_live_anchor_self));
             holder.tvMuteHint.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.managerButton.setVisibility(View.GONE);
             holder.tvLabel.setVisibility(View.GONE);
             holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_live_member_label_mute_shape));
@@ -74,9 +74,9 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
         holder.switchMute.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     viewModel.muteAllMembers(chatroomId);
-                }else {
+                } else {
                     viewModel.unMuteAllMembers(chatroomId);
                 }
             }

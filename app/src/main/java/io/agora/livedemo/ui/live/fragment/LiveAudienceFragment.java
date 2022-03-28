@@ -14,6 +14,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
@@ -22,21 +28,13 @@ import io.agora.chat.ChatRoom;
 import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.DemoHelper;
+import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
-
-
-import java.util.Random;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import io.agora.util.EMLog;
 
 public class LiveAudienceFragment extends LiveBaseFragment {

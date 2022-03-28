@@ -1,6 +1,6 @@
 package io.agora.fastlive.presenter;
 
-public interface IFastHostView extends IBaseDataView{
+public interface IFastHostView extends IBaseDataView {
     void onGetTokenSuccess(String token, int uid, boolean isRenew);
 
     void onGetTokenFail(String message);

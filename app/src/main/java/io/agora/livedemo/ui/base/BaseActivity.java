@@ -3,6 +3,9 @@ package io.agora.livedemo.ui.base;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
@@ -11,10 +14,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
-import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 import io.agora.livedemo.R;
 import io.agora.livedemo.ThreadPoolManager;
@@ -104,8 +103,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, R.color.white);
-        setStatusBarTextColor(false);
+        setFitSystemForTheme(fitSystemForTheme, R.color.black);
+        setStatusBarTextColor(true);
     }
 
     public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {

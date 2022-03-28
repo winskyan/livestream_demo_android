@@ -16,7 +16,7 @@
             android:layout_height="0.01dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_dialog_title"
@@ -39,7 +39,7 @@
             android:gravity="center"
             android:maxLines="2"
             android:ellipsize="end"
-            tools:text="标题"/>
+            tools:text="标题" />
 
         <RelativeLayout
             android:id="@+id/rl_dialog_middle"
@@ -49,7 +49,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_title"
             app:layout_constraintBottom_toTopOf="@id/btn_dialog_confirm"
-            android:layout_marginBottom="@dimen/em_dialog_middle_margin_bottom"/>
+            android:layout_marginBottom="@dimen/em_dialog_middle_margin_bottom" />
 
         <Button
             android:id="@+id/btn_dialog_cancel"
@@ -61,7 +61,7 @@
             app:layout_constraintTop_toTopOf="@id/btn_dialog_confirm"
             android:background="@drawable/em_dialog_btn_left_selector"
             android:text="@string/em_dialog_btn_cancel"
-            android:textColor="@color/em_dialog_btn_text_color_selector"/>
+            android:textColor="@color/em_dialog_btn_text_color_selector" />
 
         <Button
             android:id="@+id/btn_dialog_confirm"
@@ -73,14 +73,14 @@
             app:layout_constraintTop_toBottomOf="@id/rl_dialog_middle"
             android:background="@drawable/em_dialog_btn_selector"
             android:text="@string/em_dialog_btn_confirm"
-            android:textColor="@color/em_dialog_btn_text_color_selector"/>
+            android:textColor="@color/em_dialog_btn_text_color_selector" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:constraint_referenced_ids="view_top,rl_dialog_middle,btn_dialog_cancel"/>
+            app:constraint_referenced_ids="view_top,rl_dialog_middle,btn_dialog_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

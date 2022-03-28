@@ -8,13 +8,13 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.easemob.fastlive.R;
+
 import io.agora.cdn.presenter.CdnAudiencePresenter;
 import io.agora.cdn.presenter.ICdnAudienceView;
 import io.agora.fastlive.FastLiveHelper;
 import io.agora.fastlive.FastPrefManager;
-import com.easemob.fastlive.R;
 import io.agora.fastlive.stats.LocalStatsData;
-
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
 import io.agora.rtc2.video.VideoCanvas;

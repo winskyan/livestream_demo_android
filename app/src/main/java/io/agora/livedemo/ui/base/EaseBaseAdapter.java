@@ -6,6 +6,7 @@ public abstract class EaseBaseAdapter<VH extends RecyclerView.ViewHolder> extend
 
     /**
      * Get the data item associated with the specified position in the data set.
+     *
      * @param position
      * @return
      */

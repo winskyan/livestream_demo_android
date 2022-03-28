@@ -32,19 +32,19 @@ public class SoftKeyboardChangeHelper {
                 rootView.getWindowVisibleDisplayFrame(r);
 
                 int visibleHeight = r.height();
-                if(rootViewVisibleHeight == 0) {
+                if (rootViewVisibleHeight == 0) {
                     rootViewVisibleHeight = visibleHeight;
                     return;
                 }
 
                 //根视图显示高度没有变化，可以看作软键盘显示／隐藏状态没有改变
-                if(rootViewVisibleHeight == visibleHeight) {
+                if (rootViewVisibleHeight == visibleHeight) {
                     return;
                 }
 
                 //根视图显示高度变小且超过设定值，则认为软键盘显示
-                if(rootViewVisibleHeight - visibleHeight > CHANG_VALUE) {
-                    if(listener != null) {
+                if (rootViewVisibleHeight - visibleHeight > CHANG_VALUE) {
+                    if (listener != null) {
                         listener.keyboardShow(rootViewVisibleHeight - visibleHeight);
                     }
                     rootViewVisibleHeight = visibleHeight;
@@ -52,8 +52,8 @@ public class SoftKeyboardChangeHelper {
                 }
 
                 //根视图显示高度变大且超过设定值，则认为软键盘隐藏
-                if(visibleHeight - rootViewVisibleHeight > CHANG_VALUE) {
-                    if(listener != null) {
+                if (visibleHeight - rootViewVisibleHeight > CHANG_VALUE) {
+                    if (listener != null) {
                         listener.keyboardHide(visibleHeight - rootViewVisibleHeight);
                     }
                     rootViewVisibleHeight = visibleHeight;
@@ -64,6 +64,7 @@ public class SoftKeyboardChangeHelper {
 
     /**
      * 设置监听
+     *
      * @param activity
      * @param listener
      */
@@ -74,6 +75,7 @@ public class SoftKeyboardChangeHelper {
 
     /**
      * 设置软键盘监听
+     *
      * @param listener
      */
     public void setOnSoftKeyboardChangeListener(OnSoftKeyboardChangeListener listener) {
@@ -83,12 +85,14 @@ public class SoftKeyboardChangeHelper {
     public interface OnSoftKeyboardChangeListener {
         /**
          * 软键盘展示
+         *
          * @param height
          */
         void keyboardShow(int height);
 
         /**
          * 软键盘收起
+         *
          * @param height
          */
         void keyboardHide(int height);

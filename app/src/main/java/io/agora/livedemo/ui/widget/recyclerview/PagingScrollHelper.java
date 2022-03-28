@@ -14,27 +14,27 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Sunny on 2019/4/1.
  * 参考博文：https://blog.csdn.net/Y_sunny_U/article/details/89500464
  */
- 
+
 public class PagingScrollHelper {
- 
+
     RecyclerView mRecyclerView = null;
- 
+
     private MyOnScrollListener mOnScrollListener = new MyOnScrollListener();
- 
+
     private MyOnFlingListener mOnFlingListener = new MyOnFlingListener();
     private int offsetY = 0;
     private int offsetX = 0;
- 
+
     int startY = 0;
     int startX = 0;
- 
- 
+
+
     enum ORIENTATION {
         HORIZONTAL, VERTICAL, NULL
     }
- 
+
     private ORIENTATION mOrientation = ORIENTATION.HORIZONTAL;
- 
+
     public void setUpRecycleView(RecyclerView recycleView) {
         if (recycleView == null) {
             throw new IllegalArgumentException("recycleView must be not null");
@@ -48,9 +48,9 @@ public class PagingScrollHelper {
         recycleView.setOnTouchListener(mOnTouchListener);
         //获取滚动的方向
         updateLayoutManger();
- 
+
     }
- 
+
     public void updateLayoutManger() {
         RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
         if (layoutManager != null) {
@@ -68,11 +68,11 @@ public class PagingScrollHelper {
             startY = 0;
             offsetX = 0;
             offsetY = 0;
- 
+
         }
- 
+
     }
- 
+
     /**
      * 获取总共的页数
      */
@@ -84,17 +84,16 @@ public class PagingScrollHelper {
             if (mOrientation == ORIENTATION.VERTICAL && mRecyclerView.computeVerticalScrollExtent() != 0) {
                 return mRecyclerView.computeVerticalScrollRange() / mRecyclerView.computeVerticalScrollExtent();
             } else if (mRecyclerView.computeHorizontalScrollExtent() != 0) {
-                Log.i("zzz","rang="+mRecyclerView.computeHorizontalScrollRange()+" extent="+mRecyclerView.computeHorizontalScrollExtent());
+                Log.i("zzz", "rang=" + mRecyclerView.computeHorizontalScrollRange() + " extent=" + mRecyclerView.computeHorizontalScrollExtent());
                 return mRecyclerView.computeHorizontalScrollRange() / mRecyclerView.computeHorizontalScrollExtent();
             }
         }
         return 0;
     }
- 
- 
- 
+
+
     ValueAnimator mAnimator = null;
- 
+
     public void scrollToPosition(int position) {
         if (mAnimator == null) {
             mOnFlingListener.onFling(0, 0);
@@ -112,9 +111,9 @@ public class PagingScrollHelper {
             }
         }
     }
- 
+
     public class MyOnFlingListener extends RecyclerView.OnFlingListener {
- 
+
         @Override
         public boolean onFling(int velocityX, int velocityY) {
             if (mOrientation == ORIENTATION.NULL) {
@@ -122,15 +121,15 @@ public class PagingScrollHelper {
             }
             //获取开始滚动时所在页面的index
             int p = getStartPageIndex();
- 
+
             //记录滚动开始和结束的位置
             int endPoint = 0;
             int startPoint = 0;
- 
+
             //如果是垂直方向
             if (mOrientation == ORIENTATION.VERTICAL) {
                 startPoint = offsetY;
- 
+
                 if (velocityY < 0) {
                     p--;
                 } else if (velocityY > 0) {
@@ -139,7 +138,7 @@ public class PagingScrollHelper {
                 //更具不同的速度判断需要滚动的方向
                 //注意，此处有一个技巧，就是当速度为0的时候就滚动会开始的页面，即实现页面复位
                 endPoint = p * mRecyclerView.getHeight();
- 
+
             } else {
                 startPoint = offsetX;
                 if (velocityX < 0) {
@@ -148,22 +147,22 @@ public class PagingScrollHelper {
                     p++;
                 }
                 endPoint = p * mRecyclerView.getWidth();
- 
+
             }
             if (endPoint < 0) {
                 endPoint = 0;
             }
- 
+
             //使用动画处理滚动
             if (mAnimator == null) {
                 mAnimator = new ValueAnimator().ofInt(startPoint, endPoint);
- 
+
                 mAnimator.setDuration(300);
                 mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int nowPoint = (int) animation.getAnimatedValue();
- 
+
                         if (mOrientation == ORIENTATION.VERTICAL) {
                             int dy = nowPoint - offsetY;
                             //这里通过RecyclerView的scrollBy方法实现滚动。
@@ -191,13 +190,13 @@ public class PagingScrollHelper {
                 mAnimator.cancel();
                 mAnimator.setIntValues(startPoint, endPoint);
             }
- 
+
             mAnimator.start();
- 
+
             return true;
         }
     }
- 
+
     public class MyOnScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -210,26 +209,26 @@ public class PagingScrollHelper {
                     //如果滑动的距离超过屏幕的一半表示需要滑动到下一页
                     move = absY > recyclerView.getHeight() / 2;
                     vY = 0;
- 
+
                     if (move) {
                         vY = offsetY - startY < 0 ? -1000 : 1000;
                     }
- 
+
                 } else {
                     int absX = Math.abs(offsetX - startX);
                     move = absX > recyclerView.getWidth() / 2;
                     if (move) {
                         vX = offsetX - startX < 0 ? -1000 : 1000;
                     }
- 
+
                 }
- 
+
                 mOnFlingListener.onFling(vX, vY);
- 
+
             }
- 
+
         }
- 
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             //滚动结束记录滚动的偏移量
@@ -237,13 +236,13 @@ public class PagingScrollHelper {
             offsetX += dx;
         }
     }
- 
+
     private MyOnTouchListener mOnTouchListener = new MyOnTouchListener();
- 
+
     private boolean firstTouch = true;
- 
+
     public class MyOnTouchListener implements View.OnTouchListener {
- 
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             //手指按下的时候记录开始滚动的坐标
@@ -256,12 +255,12 @@ public class PagingScrollHelper {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 firstTouch = true;
             }
- 
+
             return false;
         }
- 
+
     }
- 
+
     private int getPageIndex() {
         int p = 0;
         if (mRecyclerView.getHeight() == 0 || mRecyclerView.getWidth() == 0) {
@@ -274,7 +273,7 @@ public class PagingScrollHelper {
         }
         return p;
     }
- 
+
     private int getStartPageIndex() {
         int p = 0;
         if (mRecyclerView.getHeight() == 0 || mRecyclerView.getWidth() == 0) {
@@ -288,15 +287,15 @@ public class PagingScrollHelper {
         }
         return p;
     }
- 
+
     onPageChangeListener mOnPageChangeListener;
- 
+
     public void setOnPageChangeListener(onPageChangeListener listener) {
         mOnPageChangeListener = listener;
     }
- 
+
     public interface onPageChangeListener {
         void onPageChange(int index);
     }
- 
+
 }

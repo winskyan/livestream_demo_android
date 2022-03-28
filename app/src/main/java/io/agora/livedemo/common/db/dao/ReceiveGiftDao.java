@@ -1,14 +1,14 @@
 package io.agora.livedemo.common.db.dao;
 
-import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import java.util.List;
+
+import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 
 @Dao
 public interface ReceiveGiftDao {

@@ -5,14 +5,13 @@ import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.restapi.LiveException;
 import io.agora.livedemo.data.restapi.LiveManager;
-
 import retrofit2.Response;
 
 public class FastLiveAudiencePresenterImpl extends FastAudiencePresenter {
     @Override
     public void onLiveClosed() {
-        runOnUI(()-> {
-            if(isActive()) {
+        runOnUI(() -> {
+            if (isActive()) {
                 mView.onLiveClosed();
             }
         });
@@ -20,8 +19,8 @@ public class FastLiveAudiencePresenterImpl extends FastAudiencePresenter {
 
     @Override
     public void leaveChannel() {
-        runOnUI(()-> {
-            if(isActive()) {
+        runOnUI(() -> {
+            if (isActive()) {
                 mView.onLeaveChannel();
             }
         });
@@ -29,18 +28,18 @@ public class FastLiveAudiencePresenterImpl extends FastAudiencePresenter {
 
     @Override
     public void getFastToken(String hxId, String channel, String hxAppkey, int uid, boolean isRenew) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        ThreadManager.getInstance().runOnIOThread(() -> {
             try {
                 Response<AgoraTokenBean> response = LiveManager.getInstance().getAgoraToken(hxId, channel, hxAppkey, uid);
-                runOnUI(()-> {
-                    if(isActive()) {
+                runOnUI(() -> {
+                    if (isActive()) {
                         mView.onGetTokenSuccess(response.body().getAccessToken(), response.body().getAgoraUserId(), isRenew);
                     }
                 });
             } catch (LiveException e) {
                 e.printStackTrace();
-                runOnUI(()-> {
-                    if(isActive()) {
+                runOnUI(() -> {
+                    if (isActive()) {
                         mView.onGetTokenFail(e.getDescription());
                     }
                 });

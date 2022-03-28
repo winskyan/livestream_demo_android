@@ -11,7 +11,7 @@ public class KeyboardUtils {
     public static void hideKeyboard(Activity activity) {
         if (activity.getCurrentFocus() != null) {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if(inputManager == null) {
+            if (inputManager == null) {
                 return;
             }
             inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),

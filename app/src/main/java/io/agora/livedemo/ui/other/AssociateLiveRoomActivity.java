@@ -11,32 +11,43 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.weigan.loopview.LoopView;
+
+import java.io.File;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.bumptech.glide.Glide;
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
-//import com.hyphenate.cloud.HttpFileManager;
-import com.weigan.loopview.LoopView;
-import java.io.File;
-import java.util.List;
 
 public class AssociateLiveRoomActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_PICK = 1;
     private static final int REQUEST_CODE_CUTTING = 2;
 
-    @BindView(R.id.loop_view) LoopView loopView;
-    @BindView(R.id.layout_select_live_id) LinearLayout selectLiveIdLayout;
-    @BindView(R.id.txt_live_id_value) TextView liveIdView;
-    @BindView(R.id.btn_start_live) Button startButton;
-    @BindView(R.id.layout_input_text) LinearLayout inputLayout;
-    @BindView(R.id.edt_live_name) EditText liveNameView;
-    @BindView(R.id.edt_live_desc) EditText liveDescView;
-    @BindView(R.id.img_live_cover) ImageView liveCoverView;
-    @BindView(R.id.txt_cover_hint) TextView hintView;
+    @BindView(R.id.loop_view)
+    LoopView loopView;
+    @BindView(R.id.layout_select_live_id)
+    LinearLayout selectLiveIdLayout;
+    @BindView(R.id.txt_live_id_value)
+    TextView liveIdView;
+    @BindView(R.id.btn_start_live)
+    Button startButton;
+    @BindView(R.id.layout_input_text)
+    LinearLayout inputLayout;
+    @BindView(R.id.edt_live_name)
+    EditText liveNameView;
+    @BindView(R.id.edt_live_desc)
+    EditText liveDescView;
+    @BindView(R.id.img_live_cover)
+    ImageView liveCoverView;
+    @BindView(R.id.txt_cover_hint)
+    TextView hintView;
 
 
     private List<String> liveIds;
@@ -48,7 +59,8 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
     private LiveRoom currentLiveRoom;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_associate_live_room);
         ButterKnife.bind(this);
@@ -77,18 +89,20 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 //        });
     }
 
-    @OnClick(R.id.txt_cancel) void cancel() {
-        if(isSelectLayoutShowed) {
+    @OnClick(R.id.txt_cancel)
+    void cancel() {
+        if (isSelectLayoutShowed) {
             dismissSelectLayout();
             isSelectLayoutShowed = false;
         }
     }
 
-    @OnClick(R.id.txt_save) void save() {
-        if(isSelectLayoutShowed) {
+    @OnClick(R.id.txt_save)
+    void save() {
+        if (isSelectLayoutShowed) {
             dismissSelectLayout();
             isSelectLayoutShowed = false;
-            if(liveIds == null || liveIds.size() == 0) {
+            if (liveIds == null || liveIds.size() == 0) {
                 return;
             }
             selectedLiveId = liveIds.get(loopView.getSelectedItem());
@@ -122,14 +136,16 @@ public class AssociateLiveRoomActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.layout_live_id) void liveIdClicked(){
-        if(!isSelectLayoutShowed) {
+    @OnClick(R.id.layout_live_id)
+    void liveIdClicked() {
+        if (!isSelectLayoutShowed) {
             showSelectLayout();
             isSelectLayoutShowed = true;
         }
     }
 
-    @OnClick(R.id.layout_live_cover) void setLiveCover(){
+    @OnClick(R.id.layout_live_cover)
+    void setLiveCover() {
         Intent pickIntent = new Intent(Intent.ACTION_PICK, null);
         pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*");
@@ -138,11 +154,13 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
     String name = null;
     String desc = null;
-    @OnClick(R.id.btn_start_live) void startLive(){
-        if (!TextUtils.isEmpty(liveNameView.getText())){
+
+    @OnClick(R.id.btn_start_live)
+    void startLive() {
+        if (!TextUtils.isEmpty(liveNameView.getText())) {
             name = liveNameView.getText().toString();
         }
-        if (!TextUtils.isEmpty(liveDescView.getText())){
+        if (!TextUtils.isEmpty(liveDescView.getText())) {
             desc = liveDescView.getText().toString();
         }
         showProgressDialog("发起直播...");
@@ -236,7 +254,8 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
 
     //TODO 和CreateLiveRoomActivity中相同/类似的功能，可以抽取一下
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_PICK:
                 if (data == null || data.getData() == null) {
@@ -278,11 +297,11 @@ public class AssociateLiveRoomActivity extends BaseActivity {
     private void setPicToView(Intent picdata) {
         //Uri uri = picdata.getData();
         coverPath = cacheFile.getAbsolutePath();
-        if(coverPath != null){
+        if (coverPath != null) {
             //Bitmap bitmap = BitmapFactory.decodeFile(coverPath);
-                Glide.with(AssociateLiveRoomActivity.this)
-                        .load(coverPath)
-                        .into(liveCoverView);
+            Glide.with(AssociateLiveRoomActivity.this)
+                    .load(coverPath)
+                    .into(liveCoverView);
             //liveCoverView.setImageBitmap(bitmap);
             hintView.setVisibility(View.INVISIBLE);
         }

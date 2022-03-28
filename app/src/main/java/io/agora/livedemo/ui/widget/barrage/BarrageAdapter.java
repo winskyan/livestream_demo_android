@@ -7,8 +7,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 
-
-import io.agora.livedemo.R;
+import androidx.annotation.LayoutRes;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
@@ -19,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import androidx.annotation.LayoutRes;
+import io.agora.livedemo.R;
 
 /**
  * 基础的适配器

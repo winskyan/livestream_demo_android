@@ -9,7 +9,6 @@ import androidx.lifecycle.MediatorLiveData;
 import io.agora.livedemo.common.reponsitories.AppServerRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.model.LiveRoom;
-
 import okhttp3.RequestBody;
 
 public class UpdateRoomViewmodel extends AndroidViewModel {

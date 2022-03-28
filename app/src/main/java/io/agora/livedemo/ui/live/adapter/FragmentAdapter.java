@@ -1,11 +1,11 @@
 package io.agora.livedemo.ui.live.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wei on 2017/3/3.

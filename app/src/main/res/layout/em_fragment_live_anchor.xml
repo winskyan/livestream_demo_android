@@ -6,8 +6,9 @@
     android:paddingTop="50dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/layout_live_toolbar"
-        android:id="@+id/toolbar"/>
+    <include
+        layout="@layout/layout_live_toolbar"
+        android:id="@+id/toolbar" />
 
     <io.agora.livedemo.ui.widget.SingleBarrageView
         android:id="@+id/barrageView"
@@ -16,7 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        android:layout_marginTop="@dimen/em_margin_20"/>
+        android:layout_marginTop="@dimen/em_margin_20" />
 
     <io.agora.livedemo.ui.widget.RoomMessagesView
         android:id="@+id/message_view"
@@ -26,7 +27,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <io.agora.livedemo.ui.widget.ShowGiveGiftView
         android:id="@+id/show_gift_view"
@@ -37,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@id/message_view"
         android:layout_marginLeft="@dimen/em_margin_10"
         android:layout_marginStart="@dimen/em_margin_10"
-        android:layout_marginBottom="@dimen/em_margin_40"/>
+        android:layout_marginBottom="@dimen/em_margin_40" />
 
     <io.agora.livedemo.ui.widget.PeriscopeLayout
         android:id="@+id/periscope_layout"
@@ -50,7 +51,7 @@
     <include
         layout="@layout/em_layout_live_bottom_bar"
         android:id="@+id/bottom_bar"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/countdown_txtv"
@@ -64,7 +65,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ViewStub
         android:id="@+id/finish_frame"

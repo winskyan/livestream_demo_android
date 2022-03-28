@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.livedemo.R;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
-import io.hyphenate.easeui.widget.EaseTitleBar;
-import io.agora.livedemo.ui.other.CreateLiveRoomActivity;
 import io.agora.livedemo.ui.live.fragment.LiveListFragment;
+import io.agora.livedemo.ui.other.CreateLiveRoomActivity;
 
 public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener {
     private EaseTitleBar titleBar;

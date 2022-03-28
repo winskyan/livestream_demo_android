@@ -24,9 +24,10 @@ public class StatusBarCompat {
 
     /**
      * 设置页面是否是沉浸式，并可以修改状态栏的颜色
+     *
      * @param activity
      * @param fitSystemForTheme 是否设置为沉浸式 true 则页面侵入状态栏; false 保留状态栏
-     * @param color 状态栏的颜色
+     * @param color             状态栏的颜色
      */
     public static void setFitSystemForTheme(Activity activity, boolean fitSystemForTheme, String color) {
         setFitSystemForTheme(activity, fitSystemForTheme, Color.parseColor(color));
@@ -36,7 +37,7 @@ public class StatusBarCompat {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        if(fitSystemForTheme) {
+        if (fitSystemForTheme) {
             ViewGroup contentFrameLayout = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
             View parentView = contentFrameLayout.getChildAt(0);
             if (parentView != null && Build.VERSION.SDK_INT >= 14) {
@@ -72,14 +73,14 @@ public class StatusBarCompat {
                 color = statusColor;
             }
             int childCount = contentView.getChildCount();
-            if(childCount > 1) {
+            if (childCount > 1) {
                 contentView.removeViewAt(1);
             }
             View statusBarView = new View(activity);
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     getStatusBarHeight(activity));
             statusBarView.setBackgroundColor(color);
-            contentView.addView(statusBarView,lp);
+            contentView.addView(statusBarView, lp);
         }
 
     }
@@ -100,15 +101,15 @@ public class StatusBarCompat {
 
     public static void setLightStatusBar(Activity activity, boolean dark) {
         //针对4.4以上
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             switch (RomUtils.getLightStatusBarAvailableRomType()) {
-                case RomUtils.AvailableRomType.MIUI :
+                case RomUtils.AvailableRomType.MIUI:
                     setMIUISetStatusBarLightMode(activity, dark);
                     break;
-                case RomUtils.AvailableRomType.FLYME :
+                case RomUtils.AvailableRomType.FLYME:
                     setFlymeLightStatusBar(activity, dark);
                     break;
-                case RomUtils.AvailableRomType.ANDROID_NATIVE :
+                case RomUtils.AvailableRomType.ANDROID_NATIVE:
                     setAndroidNativeLightStatusBar(activity, dark);
                     break;
             }

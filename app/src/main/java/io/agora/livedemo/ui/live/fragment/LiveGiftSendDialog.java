@@ -35,7 +35,7 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
     public void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             gift = (GiftBean) bundle.getSerializable("gift");
         }
     }
@@ -43,9 +43,9 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
     @Override
     public void setChildView(View view) {
         int layoutId = getMiddleLayoutId();
-        if(layoutId > 0) {
+        if (layoutId > 0) {
             RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
-            if(middleParent != null) {
+            if (middleParent != null) {
                 View child = LayoutInflater.from(mContext).inflate(layoutId, middleParent, false);
                 middleParent.removeAllViews();
                 middleParent.addView(child);
@@ -78,7 +78,7 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
     public void onConfirmClick(View v) {
         super.onConfirmClick(v);
         dismiss();
-        if(this.listener != null) {
+        if (this.listener != null) {
             listener.onConfirmClick(v, gift);
         }
     }

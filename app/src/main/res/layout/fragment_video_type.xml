@@ -26,7 +26,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/live_normal_bg"/>
+                android:src="@drawable/live_normal_bg" />
 
             <TextView
                 android:id="@+id/tv_live_title"
@@ -39,7 +39,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_live_content"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_live_content" />
 
             <TextView
                 android:id="@+id/tv_live_content"
@@ -53,7 +53,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="@id/tv_live_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_live_title"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,7 +74,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/live_fast_bg"/>
+                android:src="@drawable/live_fast_bg" />
 
             <TextView
                 android:id="@+id/tv_fast_live_title"
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_fast_live_content"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_fast_live_content" />
 
             <TextView
                 android:id="@+id/tv_fast_live_content"
@@ -101,7 +101,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="@id/tv_fast_live_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_fast_live_title"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -122,7 +122,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/live_interaction_bg"/>
+                android:src="@drawable/live_interaction_bg" />
 
             <TextView
                 android:id="@+id/tv_interaction_live_title"
@@ -135,7 +135,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tv_interaction_live_content"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_interaction_live_content" />
 
             <TextView
                 android:id="@+id/tv_interaction_live_content"
@@ -149,7 +149,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="@id/tv_interaction_live_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_interaction_live_title"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

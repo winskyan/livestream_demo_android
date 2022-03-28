@@ -14,26 +14,26 @@ import java.util.List;
  */
 
 public class UserActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks, ActivityState {
-    private List<Activity> activityList=new ArrayList<>();
-    private List<Activity> resumeActivity=new ArrayList<>();
+    private List<Activity> activityList = new ArrayList<>();
+    private List<Activity> resumeActivity = new ArrayList<>();
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-        Log.e("ActivityLifecycle", "onActivityCreated "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityCreated " + activity.getLocalClassName());
         activityList.add(0, activity);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        Log.e("ActivityLifecycle", "onActivityStarted "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityStarted " + activity.getLocalClassName());
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.e("ActivityLifecycle", "onActivityResumed "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityResumed " + activity.getLocalClassName());
         if (!resumeActivity.contains(activity)) {
             resumeActivity.add(activity);
-            if(resumeActivity.size() == 1) {
+            if (resumeActivity.size() == 1) {
                 //do nothing
             }
         }
@@ -41,32 +41,32 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityPaused(Activity activity) {
-        Log.e("ActivityLifecycle", "onActivityPaused "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityPaused " + activity.getLocalClassName());
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        Log.e("ActivityLifecycle", "onActivityStopped "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityStopped " + activity.getLocalClassName());
         resumeActivity.remove(activity);
-        if(resumeActivity.isEmpty()) {
+        if (resumeActivity.isEmpty()) {
             Log.e("TAG", "在后台了");
         }
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-        Log.e("ActivityLifecycle", "onActivitySaveInstanceState "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivitySaveInstanceState " + activity.getLocalClassName());
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        Log.e("ActivityLifecycle", "onActivityDestroyed "+activity.getLocalClassName());
+        Log.e("ActivityLifecycle", "onActivityDestroyed " + activity.getLocalClassName());
         activityList.remove(activity);
     }
 
     @Override
     public Activity current() {
-        return activityList.size()>0 ? activityList.get(0):null;
+        return activityList.size() > 0 ? activityList.get(0) : null;
     }
 
     @Override
@@ -86,10 +86,11 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
 
     /**
      * 跳转到目标activity
+     *
      * @param cls
      */
     public void skipToTarget(Class<?> cls) {
-        if(activityList != null && activityList.size() > 0) {
+        if (activityList != null && activityList.size() > 0) {
             current().startActivity(new Intent(current(), cls));
             for (Activity activity : activityList) {
                 activity.finish();
@@ -100,12 +101,13 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
 
     /**
      * finish target activity
+     *
      * @param cls
      */
     public void finishTarget(Class<?> cls) {
-        if(activityList != null && !activityList.isEmpty()) {
+        if (activityList != null && !activityList.isEmpty()) {
             for (Activity activity : activityList) {
-                if(activity.getClass() == cls) {
+                if (activity.getClass() == cls) {
                     activity.finish();
                 }
             }

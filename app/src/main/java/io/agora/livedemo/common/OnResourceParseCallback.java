@@ -3,40 +3,49 @@ package io.agora.livedemo.common;
 /**
  * 用于解析Resource<T>，减少重复代码
  * hideErrorMsg默认为false，即默认情况是会展示错误信息
+ *
  * @param <T>
  */
 public abstract class OnResourceParseCallback<T> {
     public boolean hideErrorMsg;
 
-    public OnResourceParseCallback() {}
+    public OnResourceParseCallback() {
+    }
 
     /**
      * 是否展示错误信息
+     *
      * @param hideErrorMsg
      */
     public OnResourceParseCallback(boolean hideErrorMsg) {
         this.hideErrorMsg = hideErrorMsg;
     }
+
     /**
      * 成功
+     *
      * @param data
      */
     public abstract void onSuccess(T data);
 
     /**
      * 失败
+     *
      * @param code
      * @param message
      */
-    public void onError(int code, String message){}
+    public void onError(int code, String message) {
+    }
 
     /**
      * 加载中
      */
-    public void onLoading(){}
+    public void onLoading() {
+    }
 
     /**
      * 隐藏加载
      */
-    public void hideLoading(){}
+    public void hideLoading() {
+    }
 }

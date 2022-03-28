@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,8 +22,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/em_live_button_bg_shape"
-        />
+        android:background="@drawable/em_live_button_bg_shape" />
 
     <ImageView
         android:id="@+id/user_manager_image"
@@ -38,7 +36,7 @@
         app:layout_constraintTop_toTopOf="@id/comment_image"
         app:layout_constraintBottom_toBottomOf="@id/comment_image"
         android:visibility="gone"
-        android:background="@drawable/em_live_button_bg_shape"/>
+        android:background="@drawable/em_live_button_bg_shape" />
 
 
     <ImageView
@@ -53,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/switch_camera_image"
-        android:background="@drawable/em_live_button_bg_close_shape"/>
+        android:background="@drawable/em_live_button_bg_close_shape" />
 
     <ImageView
         android:id="@+id/switch_camera_image"
@@ -66,7 +64,7 @@
         app:layout_constraintRight_toLeftOf="@id/like_image"
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"
-        android:background="@drawable/em_live_button_bg_shape"/>
+        android:background="@drawable/em_live_button_bg_shape" />
 
     <ImageView
         android:id="@+id/like_image"
@@ -78,7 +76,7 @@
         app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"
-        android:background="@drawable/em_live_like_bg_selector"/>
+        android:background="@drawable/em_live_like_bg_selector" />
 
 
     <ImageView
@@ -92,6 +90,6 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="@dimen/em_margin_10"
         android:layout_marginEnd="@dimen/em_margin_10"
-        android:background="@drawable/em_live_button_bg_gift_shape"/>
+        android:background="@drawable/em_live_button_bg_gift_shape" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

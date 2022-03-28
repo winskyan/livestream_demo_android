@@ -6,14 +6,14 @@
     android:background="@color/common_white"
     android:layout_marginBottom="1dp"
     android:layout_height="54dp">
-    <io.hyphenate.easeui.widget.EaseImageView
+
+    <io.agora.chat.uikit.widget.EaseImageView
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginLeft="12dp"
         app:ease_shape_type="round"
         android:src="@drawable/ease_default_avatar"
-        android:id="@+id/avatar"
-        />
+        android:id="@+id/avatar" />
 
     <TextView
         android:id="@+id/username"
@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:textColor="#262626"
         android:text="username"
-        android:layout_marginLeft="9dp"
-        />
+        android:layout_marginLeft="9dp" />
 
 </LinearLayout>

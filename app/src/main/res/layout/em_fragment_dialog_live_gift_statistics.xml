@@ -22,7 +22,7 @@
         android:textSize="@dimen/em_size_big"
         android:drawableLeft="@drawable/gift_icon"
         android:drawableStart="@drawable/gift_icon"
-        android:drawablePadding="6dp"/>
+        android:drawablePadding="6dp" />
 
     <TextView
         android:id="@+id/tv_gift_num"
@@ -36,7 +36,7 @@
         android:gravity="center_vertical"
         android:layout_marginEnd="@dimen/em_margin_10"
         android:layout_marginRight="@dimen/em_margin_10"
-        tools:text="共 89 份"/>
+        tools:text="共 89 份" />
 
     <TextView
         android:id="@+id/tv_sender_num"
@@ -50,7 +50,7 @@
         android:gravity="center_vertical"
         android:layout_marginRight="@dimen/em_margin_20"
         android:layout_marginEnd="@dimen/em_margin_20"
-        tools:text="打赏人数 20"/>
+        tools:text="打赏人数 20" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
@@ -59,6 +59,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

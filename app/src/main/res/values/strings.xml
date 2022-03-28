@@ -148,4 +148,6 @@
     <string name="em_create_room">传统直播</string>
     <string name="em_create_fast_room">极速直播</string>
     <string name="em_create_interaction_room">互动直播</string>
+
+    <string name="live_room_title">Stream Channels</string>
 </resources>

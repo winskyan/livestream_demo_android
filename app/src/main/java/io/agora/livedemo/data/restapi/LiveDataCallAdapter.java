@@ -2,13 +2,12 @@ package io.agora.livedemo.data.restapi;
 
 import androidx.lifecycle.LiveData;
 
-import io.agora.livedemo.common.reponsitories.ErrorCode;
-import io.agora.livedemo.data.model.BaseBean;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.agora.livedemo.common.reponsitories.ErrorCode;
+import io.agora.livedemo.data.model.BaseBean;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Callback;
@@ -34,14 +33,14 @@ public class LiveDataCallAdapter<T> implements CallAdapter<T, LiveData<T>> {
             @Override
             protected void onActive() {
                 super.onActive();
-                if(started.compareAndSet(false, true)) {
+                if (started.compareAndSet(false, true)) {
                     call.enqueue(new Callback<T>() {
                         @Override
                         public void onResponse(Call<T> call, Response<T> response) {
                             T body = response.body();
                             BaseBean result = null;
-                            if(!response.isSuccessful()) {
-                                if(body == null) {
+                            if (!response.isSuccessful()) {
+                                if (body == null) {
                                     result = new BaseBean();
                                     setErrorInfo(response, result);
                                     try {
@@ -49,8 +48,8 @@ public class LiveDataCallAdapter<T> implements CallAdapter<T, LiveData<T>> {
                                     } catch (Exception e) {
                                         //未包裹ResponseModule的话，无法获取error
                                     }
-                                }else {
-                                    if(body instanceof BaseBean) {
+                                } else {
+                                    if (body instanceof BaseBean) {
                                         setErrorInfo(response, (BaseBean) body);
                                     }
                                 }

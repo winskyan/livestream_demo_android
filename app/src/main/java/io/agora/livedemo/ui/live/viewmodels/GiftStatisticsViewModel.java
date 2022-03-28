@@ -2,16 +2,16 @@ package io.agora.livedemo.ui.live.viewmodels;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MediatorLiveData;
+
+import java.util.List;
+
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
-
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MediatorLiveData;
 
 public class GiftStatisticsViewModel extends AndroidViewModel {
     private MediatorLiveData<List<ReceiveGiftEntity>> giftObservable;

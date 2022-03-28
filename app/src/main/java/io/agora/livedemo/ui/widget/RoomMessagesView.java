@@ -3,13 +3,6 @@ package io.agora.livedemo.ui.widget;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.text.SpannableString;
@@ -29,11 +22,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Map;
+
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.TextMessageBody;
+import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -41,9 +43,6 @@ import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.SoftKeyboardChangeHelper;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.utils.Utils;
-import io.hyphenate.easeui.utils.EaseCommonUtils;
-
-import java.util.Map;
 
 /**
  * Created by wei on 2016/6/3.
@@ -104,7 +103,7 @@ public class RoomMessagesView extends RelativeLayout {
         listview.setAdapter(adapter);
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setSize(0, (int) EaseCommonUtils.dip2px(getContext(), 4));
+        drawable.setSize(0, (int) EaseUtils.dip2px(getContext(), 4));
         itemDecoration.setDrawable(drawable);
         listview.addItemDecoration(itemDecoration);
         sendBtn.setOnClickListener(new OnClickListener() {

@@ -2,14 +2,14 @@ package io.agora.livedemo.ui.cdn.fragment;
 
 import android.view.View;
 
+import java.util.List;
+
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.cdn.CdnLiveAudienceActivity;
 import io.agora.livedemo.ui.live.fragment.LiveListFragment;
-
-import java.util.List;
 
 public class CdnLivingListFragment extends LiveListFragment {
     private List<LiveRoom> vodList;

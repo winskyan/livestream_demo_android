@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="main_bottom_view_selected">
         <item name="android:textColor">@color/em_main_color_tab_selected</item>
         <item name="android:textSize">12sp</item>
@@ -9,7 +10,7 @@
         <item name="android:textColor">@color/em_main_color_tab_normal</item>
         <item name="android:textSize">12sp</item>
     </style>
-    
+
     <style name="TabLayout.Gift" parent="Base.Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="android:textSize">@dimen/em_size_normal</item>
@@ -22,7 +23,7 @@
         <item name="android:textSize">@dimen/em_size_normal</item>
         <item name="tabTextAppearance">@style/TabLayout.UserManage.TextAppearance</item>
     </style>
-    
+
     <style name="TabLayout.UserManage.TextAppearance">
         <item name="android:textSize">@dimen/em_size_normal</item>
         <item name="android:textStyle">bold</item>

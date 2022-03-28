@@ -2,23 +2,24 @@ package io.agora.livedemo.ui.other.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-
-import io.agora.livedemo.ui.live.adapter.FragmentAdapter;
-import io.agora.livedemo.ui.live.fragment.LiveListFragment;
-import io.agora.livedemo.ui.other.SearchActivity;
-import com.google.android.material.tabs.TabLayout;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.agora.livedemo.R;
+import io.agora.livedemo.ui.live.adapter.FragmentAdapter;
+import io.agora.livedemo.ui.live.fragment.LiveListFragment;
+import io.agora.livedemo.ui.other.SearchActivity;
 
 /**
  * Created by wei on 2016/5/27.
@@ -47,7 +48,8 @@ public class LiveSquareFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupViewPager();
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SearchActivity.class));
             }
         });
@@ -55,7 +57,7 @@ public class LiveSquareFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(){
+    private void setupViewPager() {
         FragmentAdapter adapter = new FragmentAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new LiveListFragment(), "热门");
         adapter.addFragment(new LiveListFragment(), "女神");

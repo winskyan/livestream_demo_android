@@ -22,11 +22,10 @@ import android.util.AttributeSet;
 import android.util.Pair;
 import android.widget.TextView;
 
-
-import io.agora.livedemo.R;
-
 import java.util.ArrayList;
 import java.util.WeakHashMap;
+
+import io.agora.livedemo.R;
 
 
 /**

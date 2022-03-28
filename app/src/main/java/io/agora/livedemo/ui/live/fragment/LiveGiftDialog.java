@@ -2,16 +2,16 @@ package io.agora.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
 
-import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
-import io.agora.livedemo.ui.live.adapter.GiftFragmentAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import androidx.annotation.NonNull;
-import androidx.viewpager2.widget.ViewPager2;
+import io.agora.livedemo.R;
+import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
+import io.agora.livedemo.ui.live.adapter.GiftFragmentAdapter;
 
 public class LiveGiftDialog extends BaseLiveDialogFragment {
     private ViewPager2 vpList;
@@ -56,7 +56,7 @@ public class LiveGiftDialog extends BaseLiveDialogFragment {
         adapter.setOnVpFragmentItemListener(new GiftFragmentAdapter.OnVpFragmentItemListener() {
             @Override
             public void onVpFragmentItem(int position, Object bean) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onConfirmClick(null, bean);
                 }
             }

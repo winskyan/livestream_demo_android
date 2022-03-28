@@ -27,7 +27,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
     public void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             giftNum = bundle.getInt("num");
         }
     }
@@ -57,11 +57,11 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
     public void onConfirmClick(View v) {
         super.onConfirmClick(v);
         String num = etInputNum.getText().toString().trim();
-        if(TextUtils.isEmpty(num)) {
+        if (TextUtils.isEmpty(num)) {
             Toast.makeText(mContext, "请输入送礼物的数目", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(this.listener != null) {
+        if (this.listener != null) {
             dismiss();
             listener.onConfirmClick(v, Integer.valueOf(num));
         }

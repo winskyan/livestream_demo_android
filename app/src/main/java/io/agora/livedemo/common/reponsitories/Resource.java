@@ -4,9 +4,10 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
+
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.common.enums.Status;
-import com.google.gson.annotations.SerializedName;
 
 public class Resource<T> {
     public Status status;
@@ -50,13 +51,14 @@ public class Resource<T> {
 
     /**
      * 获取错误信息
+     *
      * @return
      */
     public String getMessage() {
-        if(!TextUtils.isEmpty(message)) {
+        if (!TextUtils.isEmpty(message)) {
             return message;
         }
-        if(messageId > 0) {
+        if (messageId > 0) {
             return DemoApplication.getInstance().getString(messageId);
         }
         return "";

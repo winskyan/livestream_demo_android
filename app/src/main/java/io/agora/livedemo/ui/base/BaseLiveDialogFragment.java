@@ -47,11 +47,11 @@ public abstract class BaseLiveDialogFragment extends BaseDialogFragment {
     public void initListener() {
         super.initListener();
         // 保证activity finish之前，应该先dismiss dialog
-        if(getDialog() != null) {
+        if (getDialog() != null) {
             getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
                 @Override
                 public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                    if(keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
                         dismiss();
                         return true;
                     }

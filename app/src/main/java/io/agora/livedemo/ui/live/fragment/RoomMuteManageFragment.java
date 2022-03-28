@@ -3,13 +3,13 @@ package io.agora.livedemo.ui.live.fragment;
 import android.util.Log;
 import android.view.View;
 
-import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
+import io.agora.livedemo.R;
+import io.agora.livedemo.common.OnResourceParseCallback;
 
 public class RoomMuteManageFragment extends RoomUserManagementFragment {
 
@@ -20,7 +20,7 @@ public class RoomMuteManageFragment extends RoomUserManagementFragment {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(List<String> data) {
-                    Log.e("TAG", "getMuteObservable = "+data.size());
+                    Log.e("TAG", "getMuteObservable = " + data.size());
                     setAdapter(data);
                 }
 

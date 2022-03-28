@@ -27,7 +27,7 @@ public class MemberBean extends BaseBean {
     }
 
     public String getId() {
-        if(isOwner()) {
+        if (isOwner()) {
             return owner;
         }
         return member;

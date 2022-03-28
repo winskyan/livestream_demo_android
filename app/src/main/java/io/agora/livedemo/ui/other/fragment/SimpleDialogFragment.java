@@ -5,15 +5,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import io.agora.livedemo.common.OnCancelClickListener;
-import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.ui.base.DemoDialogFragment;
-import io.agora.livedemo.ui.base.BaseActivity;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
+
+import io.agora.livedemo.common.OnCancelClickListener;
+import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.ui.base.BaseActivity;
+import io.agora.livedemo.ui.base.DemoDialogFragment;
 
 public class SimpleDialogFragment extends DemoDialogFragment {
     public static final String MESSAGE_KEY = "message";
@@ -45,7 +45,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
 
     @Override
     public void initArgument() {
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             message = getArguments().getString(MESSAGE_KEY);
         }
     }
@@ -53,16 +53,16 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        if(!TextUtils.isEmpty(message)) {
+        if (!TextUtils.isEmpty(message)) {
             mTvDialogTitle.setText(message);
         }
-        if(title != 0) {
+        if (title != 0) {
             mTvDialogTitle.setText(title);
         }
-        if(confirmTitle != 0) {
+        if (confirmTitle != 0) {
             mBtnDialogConfirm.setText(confirmTitle);
         }
-        if(confirmColor != 0) {
+        if (confirmColor != 0) {
             mBtnDialogConfirm.setTextColor(ContextCompat.getColor(mContext, confirmColor));
         }
     }
@@ -81,7 +81,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     public void onConfirmClick(View v) {
         super.onConfirmClick(v);
         dismiss();
-        if(mOnConfirmClickListener != null) {
+        if (mOnConfirmClickListener != null) {
             mOnConfirmClickListener.onConfirmClick(v, null);
         }
     }
@@ -89,13 +89,14 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     @Override
     public void onCancelClick(View v) {
         super.onCancelClick(v);
-        if(mOnCancelClickListener != null) {
+        if (mOnCancelClickListener != null) {
             mOnCancelClickListener.onCancelClick(v, null);
         }
     }
 
     /**
      * 设置确定按钮的点击事件
+     *
      * @param listener
      */
     public void setOnConfirmClickListener(OnConfirmClickListener listener) {
@@ -104,6 +105,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
 
     /**
      * 设置取消按钮的点击事件
+     *
      * @param listener
      */
     public void setOnCancelClickListener(OnCancelClickListener listener) {
@@ -149,19 +151,19 @@ public class SimpleDialogFragment extends DemoDialogFragment {
 
         public SimpleDialogFragment build() {
             SimpleDialogFragment dialog = new SimpleDialogFragment();
-            if(title != 0) {
+            if (title != 0) {
                 dialog.setTitle(title);
             }
-            if(confirm != 0) {
+            if (confirm != 0) {
                 dialog.setConfirmTitle(confirm);
             }
-            if(confirmColor != 0) {
+            if (confirmColor != 0) {
                 dialog.setConfirmColor(confirmColor);
             }
-            if(mOnConfirmClickListener != null) {
+            if (mOnConfirmClickListener != null) {
                 dialog.setOnConfirmClickListener(mOnConfirmClickListener);
             }
-            if(mOnCancelClickListener != null) {
+            if (mOnCancelClickListener != null) {
                 dialog.setOnCancelClickListener(mOnCancelClickListener);
             }
             return dialog;

@@ -2,13 +2,13 @@ package io.agora.livedemo.ui.live.adapter;
 
 import android.view.View;
 
-import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.ui.live.fragment.LiveGiftListFragment;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.ui.live.fragment.LiveGiftListFragment;
 
 public class GiftFragmentAdapter extends FragmentStateAdapter {
     private OnVpFragmentItemListener listener;
@@ -24,7 +24,7 @@ public class GiftFragmentAdapter extends FragmentStateAdapter {
         fragment.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onVpFragmentItem(position, bean);
                 }
             }
@@ -35,6 +35,7 @@ public class GiftFragmentAdapter extends FragmentStateAdapter {
 
     /**
      * 根据礼物类型，此处仅为测试
+     *
      * @return
      */
     @Override

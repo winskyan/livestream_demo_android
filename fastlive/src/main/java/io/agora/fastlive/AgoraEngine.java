@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import io.agora.fastlive.rtc.AgoraRtcHandler;
 import io.agora.fastlive.rtc.RtcEventHandler;
-
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.RtcEngine;
 

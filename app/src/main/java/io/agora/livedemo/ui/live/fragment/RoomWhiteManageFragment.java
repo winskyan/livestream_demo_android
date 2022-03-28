@@ -3,12 +3,12 @@ package io.agora.livedemo.ui.live.fragment;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RoomWhiteManageFragment extends RoomUserManagementFragment {
 
@@ -19,7 +19,7 @@ public class RoomWhiteManageFragment extends RoomUserManagementFragment {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(List<String> data) {
-                    Log.e("TAG", "getWhitesObservable = "+data.size());
+                    Log.e("TAG", "getWhitesObservable = " + data.size());
                     setAdapter(data);
                 }
 
@@ -43,7 +43,7 @@ public class RoomWhiteManageFragment extends RoomUserManagementFragment {
         holder.managerButton.setVisibility(View.VISIBLE);
         holder.managerButton.setText(getString(R.string.em_live_anchor_remove_white));
         holder.managerButton.setBackground(null);
-        if(DemoHelper.isOwner(userList.get(position))) {
+        if (DemoHelper.isOwner(userList.get(position))) {
             holder.managerButton.setVisibility(View.GONE);
         }
 

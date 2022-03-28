@@ -9,9 +9,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.livedemo.R;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
-import io.hyphenate.easeui.widget.EaseTitleBar;
 
 public class AboutHxActivity extends BaseLiveActivity implements EaseTitleBar.OnBackPressListener {
     private EaseTitleBar titleBar;
@@ -57,9 +57,9 @@ public class AboutHxActivity extends BaseLiveActivity implements EaseTitleBar.On
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if(newProgress == 100) {
+                if (newProgress == 100) {
                     pbLoad.setVisibility(View.GONE);
-                }else {
+                } else {
                     pbLoad.setVisibility(View.VISIBLE);
                     pbLoad.setProgress(newProgress);
                 }
@@ -78,9 +78,9 @@ public class AboutHxActivity extends BaseLiveActivity implements EaseTitleBar.On
 
     @Override
     public void onBackPress(View view) {
-        if(webView.canGoBack()) {
+        if (webView.canGoBack()) {
             webView.goBack();
-        }else {
+        } else {
             onBackPressed();
         }
     }

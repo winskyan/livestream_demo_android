@@ -4,6 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.LinkedList;
+
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.LiveDataBus;
@@ -13,13 +20,6 @@ import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.adapter.LiveMemberAdapter;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
-
-import java.util.LinkedList;
-
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class LiveMemberListDialog extends BaseLiveDialogFragment {
@@ -47,7 +47,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
     public void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             chatRoomId = bundle.getString("username");
         }
     }
@@ -91,7 +91,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.OnMemberItemClick(view, position, adapter.getItem(position));
                 }
             }

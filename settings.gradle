@@ -3,3 +3,6 @@ include ':app', /*':ChatClient-android',*/ ':custommessage'/*, ':ulive-android-s
 //include ':ChatClient-android'//引入项目
 //project(':ChatClient-android').projectDir = new File('../ChatClient-android')  //最关键的代码
 //include ':ChatClient-android:hyphenatechatsdk'
+include ':chat-uikit'
+project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')
+

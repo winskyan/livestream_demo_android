@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnItemClickListener;
@@ -13,8 +15,6 @@ import io.agora.livedemo.ui.base.BaseLiveFragment;
 import io.agora.livedemo.ui.live.adapter.GiftListAdapter;
 import io.agora.livedemo.ui.widget.recyclerview.HorizontalPageLayoutManager;
 import io.agora.livedemo.ui.widget.recyclerview.PagingScrollHelper;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClickListener, LiveGiftNumDialog.OnGiftNumListener, LiveGiftNumDialog.OnDismissListener {
     private RecyclerView rvList;
@@ -62,20 +62,20 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
         giftBean = adapter.getItem(position);
         boolean checked = giftBean.isChecked();
         giftBean.setChecked(!checked);
-        if(giftBean.isChecked()) {
+        if (giftBean.isChecked()) {
             adapter.setSelectedPosition(position);
             showNumDialog(giftBean);
-        }else {
+        } else {
             adapter.setSelectedPosition(-1);
         }
     }
 
     private void showNumDialog(GiftBean item) {
         LiveGiftNumDialog dialog = (LiveGiftNumDialog) getChildFragmentManager().findFragmentByTag("gift_num");
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = LiveGiftNumDialog.getNewInstance(item);
         }
-        if(dialog.isAdded()) {
+        if (dialog.isAdded()) {
             return;
         }
         dialog.setOnGiftNumListener(this);
@@ -87,16 +87,16 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     public void onGiftNum(View view, int num) {
         giftBean.setNum(num);
         LiveGiftSendDialog dialog = (LiveGiftSendDialog) getChildFragmentManager().findFragmentByTag("gift_send");
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = LiveGiftSendDialog.getNewInstance(giftBean);
         }
-        if(dialog.isAdded()) {
+        if (dialog.isAdded()) {
             return;
         }
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onConfirmClick(view, bean);
                 }
             }

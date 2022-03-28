@@ -12,13 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import io.agora.livedemo.R;
 import com.github.florent37.viewanimator.AnimationBuilder;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.agora.livedemo.R;
 
 /**
  * Created by wei on 2016/6/13.
@@ -47,15 +47,15 @@ public class BarrageLayout extends LinearLayout {
         init(context, attrs);
     }
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int what = msg.what;
             final View barrageView = (View) msg.obj;
             System.out.println("what = " + what);
-            if(what == 0){
+            if (what == 0) {
                 container2.addView(barrageView);
-            }else{
+            } else {
                 container1.addView(barrageView);
             }
             barrageView.measure(0, 0);
@@ -88,7 +88,7 @@ public class BarrageLayout extends LinearLayout {
         count++;
     }
 
-    private View newBarrageView(String msgContent, String username){
+    private View newBarrageView(String msgContent, String username) {
         View barrageView = LayoutInflater.from(getContext()).inflate(R.layout.layout_barrage_show, null);
         TextView nameView = (TextView) barrageView.findViewById(R.id.name);
         TextView contentView = (TextView) barrageView.findViewById(R.id.content);

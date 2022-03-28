@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <io.hyphenate.easeui.widget.EaseTitleBar
+    <io.agora.chat.uikit.widget.EaseTitleBar
         android:id="@+id/title_bar"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_title_bar_height"
@@ -12,7 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="关于环信"
-        app:titleBarDisplayHomeAsUpEnabled="true"/>
+        app:titleBarDisplayHomeAsUpEnabled="true" />
 
     <ProgressBar
         android:id="@+id/pb_load"
@@ -24,7 +24,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar"
-        app:layout_constraintBottom_toTopOf="@id/webView"/>
+        app:layout_constraintBottom_toTopOf="@id/webView" />
 
     <WebView
         android:id="@+id/webView"
@@ -33,6 +33,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

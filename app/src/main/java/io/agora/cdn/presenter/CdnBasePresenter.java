@@ -19,39 +19,40 @@ public abstract class CdnBasePresenter implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        Log.i(TAG, this.toString() +" onCreate");
+        Log.i(TAG, this.toString() + " onCreate");
         isDestroy = false;
         mMainThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onStart() {
-        Log.i(TAG, this.toString() +" onStart");
+        Log.i(TAG, this.toString() + " onStart");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
-        Log.i(TAG, this.toString() +" onResume");
+        Log.i(TAG, this.toString() + " onResume");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void onPause() {
-        Log.i(TAG, this.toString() +" onPause");
+        Log.i(TAG, this.toString() + " onPause");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onStop() {
-        Log.i(TAG, this.toString() +" onStop");
+        Log.i(TAG, this.toString() + " onStop");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void onDestroy() {
-        Log.i(TAG, this.toString() +" onDestroy");
+        Log.i(TAG, this.toString() + " onDestroy");
         isDestroy = true;
     }
 
     /**
      * 生命周期正在销毁
+     *
      * @return
      */
     public boolean isDestroy() {
@@ -60,6 +61,7 @@ public abstract class CdnBasePresenter implements LifecycleObserver {
 
     /**
      * 生命周期仍在活跃
+     *
      * @return
      */
     public boolean isActive() {
@@ -68,6 +70,7 @@ public abstract class CdnBasePresenter implements LifecycleObserver {
 
     /**
      * 执行UI线程
+     *
      * @param runnable
      */
     public void runOnUI(Runnable runnable) {

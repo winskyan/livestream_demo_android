@@ -2,6 +2,7 @@ package io.agora.livedemo.utils;
 
 import android.os.Environment;
 import android.util.Log;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,123 +15,123 @@ import java.util.List;
 
 public class Log2FileUtil {
 
-	private static final String TAG = "Log";
-	// LogWrite
-	private String LOG_PATH_SDCARD_DIR; // log file path in sdcard
+    private static final String TAG = "Log";
+    // LogWrite
+    private String LOG_PATH_SDCARD_DIR; // log file path in sdcard
 
-	private SimpleDateFormat sdf = new SimpleDateFormat("MM-dd_HH-mm-ss");// log
-																				// name
+    private SimpleDateFormat sdf = new SimpleDateFormat("MM-dd_HH-mm-ss");// log
+    // name
 
-	private Process process;
+    private Process process;
 
-	private static Log2FileUtil mLogDemo = null;
+    private static Log2FileUtil mLogDemo = null;
 
-	private Log2FileUtil() {
-		init();
-	}
+    private Log2FileUtil() {
+        init();
+    }
 
-	public static Log2FileUtil getInstance() {
-		if (mLogDemo == null) {
-			mLogDemo = new Log2FileUtil();
-		}
+    public static Log2FileUtil getInstance() {
+        if (mLogDemo == null) {
+            mLogDemo = new Log2FileUtil();
+        }
 
-		return mLogDemo;
-	}
+        return mLogDemo;
+    }
 
-	public void startLog() {
-		createLog();
+    public void startLog() {
+        createLog();
 
-	}
+    }
 
-	public void stopLog() {
-		if (process != null) {
-			process.destroy();
-		}
-	}
-	
-	
-	//TBD: not work now... why??
-	public void clearLog() {
-		List<String> commandList = new ArrayList<String>();
-		commandList.add("rm");
-		commandList.add("-f");
-		commandList.add(LOG_PATH_SDCARD_DIR + "/ucloud*.log");
-		
-		try {
-			process = Runtime.getRuntime().exec(
-					commandList.toArray(new String[commandList.size()]));
-		} catch (Exception e) {
-			Log.e(TAG,e.getMessage(), e);
-		}
-	}
+    public void stopLog() {
+        if (process != null) {
+            process.destroy();
+        }
+    }
 
-	private void init() {
 
-		LOG_PATH_SDCARD_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
-		createLogDir();
-		Log.i(TAG, "Log onCreate");
-	}
+    //TBD: not work now... why??
+    public void clearLog() {
+        List<String> commandList = new ArrayList<String>();
+        commandList.add("rm");
+        commandList.add("-f");
+        commandList.add(LOG_PATH_SDCARD_DIR + "/ucloud*.log");
 
-	public void setLogCacheDir(String dir) {
-		LOG_PATH_SDCARD_DIR = dir;
-	}
+        try {
+            process = Runtime.getRuntime().exec(
+                    commandList.toArray(new String[commandList.size()]));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * write the log
-	 */
-	public void createLog() {
-		// TODOWriteLog
+    private void init() {
 
-		List<String> commandList = new ArrayList<String>();
-		commandList.add("logcat");
-		commandList.add("-f");
-		commandList.add(getLogPath());
-		commandList.add("-v");
-		commandList.add("time");
+        LOG_PATH_SDCARD_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
+        createLogDir();
+        Log.i(TAG, "Log onCreate");
+    }
+
+    public void setLogCacheDir(String dir) {
+        LOG_PATH_SDCARD_DIR = dir;
+    }
+
+    /**
+     * write the log
+     */
+    public void createLog() {
+        // TODOWriteLog
+
+        List<String> commandList = new ArrayList<String>();
+        commandList.add("logcat");
+        commandList.add("-f");
+        commandList.add(getLogPath());
+        commandList.add("-v");
+        commandList.add("time");
 //		commandList.add("-r");
 //		commandList.add("2048"); 
 //		commandList.add("-n");
 //		commandList.add("1");		
-		
-		try {
-			process = Runtime.getRuntime().exec(
-					commandList.toArray(new String[commandList.size()]));
-		} catch (Exception e) {
-			Log.e(TAG,e.getMessage(), e);
-		}
-	}
 
-	/**
-	 * the path of the log file
-	 * 
-	 * @return
-	 */
-	public String getLogPath() {
-		createLogDir();
-		String logFileName = "ucloud-" + sdf.format(new Date()) + ".log";// name
+        try {
+            process = Runtime.getRuntime().exec(
+                    commandList.toArray(new String[commandList.size()]));
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+    }
 
-		Log.i(TAG, "Log stored in SDcard, the path is:" + LOG_PATH_SDCARD_DIR  + File.separator + logFileName);
-		return LOG_PATH_SDCARD_DIR + File.separator + logFileName;
+    /**
+     * the path of the log file
+     *
+     * @return
+     */
+    public String getLogPath() {
+        createLogDir();
+        String logFileName = "ucloud-" + sdf.format(new Date()) + ".log";// name
 
-	}
+        Log.i(TAG, "Log stored in SDcard, the path is:" + LOG_PATH_SDCARD_DIR + File.separator + logFileName);
+        return LOG_PATH_SDCARD_DIR + File.separator + logFileName;
 
-	/**
-	 * make the dir
-	 */
-	private void createLogDir() {
-		File file;
-		boolean mkOk;
+    }
 
-		if (Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {
-			file = new File(LOG_PATH_SDCARD_DIR);
-			if (!file.isDirectory()) {
-				mkOk = file.mkdirs();
-				if (!mkOk) {
-					return;
-				}
-			}
-		}
-	}
+    /**
+     * make the dir
+     */
+    private void createLogDir() {
+        File file;
+        boolean mkOk;
+
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            file = new File(LOG_PATH_SDCARD_DIR);
+            if (!file.isDirectory()) {
+                mkOk = file.mkdirs();
+                if (!mkOk) {
+                    return;
+                }
+            }
+        }
+    }
 
 }

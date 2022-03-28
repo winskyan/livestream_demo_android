@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
  * Created by wei on 2017/2/27.
  */
 
-public class SquareLayout extends FrameLayout{
+public class SquareLayout extends FrameLayout {
     public SquareLayout(Context context) {
         super(context);
     }
@@ -21,7 +21,8 @@ public class SquareLayout extends FrameLayout{
         super(context, attrs, defStyleAttr);
     }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
     }
 }

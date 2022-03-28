@@ -16,9 +16,9 @@
 
 package io.agora.livedemo.common.db.converter;
 
-import java.util.Date;
-
 import androidx.room.TypeConverter;
+
+import java.util.Date;
 
 public class DateConverter {
     @TypeConverter

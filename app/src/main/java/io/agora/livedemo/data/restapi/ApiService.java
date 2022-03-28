@@ -2,13 +2,13 @@ package io.agora.livedemo.data.restapi;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.CdnUrlBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.model.LiveRoomUrlBean;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
-import java.util.List;
-
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,6 +27,7 @@ public interface ApiService {
 
     /**
      * 创建直播室
+     *
      * @param module 包括直播室名称，直播室描述，直播室房主，直播室封面，直播室最大人数
      * @return
      */
@@ -39,7 +40,8 @@ public interface ApiService {
 
     /**
      * 获取直播室列表
-     * @param limit 一次取的条数
+     *
+     * @param limit  一次取的条数
      * @param cursor 在这个游标基础上取数据，首次获取传null
      * @return
      */
@@ -48,7 +50,8 @@ public interface ApiService {
 
     /**
      * 获取正在直播的直播室列表
-     * @param limit 一次取的条数
+     *
+     * @param limit  一次取的条数
      * @param cursor 在这个游标基础上取数据，首次获取传null
      * @return
      */
@@ -57,9 +60,10 @@ public interface ApiService {
 
     /**
      * 更新直播室
+     *
      * @param roomId 直播室id
-     * @param body 包括直播室名称(name)，直播室描述(description)，
-     *             直播间成员最大数(maxusers)，直播间封面Url(page)，直播间自定义属性(ext，Map类型)
+     * @param body   包括直播室名称(name)，直播室描述(description)，
+     *               直播间成员最大数(maxusers)，直播间封面Url(page)，直播间自定义属性(ext，Map类型)
      * @return
      */
     @PUT("appserver/liverooms/{id}")
@@ -67,6 +71,7 @@ public interface ApiService {
 
     /**
      * 改变直播状态
+     *
      * @param roomId
      * @param username
      * @param status
@@ -79,6 +84,7 @@ public interface ApiService {
 
     /**
      * 直播室详情
+     *
      * @param roomId 直播室id
      * @return
      */
@@ -87,44 +93,48 @@ public interface ApiService {
 
     /**
      * 获取推流地址
+     *
      * @param streamKey
      * @return
      */
     @GET("appserver/streams/url/publish/")
-    LiveData<LiveRoomUrlBean> getLiveRoomPublishUrl(@Query("streamKey")String streamKey);
+    LiveData<LiveRoomUrlBean> getLiveRoomPublishUrl(@Query("streamKey") String streamKey);
 
     /**
      * 获取播放地址
+     *
      * @param streamKey
      * @return
      */
     @GET("appserver/streams/url/play/")
-    LiveData<LiveRoomUrlBean> getLiveRoomPlayUrl(@Query("streamKey")String streamKey);
+    LiveData<LiveRoomUrlBean> getLiveRoomPlayUrl(@Query("streamKey") String streamKey);
 
     /**
      * 获取Agora Token
-     * @param userId 环信id
-     * @param channel 准备加入房间的channelName
+     *
+     * @param userId   环信id
+     * @param channel  准备加入房间的channelName
      * @param hxAppkey 环信的appkey
      * @return
      */
     @GET("token/liveToken/")
-    LiveData<AgoraTokenBean> getAgoraToken(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
+    LiveData<AgoraTokenBean> getAgoraToken(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String hxAppkey, @Query("uid") int uid);
 
     /**
      * 获取Agora Token
-     * @param userId 环信id
-     * @param channel 准备加入房间的channelName
+     *
+     * @param userId   环信id
+     * @param channel  准备加入房间的channelName
      * @param hxAppkey 环信的appkey
      * @return
      */
     @GET("token/rtcToken/v1")
     // Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
-    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey);
+    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String hxAppkey);
 
     @GET("appserver/agora/cdn/streams/url/push")
-    Call<CdnUrlBean> getCdnPushUrl(@Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey, @Query("expire")int expire);
+    Call<CdnUrlBean> getCdnPushUrl(@Query("domain") String domain, @Query("pushPoint") String pushPoint, @Query("streamKey") String streamKey, @Query("expire") int expire);
 
     @GET("appserver/agora/cdn/streams/url/play")
-    Call<CdnUrlBean> getCdnPullUrl(@Query("protocol")String protocol, @Query("domain")String domain, @Query("pushPoint")String pushPoint, @Query("streamKey")String streamKey);
+    Call<CdnUrlBean> getCdnPullUrl(@Query("protocol") String protocol, @Query("domain") String domain, @Query("pushPoint") String pushPoint, @Query("streamKey") String streamKey);
 }

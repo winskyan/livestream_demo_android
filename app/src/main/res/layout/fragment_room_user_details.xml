@@ -18,9 +18,9 @@
         android:layout_marginStart="@dimen/em_margin_15"
         android:layout_marginRight="@dimen/em_margin_15"
         android:layout_marginEnd="@dimen/em_margin_15"
-        android:background="@drawable/em_live_user_detail_bg_shape"/>
+        android:background="@drawable/em_live_user_detail_bg_shape" />
 
-    <io.hyphenate.easeui.widget.EaseImageView
+    <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_avatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:ease_shape_type="round"/>
+        app:ease_shape_type="round" />
 
     <TextView
         android:id="@+id/tv_username"
@@ -40,7 +40,7 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_avatar"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_avatar" />
 
     <TextView
         android:id="@+id/tv_fan_num"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@id/tv_fan_num"
         app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
         android:text="@string/em_live_user_fans"
-        style="@style/em_live_user_tv_num_title"/>
+        style="@style/em_live_user_tv_num_title" />
 
 
     <TextView
@@ -70,14 +70,14 @@
         app:layout_constraintHorizontal_weight="1.2"
         android:layout_marginRight="@dimen/em_margin_20"
         android:text="0"
-        style="@style/em_live_user_tv_num"/>
+        style="@style/em_live_user_tv_num" />
 
     <TextView
         app:layout_constraintRight_toLeftOf="@id/tv_gift_num"
         app:layout_constraintTop_toTopOf="@id/tv_gift_num"
         app:layout_constraintBottom_toBottomOf="@id/tv_gift_num"
         android:text="@string/em_live_user_send_gift"
-        style="@style/em_live_user_tv_num_title"/>
+        style="@style/em_live_user_tv_num_title" />
 
     <TextView
         android:id="@+id/tv_attention_num"
@@ -87,14 +87,14 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_fan_num"
         app:layout_constraintHorizontal_weight="1"
         android:text="0"
-        style="@style/em_live_user_tv_num"/>
+        style="@style/em_live_user_tv_num" />
 
     <TextView
         app:layout_constraintRight_toLeftOf="@id/tv_attention_num"
         app:layout_constraintTop_toTopOf="@id/tv_attention_num"
         app:layout_constraintBottom_toBottomOf="@id/tv_attention_num"
         android:text="@string/em_live_user_star"
-        style="@style/em_live_user_tv_num_title"/>
+        style="@style/em_live_user_tv_num_title" />
 
     <ImageView
         android:id="@+id/iv_close"
@@ -105,7 +105,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:padding="10dp"
         android:layout_marginTop="65dp"
-        android:layout_marginRight="@dimen/em_margin_30"/>
+        android:layout_marginRight="@dimen/em_margin_30" />
 
 
     <LinearLayout
@@ -197,8 +197,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:visibility="gone"/>
-    
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/btn_attention"
         android:layout_width="120dp"
@@ -216,7 +216,7 @@
         android:paddingLeft="@dimen/em_margin_25"
         android:paddingStart="@dimen/em_margin_25"
         android:textColor="@color/white"
-        android:textSize="@dimen/em_size_big_notify"/>
+        android:textSize="@dimen/em_size_big_notify" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/layout_management"

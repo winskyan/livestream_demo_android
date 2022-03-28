@@ -16,7 +16,7 @@
         android:paddingEnd="68dp"
         android:background="@drawable/em_live_gift_show_bg_shape">
 
-        <io.hyphenate.easeui.widget.EaseImageView
+        <io.agora.chat.uikit.widget.EaseImageView
             android:id="@+id/iv_icon"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ease_default_avatar"
-            app:ease_shape_type="round"/>
+            app:ease_shape_type="round" />
 
         <TextView
             android:id="@+id/tv_username"
@@ -41,7 +41,7 @@
             android:maxEms="8"
             android:maxLength="8"
             android:maxLines="1"
-            android:ellipsize="end"/>
+            android:ellipsize="end" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginStart="6dp"
             android:textSize="@dimen/em_size_smaller"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:src="@drawable/gift_default_1"
         android:layout_marginRight="@dimen/em_margin_30"
-        android:layout_marginEnd="@dimen/em_margin_30"/>
+        android:layout_marginEnd="@dimen/em_margin_30" />
 
     <ImageView
         android:id="@+id/iv_x"
@@ -75,7 +75,7 @@
         android:src="@drawable/em_live_gift_x"
         android:layout_marginBottom="5dp"
         android:textColor="@color/white"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
     <io.agora.livedemo.ui.widget.MagicTextView
         android:id="@+id/tv_gift_num"
@@ -89,6 +89,6 @@
         android:gravity="left|center_vertical"
         tools:text="12"
         android:textColor="@color/white"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

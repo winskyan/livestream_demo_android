@@ -2,27 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.agora.livedemo">
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- qiniu need permission start -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
     <!-- qiniu need permission end -->
 
     <!--agora need start -->
@@ -34,35 +36,39 @@
         android:name=".DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/em_live_logo"
-        android:roundIcon="@mipmap/em_live_logo"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme">
+        android:roundIcon="@mipmap/em_live_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
-        <!--解决Android 9.0强制使用https的问题 并在application标签中添加android:usesCleartextTraffic="true"-->
+        <!--Solve the problem of forcing the use of https in Android 9.0 and add android:usesCleartextTraffic="true" in the application tag-->
         <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
 
-        <!-- 环信SDK配置 start -->
-        <!-- 设置环信应用的appkey -->
+        <!-- IM SDK required start -->
+        <!-- Set your agora chat AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#chatdemoui"/>
+            android:value="${AGORA_CHAT_APPKEY}" />
+
         <!-- 声明SDK所需的service SDK核心功能-->
-        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
-        <service android:name="com.hyphenate.chat.EMJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
             android:exported="true" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
@@ -72,8 +78,8 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.easemob.livedemo.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -88,30 +94,29 @@
         <!-- 登录页面 -->
         <activity
             android:name=".ui.other.LoginActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <!-- 直播（观众）页面 -->
-<!--        <activity-->
-<!--            android:name=".ui.live.LiveAudienceActivity"-->
-<!--            android:parentActivityName=".ui.MainActivity"-->
-<!--            android:windowSoftInputMode="stateHidden"-->
-<!--            android:launchMode="singleTask"-->
-<!--            android:screenOrientation="portrait">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".ui.MainActivity"/>-->
-<!--        </activity>-->
+        <!--        <activity-->
+        <!--            android:name=".ui.live.LiveAudienceActivity"-->
+        <!--            android:parentActivityName=".ui.MainActivity"-->
+        <!--            android:windowSoftInputMode="stateHidden"-->
+        <!--            android:launchMode="singleTask"-->
+        <!--            android:screenOrientation="portrait">-->
+        <!--            <meta-data-->
+        <!--                android:name="android.support.PARENT_ACTIVITY"-->
+        <!--                android:value=".ui.MainActivity"/>-->
+        <!--        </activity>-->
         <!-- 直播（主播）页面 -->
-<!--        <activity-->
-<!--            android:name=".ui.live.LiveAnchorActivity"-->
-<!--            android:windowSoftInputMode="stateHidden"-->
-<!--            android:parentActivityName=".ui.MainActivity"-->
-<!--            android:launchMode="singleTask"-->
-<!--            android:screenOrientation="portrait">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".ui.MainActivity"/>-->
-<!--        </activity>-->
+        <!--        <activity-->
+        <!--            android:name=".ui.live.LiveAnchorActivity"-->
+        <!--            android:windowSoftInputMode="stateHidden"-->
+        <!--            android:parentActivityName=".ui.MainActivity"-->
+        <!--            android:launchMode="singleTask"-->
+        <!--            android:screenOrientation="portrait">-->
+        <!--            <meta-data-->
+        <!--                android:name="android.support.PARENT_ACTIVITY"-->
+        <!--                android:value=".ui.MainActivity"/>-->
+        <!--        </activity>-->
         <!-- 注册页面 -->
         <activity
             android:name=".ui.other.RegisterActivity"
@@ -119,28 +124,29 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.other.LoginActivity"/>
+                android:value=".ui.other.LoginActivity" />
         </activity>
         <!-- 搜索页面（废弃） -->
         <activity
             android:name=".ui.other.SearchActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 创建直播间 -->
         <activity
             android:name=".ui.other.CreateLiveRoomActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <!-- 关联的直播间（废弃） -->
-        <activity android:name=".ui.other.AssociateLiveRoomActivity"
+        <activity
+            android:name=".ui.other.AssociateLiveRoomActivity"
             android:screenOrientation="portrait" />
         <!--启动页-->
         <activity
-            android:name=".ui.other.SplashActivity"
+            android:name=".ui.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- 直播间列表 -->
@@ -148,25 +154,31 @@
         <!-- 关于环信 -->
         <activity android:name=".ui.other.AboutHxActivity" />
         <!-- 极速直播主播端 -->
-        <activity android:name=".ui.fast.FastLiveHostActivity"
+        <activity
+            android:name=".ui.fast.FastLiveHostActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 极速直播观众端 -->
-        <activity android:name=".ui.fast.FastLiveAudienceActivity"
+        <activity
+            android:name=".ui.fast.FastLiveAudienceActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- 正在直播的房间列表 -->
-<!--        <activity android:name=".ui.live.LivingListActivity"-->
-<!--            android:screenOrientation="portrait"/>-->
+        <!--        <activity android:name=".ui.live.LivingListActivity"-->
+        <!--            android:screenOrientation="portrait"/>-->
         <!-- 正在极速直播的房间列表 -->
-        <activity android:name=".ui.fast.FastLivingListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.cdn.CdnLivingListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.cdn.CdnLiveHostActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.cdn.CdnLiveAudienceActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.fast.FastLivingListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.cdn.CdnLivingListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.cdn.CdnLiveHostActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.cdn.CdnLiveAudienceActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -2,68 +2,67 @@ package io.agora.livedemo;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 import io.agora.exceptions.ChatException;
 
-/**
- * Created by wei on 2017/3/8.
- */
-
 public class ThreadPoolManager {
-    private ExecutorService executor;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final ExecutorService executor;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private ThreadPoolManager(){
+    private ThreadPoolManager() {
         executor = Executors.newCachedThreadPool(new ThreadFactory() {
-            @Override public Thread newThread(@NonNull Runnable r) {
-                Thread thread = new Thread(r){
-                    @Override public void run() {
+            @Override
+            public Thread newThread(@NonNull Runnable r) {
+                return new Thread(r) {
+                    @Override
+                    public void run() {
                         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
                         super.run();
                     }
                 };
-                return thread;
             }
         });
     }
 
     private static final ThreadPoolManager POOL_MANAGER = new ThreadPoolManager();
 
-    public static ThreadPoolManager getInstance(){
+    public static ThreadPoolManager getInstance() {
         return POOL_MANAGER;
     }
 
-    public void executeRunnable(Runnable runnable){
+    public void executeRunnable(Runnable runnable) {
         executor.execute(runnable);
     }
 
-    public <Result> void executeTask(final Task<Result> task){
+    public <Result> void executeTask(final Task<Result> task) {
         executeRunnable(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Result result;
                 try {
                     result = task.onRequest();
-                    //if(t != null) {
-                        handler.post(new Runnable() {
-                            @Override public void run() {
-                                task.onSuccess(result);
-                            }
-                        });
-                    //}
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            task.onSuccess(result);
+                        }
+                    });
                 } catch (final ChatException e) {
                     handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             task.onError(e);
                         }
                     });
                 }
-
             }
         });
     }
@@ -71,22 +70,25 @@ public class ThreadPoolManager {
     public interface Task<Result> {
         /**
          * execute on background
-         * @return
-         * @throws HyphenateException
+         *
+         * @return result
+         * @throws ChatException exception
          */
         @WorkerThread
         Result onRequest() throws ChatException;
 
         /**
          * execute on ui thread
-         * @param result
+         *
+         * @param result result
          */
         @UiThread
         void onSuccess(Result result);
 
         /**
          * execute on ui thread
-         * @param exception
+         *
+         * @param exception exception
          */
         @UiThread
         void onError(ChatException exception);

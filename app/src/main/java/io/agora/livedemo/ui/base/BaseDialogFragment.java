@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.common.reponsitories.Resource;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.reponsitories.Resource;
 
 /**
  * 作为dialog fragment的基类
@@ -49,7 +49,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     }
 
-    public void setChildView(View view) {}
+    public void setChildView(View view) {
+    }
 
     public abstract int getLayoutId();
 
@@ -75,18 +76,24 @@ public abstract class BaseDialogFragment extends DialogFragment {
         initData();
     }
 
-    public void initArgument() {}
+    public void initArgument() {
+    }
 
-    public void initView(Bundle savedInstanceState) {}
+    public void initView(Bundle savedInstanceState) {
+    }
 
-    public void initViewModel() {}
+    public void initViewModel() {
+    }
 
-    public void initListener() {}
+    public void initListener() {
+    }
 
-    public void initData() {}
+    public void initData() {
+    }
 
     /**
      * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     *
      * @param id
      * @param <T>
      * @return
@@ -98,12 +105,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     /**
      * 解析Resource<T>
+     *
      * @param response
      * @param callback
      * @param <T>
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext != null) {
+        if (mContext != null) {
             mContext.parseResource(response, callback);
         }
     }
@@ -118,7 +126,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
             lp.dimAmount = 0.6f;
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
             lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            lp.gravity =  Gravity.BOTTOM;
+            lp.gravity = Gravity.BOTTOM;
             setDialogParams(lp);
         } catch (Exception e) {
             e.printStackTrace();

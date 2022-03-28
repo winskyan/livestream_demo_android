@@ -2,13 +2,14 @@ package io.agora.livedemo.ui.other.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,7 +26,8 @@ public class MyProfileFragment extends Fragment {
     //Spinner spinner;
     //@BindView(R.id.frame_rate)
     //TextView frameRateText;
-    @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.tv_username)
+    TextView usernameView;
 
 
     @Nullable
@@ -65,7 +67,8 @@ public class MyProfileFragment extends Fragment {
 
     }
 
-    @OnClick(R.id.btn_logout) void onLogout(){
+    @OnClick(R.id.btn_logout)
+    void onLogout() {
         ChatClient.getInstance().logout(false, new CallBack() {
             @Override
             public void onSuccess() {

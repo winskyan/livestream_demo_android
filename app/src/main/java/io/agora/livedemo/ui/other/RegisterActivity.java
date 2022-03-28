@@ -3,19 +3,19 @@ package io.agora.livedemo.ui.other;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.widget.Toolbar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.agora.chat.ChatClient;
 import io.agora.exceptions.ChatException;
 import io.agora.livedemo.R;
 import io.agora.livedemo.ui.base.BaseActivity;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -44,7 +44,7 @@ public class RegisterActivity extends BaseActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(username.getText()) || TextUtils.isEmpty(password.getText())){
+                if (TextUtils.isEmpty(username.getText()) || TextUtils.isEmpty(password.getText())) {
                     showToast("用户名和密码不能为空");
                     return;
                 }

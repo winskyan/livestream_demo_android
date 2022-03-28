@@ -12,6 +12,7 @@ import io.agora.livedemo.data.model.BaseBean;
 
 /**
  * 此类用于从环信SDK拉取异步数据或者其他耗时操作
+ *
  * @param <ResultType>
  */
 public abstract class NetworkOnlyResource<ResultType, RequestType> {
@@ -21,9 +22,9 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
 
     public NetworkOnlyResource() {
         mThreadManager = ThreadManager.getInstance();
-        if(mThreadManager.isMainThread()) {
+        if (mThreadManager.isMainThread()) {
             init();
-        }else {
+        } else {
             mThreadManager.runOnMainThread(this::init);
         }
     }
@@ -46,13 +47,13 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
             public void onSuccess(LiveData<RequestType> apiResponse) {
                 // 保证回调后在主线程
                 mThreadManager.runOnMainThread(() -> {
-                    result.addSource(apiResponse, response-> {
+                    result.addSource(apiResponse, response -> {
                         result.removeSource(apiResponse);
-                        if(response != null) {
+                        if (response != null) {
                             // 如果结果是EmResult结构，需要判断code，是否请求成功
-                            if(response instanceof BaseBean) {
+                            if (response instanceof BaseBean) {
                                 int code = ((BaseBean) response).code;
-                                if(code != ErrorCode.EM_NO_ERROR) {
+                                if (code != ErrorCode.EM_NO_ERROR) {
                                     fetchFailed(code, ((BaseBean) response).message);
                                     return;
                                 }
@@ -60,7 +61,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
                             // 在异步线程中处理保存的逻辑
                             mThreadManager.runOnIOThread(() -> {
                                 ResultType resultType = transformRequestType(response); //自定义的
-                                if(resultType == null) {
+                                if (resultType == null) {
                                     resultType = transformDefault(response);
                                 }
                                 try {
@@ -71,7 +72,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
                                 result.postValue(Resource.success(resultType));
                             });
 
-                        }else {
+                        } else {
                             fetchFailed(ErrorCode.EM_ERR_UNKNOWN, null);
                         }
                     });
@@ -91,6 +92,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
 
     /**
      * 默认转换
+     *
      * @param response
      * @return
      */
@@ -118,6 +120,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
 
     /**
      * 用户自定义转换
+     *
      * @param response
      * @return
      */
@@ -129,18 +132,21 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
     @MainThread
     private void fetchFailed(int code, String message) {
         onFetchFailed();
-        result.setValue(Resource.error(code, message,null));
+        result.setValue(Resource.error(code, message, null));
     }
 
     /**
      * Called to save the result of the API response into the database
+     *
      * @param item
      */
     @WorkerThread
-    protected void saveCallResult(ResultType item){ }
+    protected void saveCallResult(ResultType item) {
+    }
 
     /**
      * Process request response
+     *
      * @param response
      * @return
      */
@@ -151,6 +157,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
 
     /**
      * 此处设计为回调模式，方便在此方法中进行异步操作
+     *
      * @return
      */
     @MainThread
@@ -159,11 +166,13 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
     /**
      * Called when the fetch fails. The child class may want to reset components like rate limiter.
      */
-    protected void onFetchFailed() {}
+    protected void onFetchFailed() {
+    }
 
     /**
      * Returns a LiveData object that represents the resource that's implemented
      * in the base class.
+     *
      * @return
      */
     protected LiveData<Resource<ResultType>> asLiveData() {

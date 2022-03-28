@@ -1,9 +1,9 @@
 package io.agora.livedemo.common.db.entity;
 
-import java.io.Serializable;
-
 import androidx.room.Entity;
 import androidx.room.Index;
+
+import java.io.Serializable;
 
 @Entity(tableName = "em_receive_gift", primaryKeys = {"timestamp"},
         indices = {@Index(value = {"timestamp"}, unique = true)})

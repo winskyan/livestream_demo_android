@@ -8,6 +8,7 @@ import android.view.View;
 public interface OnItemClickListener {
     /**
      * 条目点击
+     *
      * @param view
      * @param position
      */

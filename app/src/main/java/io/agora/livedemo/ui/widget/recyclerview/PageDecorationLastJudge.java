@@ -11,7 +11,7 @@ public interface PageDecorationLastJudge {
      * @return
      */
     boolean isLastRow(int position);
- 
+
     /**
      * Is the last Colum in one row;
      *
@@ -19,6 +19,6 @@ public interface PageDecorationLastJudge {
      * @return
      */
     boolean isLastColumn(int position);
- 
+
     boolean isPageLast(int position);
 }

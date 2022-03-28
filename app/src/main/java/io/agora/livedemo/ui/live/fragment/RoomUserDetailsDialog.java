@@ -16,9 +16,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -31,21 +46,6 @@ import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.live.viewmodels.UserDetailManageViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
 import io.agora.livedemo.utils.Utils;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.Group;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Created by wei on 2016/7/25.
@@ -89,7 +89,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     private LiveRoom liveRoom;
 
     public static RoomUserDetailsDialog newInstance(String username, LiveRoom liveRoom) {
-        return RoomUserDetailsDialog.newInstance(username,liveRoom, DemoConstants.TYPE_AUDIENCE);
+        return RoomUserDetailsDialog.newInstance(username, liveRoom, DemoConstants.TYPE_AUDIENCE);
     }
 
     public static RoomUserDetailsDialog newInstance(String username, LiveRoom liveRoom, String type) {
@@ -131,7 +131,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
         if (username.equals(ChatClient.getInstance().getCurrentUser())) {
             managementLayout.setVisibility(View.GONE);
         }
-        if(TextUtils.equals(type, DemoConstants.TYPE_ANCHOR) && !DemoHelper.isOwner(username)) {
+        if (TextUtils.equals(type, DemoConstants.TYPE_ANCHOR) && !DemoHelper.isOwner(username)) {
             managementLayout.setVisibility(View.VISIBLE);
         }
         if (username != null) {
@@ -139,7 +139,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
             ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
 
-        if(TextUtils.equals(username, liveRoom.getOwner())) {
+        if (TextUtils.equals(username, liveRoom.getOwner())) {
             //设置礼物及点赞数
             showFansNum();
             showGiftNum();
@@ -210,9 +210,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 @Override
                 public void onSuccess(List<String> data) {
                     muteList = data;
-                    if(data.contains(username)) {
+                    if (data.contains(username)) {
                         tvMuteStatus.setText(getString(R.string.em_live_anchor_muted));
-                    }else {
+                    } else {
                         tvMuteStatus.setText(getString(R.string.em_live_anchor_mute));
                     }
                 }
@@ -223,9 +223,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 @Override
                 public void onSuccess(List<String> data) {
                     whiteList = data;
-                    if(data.contains(username)) {
+                    if (data.contains(username)) {
                         tvWhiteStatus.setText(getString(R.string.em_live_anchor_remove_from_white));
-                    }else {
+                    } else {
                         tvWhiteStatus.setText(getString(R.string.em_live_anchor_add_white));
                     }
                 }
@@ -249,17 +249,17 @@ public class RoomUserDetailsDialog extends DialogFragment {
             });
         });
 
-        if(TextUtils.equals(username, liveRoom.getOwner())) {
+        if (TextUtils.equals(username, liveRoom.getOwner())) {
             LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)
                     .observe(getViewLifecycleOwner(), response -> {
-                        if(response != null && response) {
+                        if (response != null && response) {
                             showGiftNum();
                         }
                     });
 
             LiveDataBus.get().with(DemoConstants.REFRESH_LIKE_NUM, Boolean.class)
                     .observe(getViewLifecycleOwner(), response -> {
-                        if(response != null && response) {
+                        if (response != null && response) {
                             showLikeNum();
                         }
                     });
@@ -273,9 +273,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
     @OnClick(R.id.layout_live_no_talk)
     void mute() {
         if (chatroomId != null) {
-            if(muteList != null && muteList.contains(username)) {
+            if (muteList != null && muteList.contains(username)) {
                 detailViewModel.unMuteChatRoomMembers(chatroomId, getUserList());
-            }else {
+            } else {
                 detailViewModel.muteChatRoomMembers(chatroomId, getUserList(), -1);
             }
 
@@ -285,9 +285,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
     @OnClick(R.id.layout_live_add_whitelist)
     void addToBlacklist() {
         if (chatroomId != null) {
-            if(whiteList != null && whiteList.contains(username)) {
+            if (whiteList != null && whiteList.contains(username)) {
                 detailViewModel.removeFromChatRoomWhiteList(chatroomId, getUserList());
-            }else {
+            } else {
                 detailViewModel.addToChatRoomWhiteList(chatroomId, getUserList());
             }
         }
@@ -384,12 +384,13 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
     /**
      * 解析Resource<T>
+     *
      * @param response
      * @param callback
      * @param <T>
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext != null) {
+        if (mContext != null) {
             mContext.parseResource(response, callback);
         }
     }

@@ -78,7 +78,7 @@ public class RomUtils {
         } catch (final Exception e) {
             return false;
         } finally {
-            if(stream != null) {
+            if (stream != null) {
                 try {
                     stream.close();
                 } catch (IOException e) {
@@ -106,7 +106,7 @@ public class RomUtils {
         } catch (final Exception e) {
             return false;
         } finally {
-            if(stream != null) {
+            if (stream != null) {
                 try {
                     stream.close();
                 } catch (IOException e) {

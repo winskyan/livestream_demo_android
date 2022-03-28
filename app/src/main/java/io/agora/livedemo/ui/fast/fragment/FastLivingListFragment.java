@@ -2,6 +2,8 @@ package io.agora.livedemo.ui.fast.fragment;
 
 import android.view.View;
 
+import java.util.List;
+
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
@@ -9,8 +11,6 @@ import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.fast.FastLiveAudienceActivity;
 import io.agora.livedemo.ui.fast.FastLivingListActivity;
 import io.agora.livedemo.ui.live.fragment.LiveListFragment;
-
-import java.util.List;
 
 public class FastLivingListFragment extends LiveListFragment {
     private List<LiveRoom> vodList;

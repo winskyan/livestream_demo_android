@@ -2,9 +2,10 @@ package io.agora.livedemo.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import io.agora.livedemo.R;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import io.agora.livedemo.R;
 
 /**
  * Created by wei on 2017/3/13.
@@ -21,7 +22,7 @@ public class MySwipeRefreshLayout extends SwipeRefreshLayout {
         setProgressBarColor();
     }
 
-    private void setProgressBarColor(){
+    private void setProgressBarColor() {
         setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
                 R.color.holo_orange_light, R.color.holo_red_light);
     }

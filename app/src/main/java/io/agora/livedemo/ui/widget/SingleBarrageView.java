@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
@@ -15,10 +18,6 @@ import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.data.model.MessageBean;
 import io.agora.livedemo.ui.widget.barrage.BarrageAdapter;
 import io.agora.livedemo.ui.widget.barrage.BarrageView;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SingleBarrageView extends BarrageView {
     private BarrageAdapter<MessageBean> mAdapter;
@@ -42,7 +41,7 @@ public class SingleBarrageView extends BarrageView {
         Options options = new Options()
                 .setGravity(BarrageView.GRAVITY_TOP)                // 设置弹幕的位置
                 .setInterval(100)                                     // 设置弹幕的发送间隔
-                .setSpeed(200,29)                   // 设置速度和波动值
+                .setSpeed(200, 29)                   // 设置速度和波动值
                 .setModel(BarrageView.MODEL_COLLISION_DETECTION)     // 设置弹幕生成模式
                 .setRepeat(1)                                       // 循环播放 默认为1次 -1 为无限循环
                 .setClick(false);                                    // 设置弹幕是否可以点击
@@ -67,7 +66,7 @@ public class SingleBarrageView extends BarrageView {
      * refresh
      */
     public void refresh() {
-        if(!TextUtils.isEmpty(chatId)) {
+        if (!TextUtils.isEmpty(chatId)) {
             setData(chatId);
         }
     }
@@ -87,7 +86,7 @@ public class SingleBarrageView extends BarrageView {
     }
 
     public void setData(List<ChatMessage> messages) {
-        if(messages != null && !messages.isEmpty()) {
+        if (messages != null && !messages.isEmpty()) {
             List<MessageBean> list = new ArrayList<>();
             MessageBean bean;
             for (ChatMessage message : messages) {
@@ -114,7 +113,7 @@ public class SingleBarrageView extends BarrageView {
         @Override
         protected void onBind(MessageBean data) {
             String barrageTxt = DemoMsgHelper.getInstance().getMsgBarrageTxt(data.getMessage());
-            if(!TextUtils.isEmpty(barrageTxt)) {
+            if (!TextUtils.isEmpty(barrageTxt)) {
                 mContent.setText(barrageTxt);
             }
         }

@@ -4,16 +4,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import io.agora.chat.ChatRoom;
-import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.ui.base.BaseLiveDialogFragment;;
-import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.lifecycle.ViewModelProvider;
+import io.agora.chat.ChatRoom;
+import io.agora.livedemo.R;
+import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
+import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
+
+;
 
 public class RoomManageUserDialog extends BaseLiveDialogFragment implements View.OnClickListener {
     private TextView tvMute;
@@ -43,7 +45,7 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements View
     public void initArgument() {
         super.initArgument();
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             username = bundle.getString("username");
             roomId = bundle.getString("chatroomid");
         }
@@ -112,17 +114,17 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_mute :
-                if(isMuted) {
+            case R.id.tv_mute:
+                if (isMuted) {
                     viewModel.unMuteChatRoomMembers(roomId, getList(username));
-                }else {
+                } else {
                     viewModel.muteChatRoomMembers(roomId, getList(username), -1);
                 }
                 break;
-            case R.id.tv_white :
-                if(inWhiteList) {
+            case R.id.tv_white:
+                if (inWhiteList) {
                     viewModel.removeFromChatRoomWhiteList(roomId, getList(username));
-                }else {
+                } else {
                     viewModel.addToChatRoomWhiteList(roomId, getList(username));
                 }
                 break;

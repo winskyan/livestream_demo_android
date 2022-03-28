@@ -5,14 +5,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
+
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.data.TestAvatarRepository;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-import io.hyphenate.easeui.widget.EaseImageView;
-
-import androidx.annotation.NonNull;
 
 public class MemberAvatarAdapter extends EaseBaseRecyclerViewAdapter<String> {
     TestAvatarRepository avatarRepository;

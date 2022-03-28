@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
-    <io.hyphenate.easeui.widget.EaseTitleBar
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
         android:id="@+id/title_bar"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_title_bar_height"
@@ -14,7 +14,7 @@
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarTitle="@string/em_live_list_all_title"
         app:titleBarRightTitle="新建"
-        app:titleBarRightVisible="true"/>
+        app:titleBarRightVisible="true" />
 
     <FrameLayout
         android:id="@+id/fl_fragment"
@@ -23,6 +23,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar"/>
+        app:layout_constraintTop_toBottomOf="@id/title_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

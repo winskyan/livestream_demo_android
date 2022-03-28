@@ -12,7 +12,7 @@
         android:id="@+id/iv_gift_icon"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        tools:src="@drawable/gift_default_1"/>
+        tools:src="@drawable/gift_default_1" />
 
     <TextView
         android:id="@+id/tv_gift_info"
@@ -21,6 +21,6 @@
         tools:text="20个比翼双飞"
         android:textSize="@dimen/em_size_big_notify"
         android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginStart="20dp" />
 
 </LinearLayout>

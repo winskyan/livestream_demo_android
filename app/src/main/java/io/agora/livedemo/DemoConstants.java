@@ -1,10 +1,6 @@
 package io.agora.livedemo;
 
-/**
- * Created by wei on 2016/6/7.
- */
 public interface DemoConstants {
-//    public static final String EXT_IS_GIFT = "ext_is_gift";
     String CMD_GIFT = "cmd_gift";
     String EXTRA_IS_BARRAGE_MSG = "is_barrage_msg";
     String CMD_PRAISE = "cmd_live_praise";

@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 public class GiftListAdapter extends EaseBaseRecyclerViewAdapter<GiftBean> {
     private int selectedPosition = -1;
@@ -39,10 +39,10 @@ public class GiftListAdapter extends EaseBaseRecyclerViewAdapter<GiftBean> {
         public void setData(GiftBean item, int position) {
             ivGift.setImageResource(item.getResource());
             tvGiftName.setText(item.getName());
-            if(selectedPosition == position) {
+            if (selectedPosition == position) {
                 item.setChecked(true);
                 itemView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_gift_selected_shape));
-            }else {
+            } else {
                 item.setChecked(false);
                 itemView.setBackground(null);
             }

@@ -2,13 +2,13 @@ package io.agora.livedemo.ui.live.fragment;
 
 import android.view.View;
 
+import java.util.List;
+
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.fast.FastLiveAudienceActivity;
-
-import java.util.List;
 
 public class LivingListFragment extends LiveListFragment {
     private static final int MAX_VOD_COUNT = 2;
@@ -17,9 +17,9 @@ public class LivingListFragment extends LiveListFragment {
     @Override
     public void onItemClick(View view, int position) {
         LiveRoom liveRoom = adapter.getItem(position);
-        if(DemoHelper.isFastLiveType(liveRoom.getVideo_type())) {
+        if (DemoHelper.isFastLiveType(liveRoom.getVideo_type())) {
             FastLiveAudienceActivity.actionStart(mContext, liveRoom);
-        }else {
+        } else {
             // LiveAudienceActivity.actionStart(mContext, liveRoom);
         }
     }
@@ -49,13 +49,13 @@ public class LivingListFragment extends LiveListFragment {
                     cursor = data.cursor;
                     hasMoreData = true;
                     List<LiveRoom> livingRooms = data.data;
-                    if(livingRooms.size() < pageSize) {
+                    if (livingRooms.size() < pageSize) {
                         hasMoreData = false;
                     }
-                    if(isLoadMore) {
+                    if (isLoadMore) {
                         adapter.addData(livingRooms);
-                    }else {
-                        if(vodList != null && livingRooms != null) {
+                    } else {
+                        if (vodList != null && livingRooms != null) {
                             livingRooms.addAll(0, vodList);
                         }
                         adapter.setData(livingRooms);

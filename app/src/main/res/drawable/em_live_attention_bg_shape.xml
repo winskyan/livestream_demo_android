@@ -3,17 +3,17 @@
 
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <size android:height="25dp"/>
-            <corners android:radius="12.5dp"/>
-            <solid android:color="#b5b5b6"/>
+            <size android:height="25dp" />
+            <corners android:radius="12.5dp" />
+            <solid android:color="#b5b5b6" />
         </shape>
     </item>
 
     <item>
         <shape android:shape="rectangle">
-            <size android:height="25dp"/>
-            <corners android:radius="12.5dp"/>
-            <solid android:color="@color/common_white"/>
+            <size android:height="25dp" />
+            <corners android:radius="12.5dp" />
+            <solid android:color="@color/common_white" />
         </shape>
     </item>
 
