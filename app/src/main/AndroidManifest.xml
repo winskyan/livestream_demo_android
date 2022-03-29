@@ -91,10 +91,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <!-- 登录页面 -->
-        <activity
-            android:name=".ui.other.LoginActivity"
-            android:screenOrientation="portrait"></activity>
+
         <!-- 直播（观众）页面 -->
         <!--        <activity-->
         <!--            android:name=".ui.live.LiveAudienceActivity"-->
@@ -117,20 +114,10 @@
         <!--                android:name="android.support.PARENT_ACTIVITY"-->
         <!--                android:value=".ui.MainActivity"/>-->
         <!--        </activity>-->
-        <!-- 注册页面 -->
-        <activity
-            android:name=".ui.other.RegisterActivity"
-            android:parentActivityName=".ui.other.LoginActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.other.LoginActivity" />
-        </activity>
-        <!-- 搜索页面（废弃） -->
+
         <activity
             android:name=".ui.other.SearchActivity"
             android:screenOrientation="portrait" />
-        <!-- 创建直播间 -->
         <activity
             android:name=".ui.other.CreateLiveRoomActivity"
             android:screenOrientation="portrait"

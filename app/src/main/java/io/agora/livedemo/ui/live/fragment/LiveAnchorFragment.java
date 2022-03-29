@@ -326,7 +326,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     if (data.isLiving() && (!DemoHelper.isOwner(chatroom.getOwner()) && !DemoHelper.isOwner(data.getOwner()))) {
                         EMLog.d(TAG, "getLiveRoomDetails 主播正在直播 owner: " + chatroom.getOwner());
                         //退出房间
-                        mContext.showToast(getString(R.string.em_live_list_warning));
+                        mContext.showToast(getString(R.string.live_list_warning));
                         exitRoom();
                     } else {
                         EMLog.d(TAG, "getLiveRoomDetails 准备开始直播");
@@ -394,7 +394,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         usernameView.setText(DemoHelper.getNickName(ChatClient.getInstance().getCurrentUser()));
         Log.e("TAG", "image resource = " + DemoHelper.getAvatarResource(ChatClient.getInstance().getCurrentUser()));
 //        ivIcon.setImageResource(DemoHelper.getAvatarResource(ChatClient.getInstance().getCurrentUser()));
-        ivIcon.setImageResource(R.drawable.em_avatar_1);
+        ivIcon.setImageResource(R.drawable.avatar_1);
         addChatRoomChangeListener();
         onMessageListInit();
         mContext.showToast("直播开始！");

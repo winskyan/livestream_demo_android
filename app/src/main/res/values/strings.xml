@@ -1,21 +1,12 @@
 <resources>
     <string name="app_name">LiveStream</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">用户名</string>
-    <string name="prompt_password">密码</string>
-    <string name="action_sign_in">登录</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">用户名不能为空</string>
-    <string name="error_invalid_password">密码不能为空</string>
-
     <string name="pref_default_video_frame_rate">15</string>
     <string name="pref_video_frame_rate">framerate</string>
 
     <string name="pref_default_video_encoding_bit_rate">400</string>
 
     <string name="pref_video_encoding_bit_rate">bitrate</string>
-
 
     <string name="pref_default_video_size_width">640</string>
     <string name="pref_video_size_width">video width</string>
@@ -46,7 +37,7 @@
 
     <string name="ease_list_no_data_text">暂无数据</string>
 
-    <string name="em_live_type_normal_title">融合CDN直播</string>
+
     <string name="em_live_type_interaction_title">互动直播</string>
     <string name="em_live_type_normal_introduction">超低卡顿、全链路质量透明的标准 CDN 直播</string>
     <string name="em_live_type_fast_title">极速直播</string>
@@ -61,7 +52,7 @@
     <string name="em_live_list_item_continue">继续直播</string>
     <string name="em_live_list_item_ongoing">主播在播</string>
     <string name="em_live_list_item_lived">主播在播\n不能选择</string>
-    <string name="em_live_list_warning">已经有主播在播，请选择其他房间</string>
+
 
     <string name="em_live_input_hint">和大家来聊天吧</string>
     <string name="em_live_attention">关注</string>
@@ -132,22 +123,36 @@
     <string name="em_live_disconnect_title">网络连接中断，是否退出房间？</string>
     <string name="em_live_open_video_fail_title">播放失败，是否退出房间？</string>
 
-    <string name="em_set_title">设置</string>
-    <string name="em_set_live_room">Stream Channels</string>
+
     <string name="em_set_select_auto">是否切换为访客模式？</string>
     <string name="em_set_select_login">是否切换为登录模式？</string>
     <string name="em_set_select_switch">切换</string>
     <string name="em_set_logout">退出</string>
     <string name="em_set_logout_confirm">是否退出？</string>
 
-    <string name="ok">确定</string>
-    <string name="cancel">取消</string>
-    <string name="prompt">提示</string>
+
     <string name="em_create_room_name_hint">请输入直播间名称</string>
     <string name="em_create_room_cover_hint">设置一个吸引人的封面</string>
     <string name="em_create_room">传统直播</string>
     <string name="em_create_fast_room">极速直播</string>
     <string name="em_create_interaction_room">互动直播</string>
 
-    <string name="live_room_title">Stream Channels</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="prompt">prompt</string>
+
+    <string name="home_title">Stream Channels</string>
+    <string name="home_logged_tip">Account is already logged in elsewhere!</string>
+
+    <string name="live_list_no_streamer_tip">No Streamer Live now</string>
+    <string name="live_list_start_live_stream_tip">Start your Livestream!</string>
+    <string name="live_list_warning">There is already a host playing, please choose another room</string>
+
+    <string name="search_tip">Please input search content</string>
+    <string name="search_empty_result">No Result for %1$s</string>
+    <string name="search_text_hint">Search</string>
+
+    <string name="profile_title">Profile</string>
+
+    <string name="live_type_normal_title">CDN Livestream</string>
 </resources>

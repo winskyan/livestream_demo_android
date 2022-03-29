@@ -15,7 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarDisplayHomeAsUpEnabled="false"
-        app:titleBarTitle="@string/live_room_title"
+        app:titleBarTitle="@string/home_title"
         app:titleBarTitlePosition="left"
         app:titleBarTitleTextColor="@color/white" />
 
@@ -23,7 +23,7 @@
         android:id="@+id/fl_main_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/cl_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar_main" />
@@ -32,7 +32,7 @@
         android:id="@+id/cl_bottom"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/white"
+        android:background="@drawable/bg_main_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -49,11 +49,11 @@
             app:layout_constraintRight_toLeftOf="@id/ll_home_middle"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <io.agora.chat.uikit.widget.EaseImageView
                 android:id="@+id/iv_home_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/em_live_home_selected" />
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/live_home_selected" />
 
         </LinearLayout>
 
@@ -83,11 +83,12 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <io.agora.chat.uikit.widget.EaseImageView
                 android:id="@+id/iv_home_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/em_live_set_unselected" />
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/live_set_unselected"
+                app:ease_shape_type="round" />
 
         </LinearLayout>
 
@@ -97,8 +98,8 @@
         android:id="@+id/rl_home_live"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/em_live_home_live_bg_shape"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/live_home_live_bg_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -107,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp"
-            android:src="@drawable/em_live" />
+            android:src="@drawable/live" />
 
     </RelativeLayout>
 

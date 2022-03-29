@@ -61,4 +61,11 @@
             <enum name="round" value="2" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="SearchEditText">
+        <attr name="search_edit_drawable_left_width" format="dimension" />
+        <attr name="search_edit_drawable_left_height" format="dimension" />
+        <attr name="search_edit_drawable_right_width" format="dimension" />
+        <attr name="search_edit_drawable_right_height" format="dimension" />
+    </declare-styleable>
 </resources>

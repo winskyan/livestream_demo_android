@@ -10,22 +10,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.OnItemClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.model.LiveRoom;
@@ -35,22 +34,19 @@ import io.agora.livedemo.ui.base.GridMarginDecoration;
 import io.agora.livedemo.ui.live.adapter.LiveListAdapter;
 import io.agora.livedemo.ui.live.viewmodels.LiveListViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class LiveListFragment extends BaseFragment implements OnItemClickListener {
     protected SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private ProgressBar loadmorePB;
+    private ProgressBar loadMorePB;
 
     protected static final int pageSize = 10;
     protected String cursor;
     protected boolean hasMoreData;
     private boolean isLoading;
     protected boolean isLoadMore;
-    private final List<LiveRoom> liveRoomList = new ArrayList<>();
     public LiveListAdapter adapter;
-    private GridLayoutManager layoutManager;
+    private GridLayoutManager gridLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
     private String status;
     protected LiveListViewModel viewModel;
 
@@ -90,15 +86,20 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     }
 
     private void initView() {
-        loadmorePB = (ProgressBar) getView().findViewById(R.id.pb_load_more);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycleview);
-        layoutManager = new GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
+        if (null == getView()) {
+            return;
+        }
+        loadMorePB = getView().findViewById(R.id.pb_load_more);
+        recyclerView = getView().findViewById(R.id.recycleview);
+        gridLayoutManager = new GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        swipeRefreshLayout = getView().findViewById(R.id.refresh_layout);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridMarginDecoration(mContext, 10));
         adapter = new LiveListAdapter();
+        adapter.setEmptyView(R.layout.live_list_empty);
         recyclerView.setAdapter(adapter);
 
         adapter.setStatus(status);
@@ -113,16 +114,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                     @Override
                     public void onSuccess(ResponseModule<List<LiveRoom>> data) {
                         cursor = data.cursor;
-                        hasMoreData = true;
-                        if (data.data.size() < pageSize) {
-                            hasMoreData = false;
-                        }
+                        hasMoreData = data.data.size() >= pageSize;
                         if (isLoadMore) {
-                            adapter.addData(data.data);
+                            setAdapterData(data.data, true);
                         } else {
-                            adapter.setData(data.data);
+                            setAdapterData(data.data, false);
                         }
-
                     }
 
                     @Override
@@ -144,12 +141,12 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && hasMoreData
                         && !isLoading
-                        && layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() - 1) {
+                        && gridLayoutManager.findLastVisibleItemPosition() == gridLayoutManager.getItemCount() - 1) {
                     showLiveList(true);
                 }
             }
@@ -183,11 +180,6 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         showLiveList(false);
     }
 
-    /**
-     * 加载数据
-     *
-     * @param isLoadMore
-     */
     protected void showLiveList(final boolean isLoadMore) {
         this.isLoadMore = isLoadMore;
         if (!isLoadMore) {
@@ -196,12 +188,6 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         loadLiveList(pageSize, cursor);
     }
 
-    /**
-     * 加载数据
-     *
-     * @param limit
-     * @param cursor
-     */
     protected void loadLiveList(int limit, String cursor) {
         viewModel.getLiveRoomList(limit, cursor);
     }
@@ -211,7 +197,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         if (!isLoadMore)
             swipeRefreshLayout.setRefreshing(false);
         else
-            loadmorePB.setVisibility(View.INVISIBLE);
+            loadMorePB.setVisibility(View.INVISIBLE);
     }
 
     private boolean isOngoingLive() {
@@ -235,6 +221,25 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     }
 
     private void showDialog() {
-        Toast.makeText(mContext, R.string.em_live_list_warning, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, R.string.live_list_warning, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void setAdapterData(List<LiveRoom> data, boolean isAdd) {
+        if (isAdd) {
+            if (null == adapter.getData() || adapter.getData().size() == 0) {
+                recyclerView.setLayoutManager(gridLayoutManager);
+            }
+            adapter.addData(data);
+        } else {
+            if (null == data || 0 == data.size()) {
+                recyclerView.setLayoutManager(linearLayoutManager);
+            } else {
+                if (null == adapter.getData() || adapter.getData().size() == 0) {
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                }
+                adapter.setData(data);
+            }
+        }
+
     }
 }

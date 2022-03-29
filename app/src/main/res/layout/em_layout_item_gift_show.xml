@@ -14,7 +14,7 @@
         android:padding="2dp"
         android:paddingRight="68dp"
         android:paddingEnd="68dp"
-        android:background="@drawable/em_live_gift_show_bg_shape">
+        android:background="@drawable/live_gift_show_bg_shape">
 
         <io.agora.chat.uikit.widget.EaseImageView
             android:id="@+id/iv_icon"
@@ -72,7 +72,7 @@
         android:layout_height="11dp"
         app:layout_constraintLeft_toRightOf="@id/iv_gift"
         app:layout_constraintBottom_toBottomOf="@id/iv_gift"
-        android:src="@drawable/em_live_gift_x"
+        android:src="@drawable/live_gift_x"
         android:layout_marginBottom="5dp"
         android:textColor="@color/white"
         android:textSize="25sp" />

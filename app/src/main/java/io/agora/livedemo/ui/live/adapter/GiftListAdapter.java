@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.GiftBean;
-import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 
 public class GiftListAdapter extends EaseBaseRecyclerViewAdapter<GiftBean> {
     private int selectedPosition = -1;
@@ -41,7 +41,7 @@ public class GiftListAdapter extends EaseBaseRecyclerViewAdapter<GiftBean> {
             tvGiftName.setText(item.getName());
             if (selectedPosition == position) {
                 item.setChecked(true);
-                itemView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.em_gift_selected_shape));
+                itemView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.gift_selected_shape));
             } else {
                 item.setChecked(false);
                 itemView.setBackground(null);

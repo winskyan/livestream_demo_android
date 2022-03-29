@@ -6,9 +6,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.common.OnItemClickListener;
 import io.agora.livedemo.data.TestGiftRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseLiveFragment;

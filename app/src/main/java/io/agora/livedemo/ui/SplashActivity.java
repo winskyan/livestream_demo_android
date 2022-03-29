@@ -20,7 +20,6 @@ import io.agora.livedemo.common.PreferenceManager;
 import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.databinding.ActivitySplashBinding;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
-import io.agora.livedemo.ui.other.LoginActivity;
 import io.agora.livedemo.ui.other.viewmodels.LoginViewModel;
 
 
@@ -73,12 +72,7 @@ public class SplashActivity extends BaseLiveActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            if (DemoHelper.isCanRegister()) {
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-            } else {
-                login();
-            }
+            login();
         }
     }
 

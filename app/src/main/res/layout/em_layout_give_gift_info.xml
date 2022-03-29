@@ -5,7 +5,7 @@
     android:layout_margin="10dp"
     android:orientation="horizontal"
     android:gravity="center"
-    android:background="@drawable/em_live_gift_give_gift_info"
+    android:background="@drawable/live_gift_give_gift_info"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView

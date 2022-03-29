@@ -19,6 +19,7 @@ public class PreferenceManager {
     private static final String KEY_AGORA_ID = "key_agora_id";
     private static final String KEY_NICK_NAME = "key_nick_name";
     private static final String KEY_AVATAR_RESOURCE = "key_avatar_resource";
+    private static final String KEY_AVATAR_RESOURCE_INDEX = "key_avatar_resource_index";
     private static final String KEY_LIKE_NUM = "key_like_num";
 
     @SuppressLint("CommitPrefEdits")
@@ -152,6 +153,19 @@ public class PreferenceManager {
     public int getAvatarResource() {
         if (null != mSharedPreferences) {
             return mSharedPreferences.getInt(KEY_AVATAR_RESOURCE, -1);
+        } else {
+            return -1;
+        }
+    }
+
+    public void saveAvatarResourceIndex(int res) {
+        editor.putInt(KEY_AVATAR_RESOURCE_INDEX, res);
+        editor.apply();
+    }
+
+    public int getAvatarResourceIndex() {
+        if (null != mSharedPreferences) {
+            return mSharedPreferences.getInt(KEY_AVATAR_RESOURCE_INDEX, -1);
         } else {
             return -1;
         }

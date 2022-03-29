@@ -7,10 +7,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import io.agora.livedemo.R;
 
-/**
- * Created by wei on 2017/3/13.
- */
-
 public class MySwipeRefreshLayout extends SwipeRefreshLayout {
     public MySwipeRefreshLayout(Context context) {
         super(context);

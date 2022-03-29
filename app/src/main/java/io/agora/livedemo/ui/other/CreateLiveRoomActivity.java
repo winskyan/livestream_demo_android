@@ -37,7 +37,6 @@ import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.cdn.CdnLiveHostActivity;
-import io.agora.livedemo.ui.fast.FastLiveHostActivity;
 import io.agora.livedemo.ui.live.fragment.DemoListDialogFragment;
 import io.agora.livedemo.ui.live.viewmodels.CreateLiveViewModel;
 import io.agora.util.PathUtil;
@@ -97,7 +96,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 @Override
                 public void onSuccess(LiveRoom data) {
                     if (DemoHelper.isFastLiveType(data.getVideo_type())) {
-                        FastLiveHostActivity.actionStart(mContext, data);
+
                     } else {
                         // LiveAnchorActivity.actionStart(mContext, data);
                         CdnLiveHostActivity.actionStart(mContext, data);

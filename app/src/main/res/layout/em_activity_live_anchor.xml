@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        tools:src="@drawable/em_live_default_bg" />
+        tools:src="@drawable/live_default_bg" />
 
     <FrameLayout
         android:id="@+id/fl_fragment"

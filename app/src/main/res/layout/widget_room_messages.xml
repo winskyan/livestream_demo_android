@@ -28,8 +28,8 @@
             android:layout_marginStart="@dimen/em_margin_15"
             android:layout_marginRight="@dimen/em_margin_5"
             android:layout_marginEnd="@dimen/em_margin_5"
-            android:thumb="@drawable/em_switch_thumb_selector"
-            android:track="@drawable/em_switch_track_selector"
+            android:thumb="@drawable/switch_thumb_selector"
+            android:track="@drawable/switch_track_selector"
             android:textOff="@string/em_live_msg_normal"
             android:textOn="@string/em_live_msg_barrage"
             android:showText="true"
@@ -69,7 +69,7 @@
             android:layout_marginRight="3dp"
             android:textSize="18sp"
             android:textColor="@color/common_black"
-            android:background="@drawable/em_live_input_et_bg_shape" />
+            android:background="@drawable/live_input_et_bg_shape" />
 
         <ImageView
             android:id="@+id/btn_send"
@@ -81,6 +81,6 @@
             android:layout_marginLeft="4dp"
             android:textColor="#fff"
             android:textSize="16sp"
-            android:src="@drawable/em_live_send_icon" />
+            android:src="@drawable/live_send_icon" />
     </LinearLayout>
 </RelativeLayout>

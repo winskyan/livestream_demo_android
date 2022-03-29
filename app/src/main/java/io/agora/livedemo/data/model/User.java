@@ -6,6 +6,7 @@ public class User implements Serializable {
     private String id;
     private String nickName;
     private int avatarResource;
+    private int avatarResourceIndex;
 
     public String getId() {
         return id;
@@ -31,12 +32,21 @@ public class User implements Serializable {
         this.avatarResource = avatarResource;
     }
 
+    public int getAvatarResourceIndex() {
+        return avatarResourceIndex;
+    }
+
+    public void setAvatarResourceIndex(int avatarResourceIndex) {
+        this.avatarResourceIndex = avatarResourceIndex;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", avatarResource=" + avatarResource +
+                ", avatarResourceIndex=" + avatarResourceIndex +
                 '}';
     }
 }

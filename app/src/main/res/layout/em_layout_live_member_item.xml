@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="@id/txt_usernick"
         app:layout_constraintBottom_toBottomOf="@id/txt_usernick"
         android:drawablePadding="3dp"
-        android:drawableLeft="@drawable/em_living_icon"
+        android:drawableLeft="@drawable/living_icon"
         android:visibility="gone"
         android:layout_marginLeft="@dimen/em_margin_10"
         android:layout_marginStart="@dimen/em_margin_10"
@@ -49,7 +49,7 @@
         android:paddingRight="6dp"
         android:textColor="@color/white"
         android:textSize="@dimen/em_size_normal"
-        android:background="@drawable/em_live_living_bg_shape" />
+        android:background="@drawable/live_living_bg_shape" />
 
     <Button
         android:id="@+id/btn_manager"
@@ -69,8 +69,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:switchMinWidth="20dp"
-        android:thumb="@drawable/em_switch_thumb_selector"
-        android:track="@drawable/em_switch_track_selector"
+        android:thumb="@drawable/switch_thumb_selector"
+        android:track="@drawable/switch_track_selector"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

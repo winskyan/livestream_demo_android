@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:visibility="visible"
-        tools:src="@drawable/em_live_default_bg" />
+        tools:src="@drawable/live_default_bg" />
 
     <FrameLayout
         android:id="@+id/fl_fragment"

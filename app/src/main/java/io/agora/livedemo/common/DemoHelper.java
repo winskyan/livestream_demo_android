@@ -110,6 +110,7 @@ public class DemoHelper {
     public static void saveCurrentUser() {
         PreferenceManager.getInstance().saveAgoraId(getCurrentDemoUser().getId());
         PreferenceManager.getInstance().saveNickname(getCurrentDemoUser().getNickName());
+        PreferenceManager.getInstance().saveAvatarResourceIndex(getCurrentDemoUser().getAvatarResourceIndex());
         PreferenceManager.getInstance().saveAvatarResource(getCurrentDemoUser().getAvatarResource());
     }
 
@@ -134,6 +135,10 @@ public class DemoHelper {
         return PreferenceManager.getInstance().getAvatarResource();
     }
 
+    public static int getAvatarResourceIndex() {
+        return PreferenceManager.getInstance().getAvatarResourceIndex();
+    }
+
     /**
      * get user avatar
      *
@@ -153,11 +158,11 @@ public class DemoHelper {
     public static int getAvatarResource(String username, int defaultDrawable) {
         User user = UserRepository.getInstance().getCurrentUser();
         if (user == null) {
-            return defaultDrawable == 0 ? R.drawable.em_live_logo : defaultDrawable;
+            return defaultDrawable == 0 ? R.drawable.live_logo : defaultDrawable;
         }
         DemoApplication context = DemoApplication.getInstance();
         int resId = context.getResources().getIdentifier("em_avatar_" + user.getAvatarResource(), "drawable", context.getPackageName());
-        return resId == 0 ? R.drawable.em_live_logo : resId;
+        return resId == 0 ? R.drawable.live_logo : resId;
     }
 
     /**

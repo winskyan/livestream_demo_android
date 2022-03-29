@@ -22,11 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.List;
 
+import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
+import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnItemClickListener;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.BaseDialogFragment;
-import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 
 public class DemoListDialogFragment extends BaseDialogFragment {
     private TextView tvTitle;

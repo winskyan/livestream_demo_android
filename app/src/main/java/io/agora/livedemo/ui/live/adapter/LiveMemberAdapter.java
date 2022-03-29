@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.ui.base.EaseBaseRecyclerViewAdapter;
 
 public class LiveMemberAdapter extends EaseBaseRecyclerViewAdapter<String> {
 

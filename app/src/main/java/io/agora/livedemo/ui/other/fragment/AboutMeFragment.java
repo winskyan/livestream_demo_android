@@ -18,7 +18,6 @@ import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.ui.base.BaseLiveFragment;
-import io.agora.livedemo.ui.other.LoginActivity;
 import io.agora.livedemo.ui.widget.ArrowItemView;
 
 public class AboutMeFragment extends BaseLiveFragment implements View.OnClickListener, View.OnLongClickListener {
@@ -132,16 +131,5 @@ public class AboutMeFragment extends BaseLiveFragment implements View.OnClickLis
 
     private void skipToLogin() {
         DemoHelper.clearUser();
-        Intent intent = new Intent(mContext, LoginActivity.class);
-        startActivity(intent);
-
-        List<Activity> activities = DemoApplication.getInstance().getActivityLifecycle().getActivityList();
-        if (activities != null && !activities.isEmpty()) {
-            for (Activity activity : activities) {
-                if (!(activity instanceof LoginActivity)) {
-                    activity.finish();
-                }
-            }
-        }
     }
 }

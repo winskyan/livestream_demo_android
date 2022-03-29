@@ -31,11 +31,13 @@ public class UserRepository {
         this.mContext = context;
         String agoraId = DemoHelper.getAgoraId();
         String nickname = DemoHelper.getNickName();
-        if (!TextUtils.isEmpty(agoraId) && !TextUtils.isEmpty(nickname)) {
+        int resIndex = DemoHelper.getAvatarResourceIndex();
+        if (!TextUtils.isEmpty(agoraId) && !TextUtils.isEmpty(nickname) && -1 != resIndex) {
             mCurrentUser = new User();
             mCurrentUser.setId(agoraId);
             mCurrentUser.setNickName(nickname);
-            mCurrentUser.setAvatarResource(DemoHelper.getAvatarResource());
+            mCurrentUser.setAvatarResourceIndex(resIndex);
+            mCurrentUser.setAvatarResource(getResDrawable(resIndex));
         }
     }
 
@@ -49,13 +51,18 @@ public class UserRepository {
         mCurrentUser.setId(Utils.getStringRandom(8));
         mCurrentUser.setNickName(Utils.getStringRandom(8));
         int index = (int) Math.round(Math.random() * 7 + 1);
-        int drawable = mContext.getResources().getIdentifier("em_avatar_" + index, "drawable", mContext.getPackageName());
+        int drawable = getResDrawable(index);
+        mCurrentUser.setAvatarResourceIndex(index);
         mCurrentUser.setAvatarResource(drawable);
         return mCurrentUser;
     }
 
     public User getCurrentUser() {
         return mCurrentUser;
+    }
+
+    public int getResDrawable(int index) {
+        return mContext.getResources().getIdentifier("avatar_" + index, "drawable", mContext.getPackageName());
     }
 
 }

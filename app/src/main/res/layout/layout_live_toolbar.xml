@@ -16,13 +16,13 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="@dimen/em_margin_15"
         android:layout_marginStart="@dimen/em_margin_15"
-        android:background="@drawable/em_live_live_anchor_bg_shape">
+        android:background="@drawable/live_live_anchor_bg_shape">
 
         <io.agora.chat.uikit.widget.EaseImageView
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/item_small_avatar_size"
             android:layout_height="@dimen/item_small_avatar_size"
-            android:src="@drawable/em_live"
+            android:src="@drawable/live"
             app:ease_shape_type="round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
             android:layout_marginRight="@dimen/em_margin_10"
             android:layout_marginEnd="@dimen/em_margin_10"
             android:visibility="gone"
-            android:background="@drawable/em_live_attention_bg_shape" />
+            android:background="@drawable/live_attention_bg_shape" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,7 +124,7 @@
         android:paddingStart="@dimen/em_margin_15"
         android:paddingEnd="@dimen/em_margin_15"
         android:paddingRight="@dimen/em_margin_15"
-        android:background="@drawable/em_live_live_audience_num_bg_shape" />
+        android:background="@drawable/live_live_audience_num_bg_shape" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"

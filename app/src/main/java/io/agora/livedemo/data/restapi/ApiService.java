@@ -19,16 +19,12 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-/**
- * Created by wei on 2017/2/14.
- */
-
 public interface ApiService {
 
     /**
-     * 创建直播室
+     * create live room
      *
-     * @param module 包括直播室名称，直播室描述，直播室房主，直播室封面，直播室最大人数
+     * @param module Including the name of the live room, the description of the live room, the owner of the live room, the cover of the live room, and the maximum number of people in the live room
      * @return
      */
     @POST("appserver/liverooms")
@@ -39,38 +35,38 @@ public interface ApiService {
     LiveData<LiveRoom> deleteLiveRoom(@Path("id") String roomId);
 
     /**
-     * 获取直播室列表
+     * Get a list of live room
      *
-     * @param limit  一次取的条数
-     * @param cursor 在这个游标基础上取数据，首次获取传null
+     * @param limit  the number of list
+     * @param cursor the cursor
      * @return
      */
     @GET("appserver/liverooms")
     LiveData<ResponseModule<List<LiveRoom>>> getLiveRoomList(@Query("limit") int limit, @Query("cursor") String cursor);
 
     /**
-     * 获取正在直播的直播室列表
+     * Get a list of living room
      *
-     * @param limit  一次取的条数
-     * @param cursor 在这个游标基础上取数据，首次获取传null
+     * @param limit  the number
+     * @param cursor the cursor
      * @return
      */
     @GET("appserver/liverooms/ongoing")
     LiveData<ResponseModule<List<LiveRoom>>> getLivingRoomList(@Query("limit") int limit, @Query("cursor") String cursor, @Query("video_type") String videoType);
 
     /**
-     * 更新直播室
+     * update live room
      *
-     * @param roomId 直播室id
-     * @param body   包括直播室名称(name)，直播室描述(description)，
-     *               直播间成员最大数(maxusers)，直播间封面Url(page)，直播间自定义属性(ext，Map类型)
+     * @param roomId room id
+     * @param body   Including live room name (name), live room description (description),
+     *               * Maximum number of live room members (maxusers), live room cover Url (page), live room custom attributes (ext, Map type)
      * @return
      */
     @PUT("appserver/liverooms/{id}")
     LiveData<LiveRoom> updateLiveRoom(@Path("id") String roomId, @Body RequestBody body);
 
     /**
-     * 改变直播状态
+     * change live status
      *
      * @param roomId
      * @param username
@@ -83,16 +79,16 @@ public interface ApiService {
                                         @Path("status") String status);
 
     /**
-     * 直播室详情
+     * the detail of live room
      *
-     * @param roomId 直播室id
+     * @param roomId room id
      * @return
      */
     @GET("appserver/liverooms/{id}")
     LiveData<LiveRoom> getLiveRoomDetail(@Path("id") String roomId);
 
     /**
-     * 获取推流地址
+     * get the url of publish
      *
      * @param streamKey
      * @return
@@ -101,7 +97,7 @@ public interface ApiService {
     LiveData<LiveRoomUrlBean> getLiveRoomPublishUrl(@Query("streamKey") String streamKey);
 
     /**
-     * 获取播放地址
+     * get live room play url
      *
      * @param streamKey
      * @return
@@ -110,27 +106,26 @@ public interface ApiService {
     LiveData<LiveRoomUrlBean> getLiveRoomPlayUrl(@Query("streamKey") String streamKey);
 
     /**
-     * 获取Agora Token
+     * get Agora Token
      *
-     * @param userId   环信id
-     * @param channel  准备加入房间的channelName
-     * @param hxAppkey 环信的appkey
+     * @param userId  user id
+     * @param channel channel name
+     * @param appkey  app key
      * @return
      */
     @GET("token/liveToken/")
-    LiveData<AgoraTokenBean> getAgoraToken(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String hxAppkey, @Query("uid") int uid);
+    LiveData<AgoraTokenBean> getAgoraToken(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String appkey, @Query("uid") int uid);
 
     /**
-     * 获取Agora Token
+     * get Agora Token
      *
-     * @param userId   环信id
-     * @param channel  准备加入房间的channelName
-     * @param hxAppkey 环信的appkey
+     * @param userId  user id
+     * @param channel channel name
+     * @param appkey  app key
      * @return
      */
     @GET("token/rtcToken/v1")
-    // Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount")String userId, @Query("channelName")String channel, @Query("appkey")String hxAppkey, @Query("uid") int uid);
-    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String hxAppkey);
+    Call<AgoraTokenBean> getAgoraTokenByHx(@Query("userAccount") String userId, @Query("channelName") String channel, @Query("appkey") String appkey);
 
     @GET("appserver/agora/cdn/streams/url/push")
     Call<CdnUrlBean> getCdnPushUrl(@Query("domain") String domain, @Query("pushPoint") String pushPoint, @Query("streamKey") String streamKey, @Query("expire") int expire);

@@ -17,7 +17,6 @@ import butterknife.Unbinder;
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.R;
-import io.agora.livedemo.ui.other.LoginActivity;
 
 
 public class MyProfileFragment extends Fragment {
@@ -73,7 +72,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onSuccess() {
                 getActivity().finish();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                //startActivity(new Intent(getActivity(), LoginActivity.class));
             }
 
             @Override

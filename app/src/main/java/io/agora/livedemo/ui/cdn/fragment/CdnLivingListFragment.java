@@ -2,6 +2,7 @@ package io.agora.livedemo.ui.cdn.fragment;
 
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.livedemo.common.DemoHelper;
@@ -55,12 +56,12 @@ public class CdnLivingListFragment extends LiveListFragment {
                         hasMoreData = false;
                     }
                     if (isLoadMore) {
-                        adapter.addData(livingRooms);
+                        setAdapterData(livingRooms, true);
                     } else {
-                        if (vodList != null && livingRooms != null) {
+                        if (vodList != null) {
                             livingRooms.addAll(0, vodList);
                         }
-                        adapter.setData(livingRooms);
+                        setAdapterData(livingRooms, false);
                     }
                 }
 
@@ -87,6 +88,13 @@ public class CdnLivingListFragment extends LiveListFragment {
     @Override
     protected void loadLiveList(int limit, String cursor) {
         viewModel.getFastRoomList(limit, cursor);
+    }
+
+    public List<LiveRoom> getLiveRooms() {
+        if (null != adapter) {
+            return adapter.getData();
+        }
+        return new ArrayList<>(0);
     }
 }
 

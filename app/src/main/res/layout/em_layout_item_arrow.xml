@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginRight="@dimen/em_margin_20"
         android:tint="@color/black"
-        android:src="@drawable/em_arrow_right" />
+        android:src="@drawable/arrow_right" />
 
     <View
         android:id="@+id/view_divider"
@@ -73,6 +73,6 @@
         android:layout_marginRight="@dimen/em_margin_15"
         android:layout_marginStart="@dimen/em_margin_15"
         android:layout_marginEnd="@dimen/em_margin_15"
-        android:background="@drawable/em_default_divider_list" />
+        android:background="@drawable/default_divider_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

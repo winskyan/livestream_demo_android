@@ -1,14 +1,18 @@
 package io.agora.livedemo.ui.other;
 
-import android.os.Bundle;
+import android.content.Intent;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,32 +22,53 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.LiveRoom;
-import io.agora.livedemo.ui.base.BaseActivity;
+import io.agora.livedemo.ui.base.BaseLiveActivity;
+import io.agora.livedemo.ui.base.GridMarginDecoration;
 import io.agora.livedemo.ui.live.adapter.LiveListAdapter;
+import io.agora.livedemo.utils.Utils;
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends BaseLiveActivity {
 
-    @BindView(R.id.edit_text)
+    @BindView(R.id.et_search)
     EditText editText;
-    @BindView(R.id.recView)
+    @BindView(R.id.recycleview)
     RecyclerView recyclerView;
     @BindView(R.id.empty_view)
     TextView emptyView;
-    @BindView(R.id.btn_cancel)
-    TextView cancelView;
-    List<LiveRoom> searchedList;
+    @BindView(R.id.iv_back)
+    ImageView backView;
+    @BindView(R.id.search_delete_iv)
+    ImageView searchDeleteView;
 
-    LiveListAdapter adapter;
+    private List<LiveRoom> allDataList;
+    private List<LiveRoom> resultList;
 
+    private LiveListAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+    protected int getLayoutId() {
+        return R.layout.activity_search;
+    }
+
+    @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        allDataList = new ArrayList<>((List<LiveRoom>) intent.getSerializableExtra("liverooms"));
+        resultList = new ArrayList<>(allDataList.size());
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ButterKnife.bind(this);
 
-        searchedList = new ArrayList<>();
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false));
+        adapter = new LiveListAdapter();
+        recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new GridMarginDecoration(mContext, 10));
+
+        editText.requestFocus();
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -52,47 +77,82 @@ public class SearchActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(v.getText())) {
                         searchLiveRoom(v.getText().toString());
                     } else {
-                        Toast.makeText(SearchActivity.this, "请输入房间号", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, R.string.search_tip, Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;
             }
         });
 
-        cancelView.setOnClickListener(new View.OnClickListener() {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    searchDeleteView.setVisibility(View.GONE);
+                } else {
+                    searchDeleteView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideKeyboard(v);
                 finish();
             }
         });
 
+        searchDeleteView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchClear();
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+    }
+
+    private void searchClear() {
+        editText.setText("");
+        emptyView.setVisibility(View.GONE);
+        resultList.clear();
+        adapter.setData(resultList);
+        recyclerView.setVisibility(View.GONE);
 
     }
 
     private void searchLiveRoom(final String searchText) {
-//        executeTask(new ThreadPoolManager.Task<LiveRoom>() {
-//            @Override public LiveRoom onRequest() throws HyphenateException {
-//                return LiveManager.getInstance().getLiveRoomDetails(searchText);
-//            }
-//
-//            @Override public void onSuccess(LiveRoom liveRoom) {
-//                emptyView.setVisibility(View.INVISIBLE);
-//                searchedList.clear();
-//                searchedList.add(liveRoom);
-//
-//                if(adapter == null) {
-//                    adapter = new LiveListAdapter();
-//                    recyclerView.setAdapter(adapter);
-//                }
-//
-//                adapter.setData(searchedList);
-//            }
-//
-//            @Override public void onError(HyphenateException exception) {
-//                emptyView.setVisibility(View.VISIBLE);
-//            }
-//        });
-
+        resultList.clear();
+        Utils.hideKeyboard(editText);
+        for (LiveRoom liveRoom : allDataList) {
+            if (liveRoom.getName().contains(searchText)) {
+                resultList.add(liveRoom);
+            }
+        }
+        if (resultList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setText(String.format(this.getResources().getString(R.string.search_empty_result), searchText));
+        } else {
+            emptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.setData(resultList);
+        }
     }
 
 }

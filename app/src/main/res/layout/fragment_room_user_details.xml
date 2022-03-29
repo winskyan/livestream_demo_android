@@ -18,7 +18,7 @@
         android:layout_marginStart="@dimen/em_margin_15"
         android:layout_marginRight="@dimen/em_margin_15"
         android:layout_marginEnd="@dimen/em_margin_15"
-        android:background="@drawable/em_live_user_detail_bg_shape" />
+        android:background="@drawable/live_user_detail_bg_shape" />
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_avatar"
@@ -100,7 +100,7 @@
         android:id="@+id/iv_close"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/em_close_icon"
+        android:src="@drawable/close_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:padding="10dp"
@@ -209,10 +209,10 @@
         app:layout_constraintTop_toBottomOf="@id/layout_live_no_talk"
         android:layout_marginTop="@dimen/em_margin_30"
         android:layout_marginBottom="@dimen/em_margin_25"
-        android:background="@drawable/em_live_btn_attention_bg_shape"
-        android:foreground="@drawable/em_ripple_click_gray"
+        android:background="@drawable/live_btn_attention_bg_shape"
+        android:foreground="@drawable/ripple_click_gray"
         android:text="@string/em_live_user_attentions"
-        android:drawableLeft="@drawable/em_live_plus_white"
+        android:drawableLeft="@drawable/live_plus_white"
         android:paddingLeft="@dimen/em_margin_25"
         android:paddingStart="@dimen/em_margin_25"
         android:textColor="@color/white"

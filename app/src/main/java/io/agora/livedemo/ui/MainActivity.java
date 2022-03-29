@@ -1,5 +1,6 @@
 package io.agora.livedemo.ui;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,15 +16,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.Serializable;
+import java.util.List;
+
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.R;
+import io.agora.livedemo.common.DemoHelper;
+import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.databinding.ActivityMainBinding;
 import io.agora.livedemo.runtimepermissions.PermissionsManager;
 import io.agora.livedemo.runtimepermissions.PermissionsResultAction;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
 import io.agora.livedemo.ui.cdn.fragment.CdnLivingListFragment;
 import io.agora.livedemo.ui.other.CreateLiveRoomActivity;
-import io.agora.livedemo.ui.other.LoginActivity;
+import io.agora.livedemo.ui.other.SearchActivity;
 import io.agora.livedemo.ui.other.fragment.AboutMeFragment;
 import io.agora.livedemo.utils.Utils;
 
@@ -31,7 +38,6 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     private final static String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding mBinding;
     private Fragment mCurrentFragment;
-    private Fragment mHomeFragment, mLiveListFragment, mAboutMeFragment;
     private int position;
 
 
@@ -42,10 +48,18 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     }
 
 
+
     @Override
     protected void initView() {
         super.initView();
         mBinding.titleBarMain.getTitle().setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
+        int resIndex = DemoHelper.getAvatarResourceIndex();
+        if (-1 != resIndex) {
+            mBinding.ivHomeSet.setImageResource(UserRepository.getInstance().getResDrawable(resIndex));
+        } else {
+            mBinding.ivHomeSet.setImageResource(R.drawable.live_set_selected);
+        }
+
     }
 
     @Override
@@ -54,6 +68,22 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         mBinding.llHomeHome.setOnClickListener(this);
         mBinding.llHomeSet.setOnClickListener(this);
         mBinding.rlHomeLive.setOnClickListener(this);
+
+        mBinding.titleBarMain.getRightImage().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrentFragment instanceof CdnLivingListFragment) {
+                    List<LiveRoom> liveRooms = ((CdnLivingListFragment) mCurrentFragment).getLiveRooms();
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("liverooms", (Serializable) liveRooms);
+                    startActivity(intent);
+                } else if (mCurrentFragment instanceof AboutMeFragment) {
+
+                }
+
+
+            }
+        });
     }
 
     @Override
@@ -68,7 +98,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
             @Override
             public void onGranted() {
-//				Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -97,15 +127,12 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             ChatClient.getInstance().logout(false, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.prompt)
-                    .setMessage("账户已在别处登录！")
+                    .setMessage(R.string.home_logged_tip)
                     .setCancelable(false)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            //finish();
                         }
                     });
             builder.show();
@@ -113,27 +140,27 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     }
 
     private void switchToHome() {
-        mBinding.ivHomeHome.setImageResource(R.drawable.em_live_home_selected);
-        mBinding.ivHomeSet.setImageResource(R.drawable.em_live_set_unselected);
-        mHomeFragment = getSupportFragmentManager().findFragmentByTag("home");
-        if (mHomeFragment == null) {
+        mBinding.ivHomeHome.setImageResource(R.drawable.live_home_selected);
+        mBinding.ivHomeSet.setAlpha(0.8f);
+        Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("home");
+        if (homeFragment == null) {
             CdnLivingListFragment fragment = new CdnLivingListFragment();
             Bundle bundle = new Bundle();
             bundle.putString("status", "ongoing");
             fragment.setArguments(bundle);
-            mHomeFragment = fragment;
+            homeFragment = fragment;
         }
-        replace(mHomeFragment, "home");
+        replace(homeFragment, "home");
     }
 
     private void switchToAboutMe() {
-        mBinding.ivHomeHome.setImageResource(R.drawable.em_live_home_unselected);
-        mBinding.ivHomeSet.setImageResource(R.drawable.em_live_set_selected);
-        mAboutMeFragment = getSupportFragmentManager().findFragmentByTag("about_me");
-        if (mAboutMeFragment == null) {
-            mAboutMeFragment = new AboutMeFragment();
+        mBinding.ivHomeHome.setImageResource(R.drawable.live_home_unselected);
+        mBinding.ivHomeSet.setAlpha(1.0f);
+        Fragment aboutMeFragment = getSupportFragmentManager().findFragmentByTag("about_me");
+        if (aboutMeFragment == null) {
+            aboutMeFragment = new AboutMeFragment();
         }
-        replace(mAboutMeFragment, "about_me");
+        replace(aboutMeFragment, "about_me");
     }
 
     private void startAnimation(float fromX, float toX, float fromY, float toY) {
@@ -157,6 +184,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -178,16 +206,12 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         switch (position) {
             case 0:
                 switchToHome();
-                mBinding.titleBarMain.setTitle(getResources().getString(R.string.em_set_live_room));
+                mBinding.titleBarMain.setTitle(getResources().getString(R.string.home_title));
                 mBinding.titleBarMain.setRightImageResource(R.drawable.home_search);
                 break;
-//            case 1 :
-//                switchToLiveList();
-//                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_live));
-//                break;
             case 1:
                 switchToAboutMe();
-                mBinding.titleBarMain.setTitle(getResources().getString(R.string.em_set_title));
+                mBinding.titleBarMain.setTitle(getResources().getString(R.string.profile_title));
                 break;
         }
     }

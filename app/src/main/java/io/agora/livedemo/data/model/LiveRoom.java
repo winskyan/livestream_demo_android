@@ -8,9 +8,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by wei on 2016/5/27.
- */
 public class LiveRoom extends BaseBean implements Serializable {
     @SerializedName(value = "liveroom_id", alternate = {"id"})
     private String id;
@@ -194,14 +191,6 @@ public class LiveRoom extends BaseBean implements Serializable {
         }
         return list;
     }
-
-    //public String getShowId() {
-    //    return showId;
-    //}
-    //
-    //public void setShowId(String showId) {
-    //    this.showId = showId;
-    //}
 
     public boolean isLiving() {
         return !TextUtils.isEmpty(status) && TextUtils.equals(status, "ongoing");

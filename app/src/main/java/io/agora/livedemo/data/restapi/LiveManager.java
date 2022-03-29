@@ -17,10 +17,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by wei on 2017/2/14.
- * 此类用户初始化相关网络请求类，具体接口调用，请通过viewmodel+livedata+repository实现
- */
 
 public class LiveManager {
     private ApiService apiService;

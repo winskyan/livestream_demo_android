@@ -28,7 +28,7 @@ public class CdnLivingListActivity extends BaseLiveActivity implements EaseTitle
     protected void initView() {
         super.initView();
         titleBar = findViewById(R.id.title_bar);
-        titleBar.setTitle(getString(R.string.em_live_type_normal_title));
+        titleBar.setTitle(getString(R.string.live_type_normal_title));
     }
 
     @Override

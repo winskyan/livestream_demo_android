@@ -15,7 +15,6 @@ import io.agora.livedemo.R;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.cdn.presenter.CdnLiveHostPresenterImpl;
-import io.agora.livedemo.ui.fast.FastLiveAudienceActivity;
 import io.agora.livedemo.ui.live.LiveBaseActivity;
 import io.agora.livedemo.ui.live.fragment.LiveAnchorFragment;
 import io.agora.rtc2.Constants;
@@ -115,7 +114,7 @@ public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorF
         if (presenter != null) {
             presenter.leaveChannel();
         }
-        FastLiveAudienceActivity.actionStart(mContext, liveRoom);
+        //FastLiveAudienceActivity.actionStart(mContext, liveRoom);
         finish();
     }
 
