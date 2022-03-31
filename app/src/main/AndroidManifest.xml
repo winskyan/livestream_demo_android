@@ -74,10 +74,9 @@
         </receiver>
         <!-- 环信SDK配置 end -->
 
-        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.easemob.livedemo.fileProvider"
+            android:authorities="io.agora.livedemo.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

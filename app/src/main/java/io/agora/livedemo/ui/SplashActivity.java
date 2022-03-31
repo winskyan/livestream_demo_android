@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.PreferenceManager;
@@ -81,10 +82,31 @@ public class SplashActivity extends BaseLiveActivity {
         pd.setMessage("wait...");
         pd.setCanceledOnTouchOutside(false);
 
-        viewModel.getLoginObservable().observe(mContext, response -> {
-            parseResource(response, new OnResourceParseCallback<Boolean>() {
+//        viewModel.getLoginObservable().observe(mContext, response -> {
+//            parseResource(response, new OnResourceParseCallback<Boolean>() {
+//                @Override
+//                public void onSuccess(Boolean data) {
+//                    skipToTarget();
+//                }
+//
+//                @Override
+//                public void onLoading() {
+//                    super.onLoading();
+//                    pd.show();
+//                }
+//
+//                @Override
+//                public void hideLoading() {
+//                    super.hideLoading();
+//                    pd.dismiss();
+//                }
+//            });
+//        });
+
+        viewModel.getLoginObservableUser().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<EaseUser>() {
                 @Override
-                public void onSuccess(Boolean data) {
+                public void onSuccess(EaseUser data) {
                     skipToTarget();
                 }
 

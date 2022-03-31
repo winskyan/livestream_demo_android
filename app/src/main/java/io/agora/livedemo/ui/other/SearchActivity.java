@@ -119,6 +119,8 @@ public class SearchActivity extends BaseLiveActivity {
                 searchClear();
             }
         });
+
+        searchDeleteView.setVisibility(View.GONE);
     }
 
     @Override

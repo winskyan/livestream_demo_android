@@ -52,15 +52,9 @@ import io.agora.livedemo.ui.widget.SingleBarrageView;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
-/**
- * 基本介绍：
- * 1、{@link com.hyphenate.EMChatRoomChangeListener}和{@link com.hyphenate.ChatMessageListener}均放在{@link ChatRoomPresenter}中实现。
- * 2、发送消息的逻辑均放在{@link DemoMsgHelper}这个单例中。
- * 3、消息列表展示在{@link RoomMessagesView}中。
- */
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
-    protected static final String TAG = "LiveActivity";
+    protected static final String TAG = "Lives";
     protected static final int CYCLE_REFRESH = 100;
     protected static final int CYCLE_REFRESH_TIME = 30000;
     @BindView(R.id.iv_icon)
@@ -102,17 +96,11 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     protected LiveRoom liveRoom;
     protected ChatRoom chatroom;
-    /**
-     * 环信聊天室id
-     */
     protected String chatroomId = "";
-    /**
-     * ucloud直播id
-     */
     protected String liveId = "";
     protected String anchorId;
     protected int watchedCount;
-    LinkedList<String> memberList = new LinkedList<>();
+    protected LinkedList<String> memberList = new LinkedList<>();
     protected int membersCount;
     private LinearLayoutManager layoutManager;
     private MemberAvatarAdapter avatarAdapter;
@@ -146,11 +134,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getId();
         anchorId = liveRoom.getOwner();
-        //初始化设置消息帮助相关信息
         DemoMsgHelper.getInstance().init(chatroomId);
 
         usernameView.setText(anchorId);
-        liveIdView.setText(getString(R.string.em_live_room_id, liveId));
+        liveIdView.setText(getString(R.string.live_room_id, liveId));
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
         tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
@@ -190,11 +177,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         });
     }
 
-    /**
-     * 检查直播状态
-     *
-     * @param data
-     */
+
     protected void checkLiveStatus(LiveRoom data) {
 
     }
@@ -270,11 +253,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    /**
-     * 处理handler消息
-     *
-     * @param msg
-     */
+
     public void handleHandlerMessage(Message msg) {
         switch (msg.what) {
             case CYCLE_REFRESH:
@@ -304,27 +283,16 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }, 200);
     }
 
-    /**
-     * 点击礼物的事件
-     */
+
     protected void onGiftClick() {
     }
 
-    /**
-     * 点击头像
-     */
     protected void AnchorClick() {
     }
 
-    /**
-     * 跳转到member列表
-     */
     protected void skipToListDialog() {
     }
 
-    /**
-     * 展示观众列表（主播）
-     */
     protected void showUserList() {
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_COUNT).postValue(true);
         RoomUserManagementDialog dialog = (RoomUserManagementDialog) getChildFragmentManager().findFragmentByTag("RoomUserManagementDialog");
@@ -404,7 +372,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             @Override
             public void run() {
                 if (name.equals(chatroom.getOwner())) {
-                    //mContext.showLongToast("主播已结束直播");
                     LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
                 }
@@ -423,7 +390,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                         presenter.sendTxtMsg(content, isBarrageMsg, new OnMsgCallBack() {
                             @Override
                             public void onSuccess(ChatMessage message) {
-                                //刷新消息列表
                                 messageView.refreshSelectLast();
 
                                 if (isBarrageMsg) {
@@ -542,7 +508,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     }
                     audienceNumView.setText(String.valueOf(size));
                     membersCount = size;
-                    //观看人数不包含主播
                     watchedCount = membersCount;
                     tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
                     notifyDataSetChanged();
@@ -564,12 +529,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 //        startAnimation(getView(), startX, endX);
     }
 
-    /**
-     * 向右滑动屏幕
-     *
-     * @param startX
-     * @param endX
-     */
+
     protected void slideToRight(float startX, float endX) {
 //        startAnimation(getView(), startX, endX);
     }
@@ -610,9 +570,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 float y = curY - preY;
                 if (Math.abs(x) > Math.abs(y) && Math.abs(x) > 20) {
                     float[] screenInfo = EaseUtils.getScreenInfo(mContext);
-                    if (x > 0) {// 向右滑动
+                    if (x > 0) {
                         slideToLeft(0, screenInfo[0]);
-                    } else {// 向左滑动
+                    } else {
                         slideToRight(screenInfo[0], 0);
                     }
                 }
@@ -666,11 +626,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceiveGiftMsg(ChatMessage message) {
-        //加入直播间之后才统计相关点赞信息
         if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveGiftInfo(message);
         }
-        //加入直播间之前的礼物消息不再展示
         if (message.getMsgTime() < joinTime - 2000) {
             return;
         }
@@ -693,7 +651,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onReceivePraiseMsg(ChatMessage message) {
-        //加入直播间之后才统计相关点赞信息
         if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveLikeInfo(message);
         }
@@ -704,11 +661,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         showPraise(likeNum);
     }
 
-    /**
-     * 收到弹幕消息
-     *
-     * @param message
-     */
+
     @Override
     public void onReceiveBarrageMsg(ChatMessage message) {
         ThreadManager.getInstance().runOnMainThread(() -> {

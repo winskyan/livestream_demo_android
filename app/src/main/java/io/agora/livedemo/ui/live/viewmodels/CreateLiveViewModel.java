@@ -34,7 +34,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
     }
 
     /**
-     * 创建房间
+     * create live room
      *
      * @param name
      * @param description
@@ -61,7 +61,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
     }
 
     /**
-     * 创建房间
+     * create live room
      *
      * @param name
      * @param description
@@ -95,7 +95,6 @@ public class CreateLiveViewModel extends AndroidViewModel {
         liveRoom.setOwner(ChatClient.getInstance().getCurrentUser());
         liveRoom.setCover(cover);
         liveRoom.setMaxusers(200);
-        //直播间默认是持续存在的，想要主播离开房间一段时间后销毁，需主动设置为false
         liveRoom.setPersistent(false);
         return liveRoom;
     }
@@ -108,7 +107,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
         liveRoom.setVideo_type(videoType);
         liveRoom.setCover(cover);
         liveRoom.setMaxusers(200);
-        //直播间默认是持续存在的，想要主播离开房间一段时间后销毁，需主动设置为false
+        //The live room is persistent by default. If you want the host to leave the room and destroy it after a period of time, you need to actively set it to false
         liveRoom.setPersistent(false);
         return liveRoom;
     }

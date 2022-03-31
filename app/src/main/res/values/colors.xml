@@ -73,4 +73,6 @@
     <color name="color_search_bg">#212226</color>
     <color name="color_search_hint">#5CFFFFFF</color>
     <color name="color_search_text">#FFFFFF</color>
+
+    <color name="create_live_name_numbers_tip">#99FFFFFF</color>
 </resources>

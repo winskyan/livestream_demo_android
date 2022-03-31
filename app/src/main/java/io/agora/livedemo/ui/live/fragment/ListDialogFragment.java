@@ -2,6 +2,7 @@ package io.agora.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,7 @@ import io.agora.livedemo.R;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.BaseDialogFragment;
 
-public class DemoListDialogFragment extends BaseDialogFragment {
-    private TextView tvTitle;
-    private View viewDivider;
+public class ListDialogFragment extends BaseDialogFragment {
     private RecyclerView rvDialogList;
     private Button btnCancel;
     private EaseBaseRecyclerViewAdapter adapter;
@@ -41,12 +40,13 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     private OnDialogItemClickListener itemClickListener;
     private List<String> data;
     private OnDialogCancelClickListener cancelClickListener;
-    private int animations;//进出动画
+    private int animations;
+    private int gravity;
 
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_dialog_list;
+        return R.layout.fragment_dialog_list;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             }
         }
 
-        tvTitle = findViewById(R.id.tv_title);
-        viewDivider = findViewById(R.id.view_divider);
+        TextView tvTitle = findViewById(R.id.tv_title);
+        View viewDivider = findViewById(R.id.view_divider);
         rvDialogList = findViewById(R.id.rv_dialog_list);
         btnCancel = findViewById(R.id.btn_cancel);
 
@@ -79,6 +79,11 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             viewDivider.setVisibility(View.VISIBLE);
             tvTitle.setText(title);
         }
+
+        if (gravity != -1) {
+            tvTitle.setGravity(gravity | Gravity.CENTER_VERTICAL);
+        }
+
 
         if (TextUtils.isEmpty(cancel)) {
             btnCancel.setText(getString(R.string.cancel));
@@ -108,6 +113,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     @Override
     public void initData() {
         super.initData();
+        gravity = -1;
         rvDialogList.setLayoutManager(new LinearLayoutManager(mContext));
         if (adapter == null) {
             adapter = getDefaultAdapter();
@@ -140,7 +146,8 @@ public class DemoListDialogFragment extends BaseDialogFragment {
         private int cancelColor;
         private OnDialogCancelClickListener cancelClickListener;
         private Bundle bundle;
-        private int animations;//进出动画
+        private int animations;
+        private int gravity;
 
         public Builder(BaseActivity context) {
             this.context = context;
@@ -153,6 +160,11 @@ public class DemoListDialogFragment extends BaseDialogFragment {
 
         public Builder setTitle(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder setGravity(int gravity) {
+            this.gravity = gravity;
             return this;
         }
 
@@ -208,9 +220,10 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             return this;
         }
 
-        public DemoListDialogFragment build() {
-            DemoListDialogFragment fragment = new DemoListDialogFragment();
+        public ListDialogFragment build() {
+            ListDialogFragment fragment = new ListDialogFragment();
             fragment.setTitle(title);
+            fragment.setGravity(gravity);
             fragment.setAdapter(adapter);
             fragment.setData(data);
             fragment.setOnItemClickListener(this.clickListener);
@@ -222,8 +235,8 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             return fragment;
         }
 
-        public DemoListDialogFragment show() {
-            DemoListDialogFragment fragment = build();
+        public ListDialogFragment show() {
+            ListDialogFragment fragment = build();
             FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragment.show(transaction, null);
             return fragment;
@@ -260,11 +273,17 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     }
 
     private EaseBaseRecyclerViewAdapter getDefaultAdapter() {
-        return new DefaultAdapter();
+        DefaultAdapter defaultAdapter = new DefaultAdapter();
+        defaultAdapter.setGravity(gravity);
+        return defaultAdapter;
     }
 
     private void setTitle(String title) {
         this.title = title;
+    }
+
+    private void setGravity(int gravity) {
+        this.gravity = gravity;
     }
 
     public interface OnDialogItemClickListener {
@@ -276,24 +295,40 @@ public class DemoListDialogFragment extends BaseDialogFragment {
     }
 
 
-    private class DefaultAdapter extends EaseBaseRecyclerViewAdapter<String> {
+    private static class DefaultAdapter extends EaseBaseRecyclerViewAdapter<String> {
+        private int gravity;
 
-        @Override
-        public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.em_dialog_default_list_item, parent, false);
-            return new MyViewHolder(view);
+        public void setGravity(int gravity) {
+            this.gravity = gravity;
         }
 
-        private class MyViewHolder extends ViewHolder<String> {
+        @Override
+        public MyViewHolder getViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_default_list_item, parent, false);
+            MyViewHolder viewHolder = new MyViewHolder(view);
+            viewHolder.setGravity(gravity);
+            return viewHolder;
+        }
+
+        private static class MyViewHolder extends ViewHolder<String> {
             private TextView content;
+            private int gravity;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
+                gravity = -1;
+            }
+
+            public void setGravity(int gravity) {
+                this.gravity = gravity;
             }
 
             @Override
             public void initView(View itemView) {
                 content = findViewById(R.id.tv_title);
+                if (-1 != gravity) {
+                    content.setGravity(gravity | Gravity.CENTER_VERTICAL);
+                }
             }
 
             @Override

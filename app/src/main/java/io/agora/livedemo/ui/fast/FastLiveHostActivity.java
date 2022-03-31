@@ -58,7 +58,7 @@ public class FastLiveHostActivity extends LiveBaseActivity implements LiveAnchor
         super.initView();
         coverImage.setVisibility(View.VISIBLE);
         initFragment();
-        initVideoFragment();
+        //initVideoFragment();
     }
 
     private void initFragment() {

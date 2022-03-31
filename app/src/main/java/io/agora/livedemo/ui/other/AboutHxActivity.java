@@ -25,7 +25,7 @@ public class AboutHxActivity extends BaseLiveActivity implements EaseTitleBar.On
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_about_hx;
+        return R.layout.activity_about_hx;
     }
 
     @Override

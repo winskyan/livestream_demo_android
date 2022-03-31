@@ -21,7 +21,7 @@ public class LiveAllActivity extends BaseLiveActivity implements EaseTitleBar.On
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_live_all;
+        return R.layout.activity_live_all;
     }
 
     @Override

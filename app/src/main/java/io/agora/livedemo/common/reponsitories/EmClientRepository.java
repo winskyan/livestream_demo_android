@@ -3,7 +3,6 @@ package io.agora.livedemo.common.reponsitories;
 import static io.agora.cloud.HttpClientManager.Method_POST;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -21,6 +20,7 @@ import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.cloud.EMCloudOperationCallback;
 import io.agora.cloud.EMHttpClient;
 import io.agora.cloud.HttpClientManager;
@@ -181,6 +181,32 @@ public class EmClientRepository extends BaseEMRepository {
                 callBack.onError(Error.NETWORK_ERROR, e.getMessage());
             }
         });
+    }
+
+    public LiveData<Resource<EaseUser>> loginToServer(String userName, String pwd) {
+        return new NetworkOnlyResource<EaseUser, EaseUser>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
+
+                ChatClient.getInstance().login(userName, pwd, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        success("", null);
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            }
+        }.asLiveData();
     }
 
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {

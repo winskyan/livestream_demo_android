@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.data.model.User;
-import io.agora.livedemo.utils.Utils;
 
 public class UserRepository {
     private static volatile UserRepository mInstance;
@@ -48,8 +47,10 @@ public class UserRepository {
      */
     public User getRandomUser() {
         mCurrentUser = new User();
-        mCurrentUser.setId(Utils.getStringRandom(8));
-        mCurrentUser.setNickName(Utils.getStringRandom(8));
+//        mCurrentUser.setId(Utils.getStringRandom(8));
+//        mCurrentUser.setNickName(Utils.getStringRandom(8));
+        mCurrentUser.setId("user1111");
+        mCurrentUser.setNickName("user1111");
         int index = (int) Math.round(Math.random() * 7 + 1);
         int drawable = getResDrawable(index);
         mCurrentUser.setAvatarResourceIndex(index);

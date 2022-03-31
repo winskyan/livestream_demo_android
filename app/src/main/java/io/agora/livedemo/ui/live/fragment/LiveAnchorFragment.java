@@ -35,6 +35,7 @@ import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
+import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
 public class LiveAnchorFragment extends LiveBaseFragment {
@@ -61,13 +62,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private LivingViewModel viewModel;
     private boolean isOnGoing;
     private boolean reChangeLiveStatus;
-    //是否将owner移交给其他人，此种场景，不进行退出聊天室的操作。
+    //Whether to hand over the owner to someone else, in this scenario, the operation of exiting the chat room is not performed.
     private boolean isSwitchOwnerToOther;
     private OnConfirmClickListener mStopLiveClickListener;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_live_anchor;
+        return R.layout.fragment_live_anchor;
     }
 
     @Override
@@ -82,6 +83,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         usernameView.setText("");
         switchCameraView.setVisibility(View.VISIBLE);
         groupGiftInfo.setVisibility(View.VISIBLE);
+        countdownView.setTypeface(Utils.getRobotoTypeface(getActivity().getApplicationContext()));
 
         ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
         if (giftDao != null) {
@@ -140,9 +142,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         }
     }
 
-    /**
-     * 切换摄像头
-     */
     @OnClick(R.id.switch_camera_image)
     void switchCamera() {
         //mEasyStreaming.switchCamera();
@@ -226,17 +225,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void checkLiveStatus(LiveRoom data) {
         super.checkLiveStatus(data);
-        //页面没有销毁，直播一直在进行，但是直播状态不是"ongoing"状态
+        //The page is not destroyed, the live broadcast has been going on, but the live broadcast status is not "ongoing"
         if (mContext != null && !mContext.isFinishing() && isOnGoing && DemoHelper.isOwner(data.getOwner()) && !data.isLiving()) {
             restartAnchorLive();
         }
     }
 
-    /**
-     * 开始直播
-     */
     private void startLive() {
-        //Utils.hideKeyboard(titleEdit);
         new Thread() {
             public void run() {
                 int i = COUNTDOWN_START_INDEX;
@@ -275,7 +270,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     countdownView.setVisibility(View.GONE);
 
                     if (count == COUNTDOWN_END_INDEX
-                            //&& mEasyStreaming != null
                             && !isShutDownCountdown && mContext != null && !mContext.isFinishing()) {
                         joinChatRoom();
                     }
@@ -308,15 +302,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     @Override
                     public void onError(int i, String s) {
                         EMLog.d(TAG, "joinChatRoom fail message: " + s);
-                        mContext.showToast("加入聊天室失败");
-                        mContext.finish();
+                        mContext.showToast("Go live fail");
                     }
                 });
     }
 
-    /**
-     * 这里判断是否是owner，需要使用上一步的chatroom对象进行判断，防止通过rest接口获取的数据不是最新的，导致判断出错。
-     */
     private void getLiveRoomDetail() {
         viewModel.getRoomDetailObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
