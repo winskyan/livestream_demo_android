@@ -13,19 +13,19 @@ import io.agora.chat.ChatClient;
 import io.agora.livedemo.common.SingleSourceLiveData;
 import io.agora.livedemo.common.enums.Status;
 import io.agora.livedemo.common.reponsitories.AppServerRepository;
-import io.agora.livedemo.common.reponsitories.EmClientRepository;
+import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.model.LiveRoom;
 
 public class CreateLiveViewModel extends AndroidViewModel {
     private AppServerRepository repository;
-    private EmClientRepository emClientRepository;
+    private ClientRepository clientRepository;
     private SingleSourceLiveData<Resource<LiveRoom>> createObservable;
 
     public CreateLiveViewModel(@NonNull Application application) {
         super(application);
         repository = new AppServerRepository();
-        emClientRepository = new EmClientRepository();
+        clientRepository = new ClientRepository();
         createObservable = new SingleSourceLiveData<>();
     }
 
@@ -46,7 +46,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
             LiveRoom liveRoom = getLiveRoom(name, description, null);
             liveData = repository.createLiveRoom(liveRoom);
         } else {
-            liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
+            liveData = Transformations.switchMap(clientRepository.updateRoomCover(localPath), input -> {
                 if (input.status == Status.ERROR) {
                     return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));
                 } else if (input.status == Status.SUCCESS) {
@@ -74,7 +74,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
             LiveRoom liveRoom = getLiveRoom(name, description, videoType, null);
             liveData = repository.createLiveRoom(liveRoom);
         } else {
-            liveData = Transformations.switchMap(emClientRepository.updateRoomCover(localPath), input -> {
+            liveData = Transformations.switchMap(clientRepository.updateRoomCover(localPath), input -> {
                 if (input.status == Status.ERROR) {
                     return new MutableLiveData<>(Resource.error(input.errorCode, input.getMessage(), null));
                 } else if (input.status == Status.SUCCESS) {

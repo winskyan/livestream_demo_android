@@ -41,7 +41,7 @@ import io.agora.rtc2.IRtcEngineEventHandler;
  * (2) 获取声网token(如果需要的话)成功，并加入channel，具体方法为{@link #joinRtcChannel(String)}
  */
 public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHostView, IDirectCdnStreamingEventHandler {
-    private static final String TAG = "CdnLiveHostFragment";
+    private static final String TAG = CdnLiveHostFragment.class.getSimpleName();
     private static final int RESTART_VIDEO = 10;
     private static final int MAX_RESTART_TIMES = 5;
     private static final int RETRY_TIME = 15000;

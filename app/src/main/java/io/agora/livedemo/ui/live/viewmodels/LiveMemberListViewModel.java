@@ -8,16 +8,16 @@ import androidx.lifecycle.MediatorLiveData;
 
 import java.util.List;
 
-import io.agora.livedemo.common.reponsitories.EmClientRepository;
+import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class LiveMemberListViewModel extends AndroidViewModel {
-    private EmClientRepository repository;
+    private ClientRepository repository;
     private MediatorLiveData<Resource<List<String>>> membersObservable;
 
     public LiveMemberListViewModel(@NonNull Application application) {
         super(application);
-        repository = new EmClientRepository();
+        repository = new ClientRepository();
         membersObservable = new MediatorLiveData<>();
     }
 

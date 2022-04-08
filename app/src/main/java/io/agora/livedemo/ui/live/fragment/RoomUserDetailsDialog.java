@@ -45,6 +45,7 @@ import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.live.viewmodels.UserDetailManageViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
+import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 
 /**
@@ -172,13 +173,13 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
 
     private void showLikeNum() {
-        String text = DemoHelper.formatNum(DemoHelper.getLikeNum(liveId));
+        String text = NumberUtils.amountConversion(DemoHelper.getLikeNum(liveId));
         tvAttentionNum.setText(text);
     }
 
     private void showGiftNum() {
         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-        tvGiftNum.setText(DemoHelper.formatNum(totalNum));
+        tvGiftNum.setText(NumberUtils.amountConversion(totalNum));
     }
 
     private void customDialog() {

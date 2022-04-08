@@ -30,11 +30,12 @@ import io.agora.livedemo.BuildConfig;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.LoginBean;
 import io.agora.livedemo.data.model.User;
+import io.agora.util.EMLog;
 
-public class EmClientRepository extends BaseEMRepository {
+public class ClientRepository extends BaseEMRepository {
 
     /**
-     * 上传直播间url
+     * upload live stream cover
      *
      * @param localPath
      * @return
@@ -183,16 +184,19 @@ public class EmClientRepository extends BaseEMRepository {
         });
     }
 
-    public LiveData<Resource<EaseUser>> loginToServer(String userName, String pwd) {
-        return new NetworkOnlyResource<EaseUser, EaseUser>() {
+    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        // ** manually load all local groups and conversation
+        callBack.onSuccess(createLiveData(true));
+    }
 
+    public LiveData<Resource<User>> login(User user) {
+        return new NetworkOnlyResource<User, User>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
-
-                ChatClient.getInstance().login(userName, pwd, new CallBack() {
+            protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
+                ChatClient.getInstance().login(user.getId(), user.getNickName(), new CallBack() {
                     @Override
                     public void onSuccess() {
-                        success("", null);
+                        callBack.onSuccess(createLiveData(user));
                     }
 
                     @Override
@@ -201,7 +205,7 @@ public class EmClientRepository extends BaseEMRepository {
                     }
 
                     @Override
-                    public void onProgress(int i, String s) {
+                    public void onProgress(int progress, String status) {
 
                     }
                 });
@@ -209,17 +213,24 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-        // ** manually load all local groups and conversation
-        callBack.onSuccess(createLiveData(true));
+    public LiveData<Resource<User>> register(User user) {
+        return new NetworkOnlyResource<User, User>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
+                ThreadManager.getInstance().runOnIOThread(() -> {
+                    try {
+                        ChatClient.getInstance().createAccount(user.getId(), user.getNickName());
+                        callBack.onSuccess(createLiveData(user));
+                    } catch (ChatException e) {
+                        e.printStackTrace();
+                        callBack.onError(e.getErrorCode(), e.getMessage());
+                    }
+                });
+            }
+        }.asLiveData();
     }
 
-    /**
-     * 获取白名单
-     *
-     * @param roomId
-     * @return
-     */
+
     public LiveData<Resource<List<String>>> getWhiteList(String roomId) {
         return new NetworkOnlyResource<List<String>, List<String>>() {
             @Override
@@ -239,13 +250,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 将用户加入白名单
-     *
-     * @param chatRoomId
-     * @param members
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> addToChatRoomWhiteList(String chatRoomId, List<String> members) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override
@@ -267,13 +271,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 将用户从白名单中移除
-     *
-     * @param chatRoomId
-     * @param members
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> removeFromChatRoomWhiteList(String chatRoomId, List<String> members) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override
@@ -295,12 +292,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 检查是否在白名单中
-     *
-     * @param username
-     * @return
-     */
     public LiveData<Resource<Boolean>> checkIfInGroupWhiteList(String username) {
         return new NetworkOnlyResource<Boolean, Boolean>() {
             @Override
@@ -320,12 +311,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 获取成员列表（不包含owner和admins）
-     *
-     * @param chatRoomId
-     * @return
-     */
     public LiveData<Resource<List<String>>> getOnlyMembers(String chatRoomId) {
         return new NetworkOnlyResource<List<String>, List<String>>() {
             @Override
@@ -343,12 +328,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 获取成员列表
-     *
-     * @param roomId
-     * @return
-     */
     public LiveData<Resource<List<String>>> getMembers(String roomId) {
         return new NetworkOnlyResource<List<String>, List<String>>() {
             @Override
@@ -374,12 +353,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 获取禁言列表
-     *
-     * @param roomId
-     * @return
-     */
     public LiveData<Resource<List<String>>> getMuteList(String roomId) {
         return new NetworkOnlyResource<List<String>, List<String>>() {
             @Override
@@ -396,12 +369,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 禁止聊天室成员发言，需要聊天室拥有者或者管理员权限
-     *
-     * @param chatRoomId
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> MuteChatRoomMembers(String chatRoomId, List<String> muteMembers, long duration) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override
@@ -421,12 +388,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 取消禁言，需要聊天室拥有者或者管理员权限
-     *
-     * @param chatRoomId
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> unMuteChatRoomMembers(String chatRoomId, List<String> muteMembers) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override
@@ -446,12 +407,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 一键禁言
-     *
-     * @param chatRoomId
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> muteAllMembers(String chatRoomId) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override
@@ -471,12 +426,6 @@ public class EmClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * 一键解除禁言
-     *
-     * @param chatRoomId
-     * @return
-     */
     public LiveData<Resource<ChatRoom>> unmuteAllMembers(String chatRoomId) {
         return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
             @Override

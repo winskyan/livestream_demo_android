@@ -3,7 +3,6 @@ package io.agora.livedemo.ui.live.fragment;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.Animation;
@@ -35,6 +34,7 @@ import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
+import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
@@ -43,6 +43,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     public static final int COUNTDOWN_DELAY = 1000;
     public static final int COUNTDOWN_START_INDEX = 3;
     public static final int COUNTDOWN_END_INDEX = 1;
+    @BindView(R.id.view_group)
+    Group viewGroup;
     @BindView(R.id.countdown_txtv)
     TextView countdownView;
     @BindView(R.id.finish_frame)
@@ -80,22 +82,20 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        usernameView.setText("");
-        switchCameraView.setVisibility(View.VISIBLE);
-        groupGiftInfo.setVisibility(View.VISIBLE);
+        ivIcon.setImageResource(DemoHelper.getAvatarResource());
+        viewGroup.setVisibility(View.GONE);
         countdownView.setTypeface(Utils.getRobotoTypeface(getActivity().getApplicationContext()));
 
         ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
         if (giftDao != null) {
             int totalNum = giftDao.loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
         } else {
-            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(0)));
+            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(0)));
         }
 
         int likeNum = DemoHelper.getLikeNum(liveId);
-        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
-
+        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if (response != null && response) {
                         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, DemoHelper.formatNum(totalNum)));
+                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
                     }
                 });
 
@@ -120,7 +120,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if (response != null && response) {
                         int likeNum = DemoHelper.getLikeNum(liveId);
-                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, DemoHelper.formatNum(likeNum)));
+                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
                     }
                 });
         LiveDataBus.get().with(DemoConstants.FINISH_LIVE, Boolean.class)
@@ -271,6 +271,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
                     if (count == COUNTDOWN_END_INDEX
                             && !isShutDownCountdown && mContext != null && !mContext.isFinishing()) {
+                        viewGroup.setVisibility(View.VISIBLE);
                         joinChatRoom();
                     }
                 }
@@ -314,12 +315,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 public void onSuccess(LiveRoom data) {
                     //需要保证聊天室和直播间的主播均不是当前用户
                     if (data.isLiving() && (!DemoHelper.isOwner(chatroom.getOwner()) && !DemoHelper.isOwner(data.getOwner()))) {
-                        EMLog.d(TAG, "getLiveRoomDetails 主播正在直播 owner: " + chatroom.getOwner());
-                        //退出房间
+                        EMLog.d(TAG, "getLiveRoomDetails is living owner: " + chatroom.getOwner());
                         mContext.showToast(getString(R.string.live_list_warning));
                         exitRoom();
                     } else {
-                        EMLog.d(TAG, "getLiveRoomDetails 准备开始直播");
+                        EMLog.d(TAG, "getLiveRoomDetails start livestream");
                         LiveAnchorFragment.this.liveRoom = data;
                         changeAnchorLive();
                     }
@@ -381,13 +381,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private void startAnchorLive(LiveRoom liveRoom) {
         isOnGoing = true;
         DemoHelper.saveLivingId(liveRoom.getId());
-        usernameView.setText(DemoHelper.getNickName(ChatClient.getInstance().getCurrentUser()));
-        Log.e("TAG", "image resource = " + DemoHelper.getAvatarResource(ChatClient.getInstance().getCurrentUser()));
-//        ivIcon.setImageResource(DemoHelper.getAvatarResource(ChatClient.getInstance().getCurrentUser()));
-        ivIcon.setImageResource(R.drawable.avatar_1);
         addChatRoomChangeListener();
         onMessageListInit();
-        mContext.showToast("直播开始！");
+        mContext.showToast("live stream begin");
         if (cameraListener != null) {
             cameraListener.onStartCamera();
         }

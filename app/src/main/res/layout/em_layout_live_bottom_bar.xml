@@ -15,7 +15,6 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:padding="@dimen/em_margin_10"
-        android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:clickable="true"
         android:src="@drawable/live_comment"

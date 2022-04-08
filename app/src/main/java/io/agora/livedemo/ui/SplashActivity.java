@@ -14,17 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.ChatClient;
-import io.agora.chat.uikit.models.EaseUser;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.PreferenceManager;
 import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.databinding.ActivitySplashBinding;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
 import io.agora.livedemo.ui.other.viewmodels.LoginViewModel;
 
 
 public class SplashActivity extends BaseLiveActivity {
+    private final static String TAG = SplashActivity.class.getSimpleName();
     private LoginViewModel viewModel;
     private ActivitySplashBinding mBinding;
 
@@ -82,31 +83,10 @@ public class SplashActivity extends BaseLiveActivity {
         pd.setMessage("wait...");
         pd.setCanceledOnTouchOutside(false);
 
-//        viewModel.getLoginObservable().observe(mContext, response -> {
-//            parseResource(response, new OnResourceParseCallback<Boolean>() {
-//                @Override
-//                public void onSuccess(Boolean data) {
-//                    skipToTarget();
-//                }
-//
-//                @Override
-//                public void onLoading() {
-//                    super.onLoading();
-//                    pd.show();
-//                }
-//
-//                @Override
-//                public void hideLoading() {
-//                    super.hideLoading();
-//                    pd.dismiss();
-//                }
-//            });
-//        });
-
-        viewModel.getLoginObservableUser().observe(mContext, response -> {
-            parseResource(response, new OnResourceParseCallback<EaseUser>() {
+        viewModel.getLoginObservable().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<User>() {
                 @Override
-                public void onSuccess(EaseUser data) {
+                public void onSuccess(User data) {
                     skipToTarget();
                 }
 
@@ -120,6 +100,11 @@ public class SplashActivity extends BaseLiveActivity {
                 public void hideLoading() {
                     super.hideLoading();
                     pd.dismiss();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
                 }
             });
         });

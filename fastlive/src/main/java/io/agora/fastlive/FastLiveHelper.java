@@ -33,6 +33,7 @@ import io.agora.rtc2.video.VideoEncoderConfiguration;
  * Agora极速直播的帮助类
  */
 public class FastLiveHelper {
+    private static final String TAG = "lives";
     private Context mContext;
     private AgoraEngine mAgoraEngine;
     private StatsManager mStatsManager;
@@ -267,10 +268,12 @@ public class FastLiveHelper {
     }
 
     public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
+        Log.i(TAG,"startCdnBroadcast");
         rtcEngine().enableAudio();
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         SurfaceView surfaceView = prepareRtcVideo(uid, true);
+        Log.i(TAG,"startCdnBroadcast surfaceView="+surfaceView);
         surfaceView.setZOrderMediaOverlay(true);
         container.addUserVideoSurface(uid, surfaceView, true);
         rtcEngine().startPreview();

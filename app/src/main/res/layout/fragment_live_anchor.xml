@@ -4,12 +4,17 @@
     android:id="@+id/group_ui"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:paddingTop="@dimen/margin_20">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/layout_live_toolbar" />
+        layout="@layout/layout_live_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/margin_20"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <io.agora.livedemo.ui.widget.SingleBarrageView
         android:id="@+id/barrageView"
@@ -71,5 +76,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout="@layout/live_finish_layout" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/view_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="toolbar,barrageView,message_view,show_gift_view,periscope_layout,bottom_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

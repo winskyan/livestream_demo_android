@@ -2,7 +2,6 @@ package io.agora.livedemo.common;
 
 import android.text.TextUtils;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -265,14 +264,6 @@ public class DemoHelper {
     public static int getLikeNum(String roomId) {
         return PreferenceManager.getInstance().getLikeNum(roomId);
     }
-
-    public static String formatNum(double num) {
-        if (num < 10000) {
-            return String.valueOf((int) num);
-        }
-        return new DecimalFormat("#0.0").format(num / 10000) + "万";
-    }
-
 
     public static boolean isFastLiveType(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.agora_speed_live.name());

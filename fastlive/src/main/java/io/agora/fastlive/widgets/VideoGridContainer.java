@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import io.agora.fastlive.stats.StatsManager;
 
 
 public class VideoGridContainer extends RelativeLayout implements Runnable {
+    private static final String TAG = "lives";
     private static final int MAX_USER = 4;
     private static final int STATS_REFRESH_INTERVAL = 2000;
     private static final int STAT_LEFT_MARGIN = 34;
@@ -90,7 +92,6 @@ public class VideoGridContainer extends RelativeLayout implements Runnable {
 
         if (id != -1) {
             mUserViewList.append(uid, createVideoView(surface));
-
             if (mStatsManager != null) {
                 mStatsManager.addUserStats(uid, isLocal);
                 if (mStatsManager.isEnabled()) {

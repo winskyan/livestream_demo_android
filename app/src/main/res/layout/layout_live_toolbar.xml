@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@color/red">
+    android:layout_height="60dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_anchor"
@@ -33,44 +32,90 @@
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/em_margin_10"
-            android:layout_marginEnd="@dimen/em_margin_15"
-            android:text="ffffff"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginTop="@dimen/margin_5"
             android:textColor="@color/common_white"
-            android:textSize="@dimen/em_size_small"
-            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+            android:textSize="@dimen/size_normal"
             app:layout_constraintLeft_toRightOf="@id/iv_icon"
-            app:layout_constraintRight_toLeftOf="@id/tv_attention"
-            app:layout_constraintTop_toTopOf="@id/iv_icon" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/audience_num"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/em_margin_10"
-            android:textColor="@color/common_white"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:background="@drawable/sex_male_bg_shape"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_username"
+            app:layout_constraintLeft_toRightOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="@id/tv_username">
 
-            app:layout_constraintBottom_toBottomOf="@id/iv_icon"
-            app:layout_constraintLeft_toRightOf="@id/iv_icon"
-            app:layout_constraintTop_toBottomOf="@id/tv_username"
-            tools:text="1人" />
+            <ImageView
+                android:id="@+id/sex_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:src="@drawable/sex_male_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/age_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_marginRight="2dp"
+                android:text="18"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_normal"
+                app:layout_constraintBottom_toBottomOf="@id/sex_icon"
+                app:layout_constraintLeft_toRightOf="@id/sex_icon"
+                app:layout_constraintTop_toTopOf="@id/sex_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/gold_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/gold_icon"
+            app:layout_constraintLeft_toLeftOf="@id/tv_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
         <TextView
-            android:id="@+id/tv_attention"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/em_margin_10"
-            android:background="@drawable/live_attention_bg_shape"
-            android:gravity="center"
-            android:text="@string/live_attention"
-            android:textColor="@color/em_color_warning"
-            android:textSize="@dimen/em_size_normal"
-            app:layout_constraintBottom_toBottomOf="@id/audience_num"
-            app:layout_constraintLeft_toRightOf="@id/tv_username"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_username" />
+            android:layout_marginLeft="2dp"
+            android:text="8,420"
+            android:textColor="#BDFFFFFF"
+            android:textSize="@dimen/size_small"
+            app:layout_constraintBottom_toBottomOf="@id/gold_icon"
+            app:layout_constraintLeft_toRightOf="@id/gold_icon"
+            app:layout_constraintTop_toTopOf="@id/gold_icon" />
 
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/layout_sex"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_attention"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:background="@drawable/live_attention_bg_shape"
+        android:gravity="center"
+        android:text="@string/live_attention"
+        android:textColor="@color/em_color_warning"
+        android:textSize="@dimen/em_size_normal"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/layout_anchor"
+        app:layout_constraintTop_toBottomOf="@id/layout_anchor" />
 
     <TextView
         android:id="@+id/tv_gift_num"
@@ -96,26 +141,45 @@
         app:layout_constraintTop_toBottomOf="@id/layout_anchor"
         tools:text="礼物200" />
 
-    <TextView
-        android:id="@+id/tv_member_num"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_member_num"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/em_margin_10"
-        android:background="@drawable/live_live_audience_num_bg_shape"
-        android:gravity="center"
-        android:minWidth="30dp"
-        android:minHeight="30dp"
-        android:paddingStart="@dimen/em_margin_15"
-        android:paddingLeft="@dimen/em_margin_15"
-        android:paddingEnd="@dimen/em_margin_15"
-        android:paddingRight="@dimen/em_margin_15"
-        android:textColor="@color/white"
-        android:textSize="@dimen/em_size_normal"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:background="@drawable/live_live_anchor_bg_shape"
+        android:padding="1dp"
         app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
-        app:layout_constraintLeft_toRightOf="@id/horizontal_recycle_view"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layout_anchor"
-        tools:text="500" />
+        app:layout_constraintTop_toTopOf="@id/layout_anchor">
+
+        <ImageView
+            android:id="@+id/people_icon"
+            android:layout_width="@dimen/margin_20"
+            android:layout_height="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_10"
+            android:src="@drawable/people_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_member_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:gravity="center"
+            android:minWidth="30dp"
+            android:minHeight="30dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/em_size_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/people_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="500" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontal_recycle_view"
@@ -127,7 +191,7 @@
         app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toRightOf="@id/layout_anchor"
-        app:layout_constraintRight_toLeftOf="@id/tv_member_num"
+        app:layout_constraintRight_toLeftOf="@id/layout_member_num"
         app:layout_constraintTop_toTopOf="@id/layout_anchor" />
 
     <TextView

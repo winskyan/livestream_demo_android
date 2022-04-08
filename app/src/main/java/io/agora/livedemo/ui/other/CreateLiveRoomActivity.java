@@ -208,7 +208,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
                 @Override
                 public void onSuccess(LiveRoom data) {
                     if (DemoHelper.isCdnLiveType(data.getVideo_type())) {
-                        CameraX.unbindAll();
+                        stopCamera();
                         CdnLiveHostActivity.actionStart(mContext, data);
                     }
                     finish();
@@ -413,24 +413,35 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
 
     private void startCamera(CameraX.LensFacing facing) {
         mFacingType = facing;
-        CameraX.unbindAll();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            stopCamera();
+            PreviewConfig previewConfig = new PreviewConfig.Builder()
+                    .setLensFacing(facing)
+                    .build();
 
-        PreviewConfig previewConfig = new PreviewConfig.Builder()
-                .setLensFacing(facing)
-                .build();
+            Preview preview = new Preview(previewConfig);
+            preview.setOnPreviewOutputUpdateListener(new Preview.OnPreviewOutputUpdateListener() {
+                @Override
+                public void onUpdated(Preview.PreviewOutput output) {
+                    ViewGroup parent = (ViewGroup) mBinding.cameraView.getParent();
+                    parent.removeView(mBinding.cameraView);
+                    parent.addView(mBinding.cameraView, 0);
 
-        Preview preview = new Preview(previewConfig);
-        preview.setOnPreviewOutputUpdateListener(new Preview.OnPreviewOutputUpdateListener() {
-            @Override
-            public void onUpdated(Preview.PreviewOutput output) {
-                ViewGroup parent = (ViewGroup) mBinding.cameraView.getParent();
-                parent.removeView(mBinding.cameraView);
-                parent.addView(mBinding.cameraView, 0);
+                    mBinding.cameraView.setSurfaceTexture(output.getSurfaceTexture());
+                    updateTransform();
+                }
+            });
+            CameraX.bindToLifecycle(this, preview);
+        } else {
 
-                mBinding.cameraView.setSurfaceTexture(output.getSurfaceTexture());
-                updateTransform();
-            }
-        });
-        CameraX.bindToLifecycle(this, preview);
+        }
+    }
+
+    private void stopCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CameraX.unbindAll();
+        } else {
+
+        }
     }
 }

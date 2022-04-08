@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,12 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
@@ -49,12 +54,13 @@ import io.agora.livedemo.ui.widget.PeriscopeLayout;
 import io.agora.livedemo.ui.widget.RoomMessagesView;
 import io.agora.livedemo.ui.widget.ShowGiveGiftView;
 import io.agora.livedemo.ui.widget.SingleBarrageView;
+import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
     private static final int MAX_SIZE = 10;
-    protected static final String TAG = "Lives";
+    protected static final String TAG = "lives";
     protected static final int CYCLE_REFRESH = 100;
     protected static final int CYCLE_REFRESH_TIME = 30000;
     @BindView(R.id.iv_icon)
@@ -69,8 +75,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     ShowGiveGiftView barrageLayout;
     @BindView(R.id.horizontal_recycle_view)
     RecyclerView horizontalRecyclerView;
-    @BindView(R.id.audience_num)
-    TextView audienceNumView;
     //@BindView(R.id.new_messages_warn) ImageView newMsgNotifyImage;
 
     @BindView(R.id.user_manager_image)
@@ -93,6 +97,12 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     ImageView liveReceiveGift;
     @BindView(R.id.barrageView)
     SingleBarrageView barrageView;
+    @BindView(R.id.layout_sex)
+    ConstraintLayout sexLayout;
+    @BindView(R.id.sex_icon)
+    ImageView sexIcon;
+    @BindView(R.id.age_tv)
+    TextView ageTv;
 
     protected LiveRoom liveRoom;
     protected ChatRoom chatroom;
@@ -131,16 +141,49 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        Log.i(TAG, "live room=" + liveRoom);
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getId();
         anchorId = liveRoom.getOwner();
         DemoMsgHelper.getInstance().init(chatroomId);
 
         usernameView.setText(anchorId);
+
+        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{anchorId}, new ValueCallBack<Map<String, UserInfo>>() {
+            @Override
+            public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
+                for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
+                    Log.i(TAG, "user=" + user.getKey() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth());
+                    if (anchorId.equals(user.getKey())) {
+                        int gender = user.getValue().getGender();
+                        if (1 == gender) {
+                            sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
+                            sexIcon.setImageResource(R.drawable.sex_male_icon);
+                        } else if (2 == gender) {
+                            sexLayout.setBackgroundResource(R.drawable.sex_female_bg_shape);
+                            sexIcon.setImageResource(R.drawable.sex_female_icon);
+                        } else {
+                            sexLayout.setBackgroundResource(R.drawable.sex_other_bg_shape);
+                            sexIcon.setImageResource(R.drawable.sex_other_icon);
+                        }
+                        String birth = user.getValue().getBirth();
+                        if (!TextUtils.isEmpty(birth)) {
+                            ageTv.setText(String.valueOf(user.getValue().getBirth()));
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+
         liveIdView.setText(getString(R.string.live_room_id, liveId));
-        audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
-        tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
+        tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
 
         presenter = new ChatRoomPresenter(mContext, chatroomId);
     }
@@ -325,7 +368,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         watchedCount = room.getAudienceNum();
         memberList = room.getMemberList(MAX_SIZE);
         ThreadManager.getInstance().runOnMainThread(() -> {
-            tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
+            tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
             notifyDataSetChanged();
         });
     }
@@ -342,7 +385,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             ThreadManager.getInstance().runOnMainThread(new Runnable() {
                 @Override
                 public void run() {
-                    audienceNumView.setText(String.valueOf(membersCount));
                     tvMemberNum.setText(String.valueOf(watchedCount));
                     if (name.equals(chatroom.getOwner())) {
                         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
@@ -506,10 +548,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     if (size < data.size()) {
                         size = data.size();
                     }
-                    audienceNumView.setText(String.valueOf(size));
                     membersCount = size;
                     watchedCount = membersCount;
-                    tvMemberNum.setText(DemoHelper.formatNum(watchedCount));
+                    tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
                     notifyDataSetChanged();
                 }
             });

@@ -58,7 +58,7 @@ public class FastLiveAudienceActivity extends LiveBaseActivity implements LiveAu
 
     @Override
     protected void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_fast_live_host);
+        setContentView(R.layout.activity_cdn_live_host);
         setFitSystemForTheme(false, android.R.color.transparent);
     }
 

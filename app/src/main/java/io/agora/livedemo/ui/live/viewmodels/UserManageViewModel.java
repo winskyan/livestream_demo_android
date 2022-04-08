@@ -9,11 +9,11 @@ import androidx.lifecycle.MediatorLiveData;
 import java.util.List;
 
 import io.agora.chat.ChatRoom;
-import io.agora.livedemo.common.reponsitories.EmClientRepository;
+import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class UserManageViewModel extends AndroidViewModel {
-    private EmClientRepository repository;
+    private ClientRepository repository;
     private MediatorLiveData<Resource<List<String>>> observable;
     private MediatorLiveData<Resource<List<String>>> whitesObservable;
     private MediatorLiveData<Resource<List<String>>> muteObservable;
@@ -22,7 +22,7 @@ public class UserManageViewModel extends AndroidViewModel {
 
     public UserManageViewModel(@NonNull Application application) {
         super(application);
-        repository = new EmClientRepository();
+        repository = new ClientRepository();
         observable = new MediatorLiveData<>();
         whitesObservable = new MediatorLiveData<>();
         chatRoomObservable = new MediatorLiveData<>();
