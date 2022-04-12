@@ -2,6 +2,8 @@ package io.agora.livedemo.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -176,5 +178,20 @@ public class Utils {
 
     public static Typeface getRobotoTypeface(Context context) {
         return Typeface.createFromAsset(context.getAssets(), "font/Roboto-Black.ttf");
+    }
+
+    public static String getAppVersionName(Context context) {
+        String versionName = "";
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            if (versionName == null || versionName.length() <= 0) {
+                return "";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionName;
     }
 }

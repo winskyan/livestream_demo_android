@@ -75,4 +75,12 @@
     <color name="color_search_text">#FFFFFF</color>
 
     <color name="create_live_name_numbers_tip">#99FFFFFF</color>
+    <color name="translucent_bg">#70000000</color>
+    <color name="color_black_333333">#333333</color>
+    <color name="color_light_gray_999999">#999999</color>
+    <color name="group_blue_154dfe">#154dfe</color>
+    <color name="group_blue_20154dfe">#20154dfe</color>
+
+    <color name="color_second_text">#666666</color>
+    <color name="color_main_text">#0D0D0D</color>
 </resources>

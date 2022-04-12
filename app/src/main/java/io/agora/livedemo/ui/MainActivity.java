@@ -30,6 +30,7 @@ import io.agora.livedemo.runtimepermissions.PermissionsResultAction;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
 import io.agora.livedemo.ui.cdn.fragment.CdnLivingListFragment;
 import io.agora.livedemo.ui.other.CreateLiveRoomActivity;
+import io.agora.livedemo.ui.other.EditProfileActivity;
 import io.agora.livedemo.ui.other.SearchActivity;
 import io.agora.livedemo.ui.other.fragment.AboutMeFragment;
 import io.agora.livedemo.utils.Utils;
@@ -46,7 +47,6 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         return mBinding.getRoot();
     }
-
 
 
     @Override
@@ -78,10 +78,10 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
                     intent.putExtra("liverooms", (Serializable) liveRooms);
                     startActivity(intent);
                 } else if (mCurrentFragment instanceof AboutMeFragment) {
-
+                    Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
-
-
             }
         });
     }
@@ -212,6 +212,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
             case 1:
                 switchToAboutMe();
                 mBinding.titleBarMain.setTitle(getResources().getString(R.string.profile_title));
+                mBinding.titleBarMain.setRightImageResource(R.drawable.profile_edit);
                 break;
         }
     }

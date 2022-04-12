@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,6 +31,7 @@ import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
+import io.agora.livedemo.common.enums.LiveRoleType;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
@@ -47,8 +48,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     Group viewGroup;
     @BindView(R.id.countdown_txtv)
     TextView countdownView;
-    @BindView(R.id.finish_frame)
-    ViewStub liveEndLayout;
     @BindView(R.id.group_gift_info)
     Group groupGiftInfo;
     @BindView(R.id.tv_gift_num)
@@ -57,6 +56,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     TextView tvLikeNum;
     @BindView(R.id.img_bt_close)
     ImageView imgBtClose;
+    @BindView(R.id.layout)
+    ConstraintLayout layout;
+    @BindView(R.id.end_live_stream_tip)
+    TextView endLiveStreamTip;
+
     private Unbinder unbinder;
     protected boolean isShutDownCountdown = false;
     boolean isStarted;
@@ -102,6 +106,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     protected void initListener() {
         super.initListener();
         imgBtClose.setOnClickListener(this);
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.finish();
+            }
+        });
     }
 
     @Override
@@ -129,6 +139,16 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                         stopLiving();
                     }
                 });
+
+        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION, String.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if (TextUtils.isEmpty(response)) {
+                        layoutAttention.setVisibility(View.GONE);
+                    } else {
+                        layoutAttention.setVisibility(View.VISIBLE);
+                        tvAttention.setText(response);
+                    }
+                });
         startLive();
     }
 
@@ -151,8 +171,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     @Override
-    protected void AnchorClick() {
-        super.AnchorClick();
+    protected void anchorClick() {
+        super.anchorClick();
         showUserDetailsDialog(chatroom.getOwner());
     }
 
@@ -185,12 +205,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     @Override
     protected void showUserDetailsDialog(String username) {
-        if (TextUtils.equals(username, liveRoom.getOwner())) {
-            return;
-        }
         RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
         if (fragment == null) {
-            fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
+            fragment = RoomManageUserDialog.getNewInstance(chatroomId, username, LiveRoleType.Streamer);
         }
         if (fragment.isAdded()) {
             return;
@@ -370,10 +387,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             });
         });
         if (liveRoom.isLiving() && !reChangeLiveStatus) {
-            EMLog.d(TAG, "restartAnchorLive 直接开播");
             startAnchorLive(liveRoom);
         } else {
-            EMLog.d(TAG, "restartAnchorLive 调用接口");
             viewModel.changeLiveStatus(liveId, ChatClient.getInstance().getCurrentUser(), "ongoing");
         }
     }
@@ -392,8 +407,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     private void showDialog(OnConfirmClickListener listener) {
         new SimpleDialogFragment.Builder(mContext)
-                .setTitle(R.string.em_live_dialog_quit_title)
-                .setConfirmButtonTxt(R.string.em_live_dialog_quit_btn_title)
+                .setTitle(R.string.live_dialog_quit_title)
+                .setConfirmButtonTxt(R.string.live_dialog_quit_btn_title)
                 .setConfirmColor(R.color.em_color_warning)
                 .setOnConfirmClickListener(new OnConfirmClickListener() {
                     @Override
@@ -408,9 +423,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .show(getChildFragmentManager(), "dialog");
     }
 
-    /**
-     * 停止直播
-     */
     private void stopLiving() {
         if (cameraListener != null) {
             cameraListener.onStopCamera();
@@ -432,7 +444,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                         DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
                     }
                     DemoHelper.saveLikeNum(data.getId(), 0);
-                    mContext.finish();
+                    endLiveStream();
                 }
 
                 @Override
@@ -447,6 +459,16 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     public void setOnCameraListener(OnCameraListener listener) {
         this.cameraListener = listener;
+    }
+
+    private void endLiveStream() {
+        toolbarGroupView.setVisibility(View.GONE);
+        closeIv.setVisibility(View.VISIBLE);
+        imgBtClose.setVisibility(View.GONE);
+        switchCameraView.setEnabled(false);
+        commentIv.setEnabled(false);
+        endLiveStreamTip.setVisibility(View.VISIBLE);
+        layout.setBackgroundResource(R.color.translucent_bg);
     }
 
     @Override

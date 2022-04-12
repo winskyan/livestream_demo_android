@@ -106,4 +106,7 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/black</item>
+    </style>
 </resources>

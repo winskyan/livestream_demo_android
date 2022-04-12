@@ -104,8 +104,7 @@
     <string name="em_gift_send_info">%1$d个 %2$s</string>
     <string name="em_gift_input_num_title">输入赠送数量</string>
     <string name="em_gift_show_send">送出礼物</string>
-    <string name="em_live_dialog_quit_title">确定结束直播？</string>
-    <string name="em_live_dialog_quit_btn_title">结束并退出</string>
+
     <string name="em_live_msg_gift">%1$s 赠送了 %2$s x%3$d</string>
     <string name="em_live_msg_like">%1$s 点了 %2$d个赞</string>
     <string name="em_live_msg_member_add">进入了直播间</string>
@@ -138,6 +137,7 @@
     <string name="em_create_interaction_room">互动直播</string>
 
     <string name="ok">OK</string>
+    <string name="confirm">CONFIRM</string>
     <string name="cancel">Cancel</string>
     <string name="prompt">prompt</string>
 
@@ -165,4 +165,29 @@
     <string name="profile_title">Profile</string>
 
     <string name="live_type_normal_title">CDN Livestream</string>
+
+    <string name="live_dialog_quit_title">End your Livestream？</string>
+    <string name="live_dialog_quit_btn_title">END</string>
+    <string name="anchor_end_live_stream_tip">Your Live Stream has ended</string>
+    <string name="role_type_streamer">Streamer</string>
+    <string name="role_type_moderator">Moderator</string>
+
+    <string name="ban_all">Ban All</string>
+    <string name="attention_ban_all">Streamer has set Banned on all Chats</string>
+
+    <string name="setting_title">Settings</string>
+    <string name="setting_about_title">About</string>
+    <string name="setting_edit_profile">Edit Profile</string>
+    <string name="setting_change_avatar">Click to Change Avatar</string>
+    <string name="setting_username_title">Username</string>
+    <string name="setting_gender_title">Gender</string>
+    <string name="setting_birthday_title">Birthday</string>
+    <string name="setting_unknown">Unknown</string>
+
+    <string name="about_sdk_version">SDK Version</string>
+    <string name="about_lib_version">UI Library Version</string>
+    <string name="about_policy">Legals n’ Policies</string>
+    <string name="about_more">More</string>
+    <string name="about_net_addr">Agora.io</string>
+
 </resources>

@@ -25,7 +25,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_dialog_base_view;
+        return R.layout.fragment_dialog_base_view;
     }
 
     @Override

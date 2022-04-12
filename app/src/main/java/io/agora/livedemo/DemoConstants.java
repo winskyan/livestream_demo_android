@@ -15,6 +15,7 @@ public interface DemoConstants {
     String REFRESH_MEMBER_COUNT = "refresh_member_count";
     String FINISH_LIVE = "finish_live";
     String LIVING_STATUS = "living_status";
+    String REFRESH_ATTENTION = "refresh_attention";
 
     String NETWORK_CONNECTED = "network_connected";
 
@@ -28,4 +29,5 @@ public interface DemoConstants {
 
     int MAX_SHOW_MEMBERS_COUNT = 200;
 
+    String NICKNAME_CHANGE = "nickname_change";
 }

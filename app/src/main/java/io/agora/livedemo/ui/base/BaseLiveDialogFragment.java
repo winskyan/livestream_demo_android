@@ -46,7 +46,6 @@ public abstract class BaseLiveDialogFragment extends BaseDialogFragment {
     @Override
     public void initListener() {
         super.initListener();
-        // 保证activity finish之前，应该先dismiss dialog
         if (getDialog() != null) {
             getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
                 @Override

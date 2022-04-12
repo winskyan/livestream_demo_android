@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,8 +84,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     ImageView switchCameraView;
     @BindView(R.id.like_image)
     ImageView likeImageView;
-    @BindView(R.id.txt_live_id)
-    TextView liveIdView;
     @BindView(R.id.tv_username)
     TextView usernameView;
     @BindView(R.id.tv_member_num)
@@ -103,6 +102,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     ImageView sexIcon;
     @BindView(R.id.age_tv)
     TextView ageTv;
+    @BindView(R.id.group_toolbar_info)
+    Group toolbarGroupView;
+    @BindView(R.id.close_iv)
+    ImageView closeIv;
+    @BindView(R.id.comment_image)
+    ImageView commentIv;
+    @BindView(R.id.layout_attention)
+    ConstraintLayout layoutAttention;
 
     protected LiveRoom liveRoom;
     protected ChatRoom chatroom;
@@ -181,7 +188,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             }
         });
 
-        liveIdView.setText(getString(R.string.live_room_id, liveId));
         watchedCount = liveRoom.getAudienceNum();
         tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
 
@@ -229,7 +235,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void initListener() {
         super.initListener();
         tvMemberNum.setOnClickListener(this);
-        toolbar.setOnClickListener(this);
         liveReceiveGift.setOnClickListener(this);
         getView().setOnTouchListener(this);
         presenter.setOnChatRoomListener(this);
@@ -248,9 +253,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         switch (v.getId()) {
             case R.id.tv_member_num:
                 skipToListDialog();
-                break;
-            case R.id.toolbar:
-                AnchorClick();
                 break;
             case R.id.live_receive_gift:
                 onGiftClick();
@@ -330,7 +332,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void onGiftClick() {
     }
 
-    protected void AnchorClick() {
+    @OnClick(R.id.layout_anchor)
+    protected void anchorClick() {
     }
 
     protected void skipToListDialog() {
@@ -560,12 +563,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     private float preX, preY;
 
-    /**
-     * 向左滑动屏幕
-     *
-     * @param startX
-     * @param endX
-     */
     protected void slideToLeft(int startX, float endX) {
 //        startAnimation(getView(), startX, endX);
     }

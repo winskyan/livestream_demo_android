@@ -43,4 +43,6 @@
     <dimen name="size_normal">14sp</dimen>
     <dimen name="size_big">16sp</dimen>
     <dimen name="size_big_notify">18sp</dimen>
+
+    <dimen name="common_item_height">54dp</dimen>
 </resources>
