@@ -69,19 +69,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_5"
-            android:background="@drawable/btn_normal_bg"
             android:padding="@dimen/margin_5"
             android:textColor="@color/white"
             android:textSize="@dimen/size_normal"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/mute_state"
             app:layout_constraintTop_toBottomOf="@id/tv_username" />
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/mute_state"
+            android:layout_width="@dimen/margin_15"
+            android:layout_height="@dimen/margin_15"
+            android:src="@drawable/live_mute_icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/role_type"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@id/role_type"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/role_type" />
 
         <io.agora.livedemo.ui.widget.SwitchItemView
             android:id="@+id/ban_all"
             android:layout_width="match_parent"
             android:layout_height="@dimen/common_item_height"
             android:background="@color/white"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/role_type"
@@ -89,6 +103,123 @@
             app:switchItemTitle="@string/ban_all"
             app:switchItemTitleSize="@dimen/size_normal" />
 
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_remove_from_allowed_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_remove_from_allowed_list"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ban_all" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_move_to_allowed_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_move_to_allowed_list"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_remove_from_allowed_list" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_remove_as_moderator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_remove_as_moderator"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_move_to_allowed_list" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_assign_as_moderator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_assign_as_moderator"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_remove_as_moderator" />
+
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_timeout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_timeout"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_assign_as_moderator" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_mute"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_mute"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_timeout" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_unmute"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_unmute"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_mute" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_ban"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_ban"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_unmute" />
+
+        <io.agora.livedemo.ui.widget.ArrowItemView
+            android:id="@+id/item_unban"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_item_height"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:arrowItemShowArrow="false"
+            app:arrowItemTitle="@string/room_manager_unban"
+            app:arrowItemTitleSize="@dimen/size_normal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_ban" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <io.agora.chat.uikit.widget.EaseImageView

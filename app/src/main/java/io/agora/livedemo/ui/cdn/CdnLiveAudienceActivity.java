@@ -75,7 +75,6 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
     protected void initData() {
         super.initData();
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
-            //只有非点播模式下，才会去关闭播放器
             if (liveRoom != null
                     && !TextUtils.isEmpty(liveRoom.getVideo_type())
                     && !DemoHelper.isVod(liveRoom.getVideo_type())) {
@@ -127,14 +126,12 @@ public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAud
         if (presenter != null) {
             presenter.onLiveClosed();
         }
-        showLongToast("直播间已关闭");
+        showLongToast("Live stream end!");
         finish();
     }
 
     @Override
     public void onRoomOwnerChangedToCurrentUser(String chatRoomId, String newOwner) {
-        // 如果直播间主播被调整为自己
-        //切换直播场景之前先调用离开频道的逻辑，否则会造成当前用户还没有离开频道，又在新的页面加入频道的问题
         if (presenter != null) {
             presenter.leaveChannel();
         }

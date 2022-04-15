@@ -15,6 +15,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,7 +34,6 @@ import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
-import io.agora.livedemo.common.enums.LiveRoleType;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
@@ -86,8 +88,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        ivIcon.setImageResource(DemoHelper.getAvatarResource());
+        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(ivIcon);
         viewGroup.setVisibility(View.GONE);
+        btEnd.setVisibility(View.VISIBLE);
         countdownView.setTypeface(Utils.getRobotoTypeface(getActivity().getApplicationContext()));
 
         ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
@@ -149,6 +152,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                         tvAttention.setText(response);
                     }
                 });
+
+
+
         startLive();
     }
 
@@ -203,17 +209,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         dialog.show(getChildFragmentManager(), "git_statistics");
     }
 
-    @Override
-    protected void showUserDetailsDialog(String username) {
-        RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
-        if (fragment == null) {
-            fragment = RoomManageUserDialog.getNewInstance(chatroomId, username, LiveRoleType.Streamer);
-        }
-        if (fragment.isAdded()) {
-            return;
-        }
-        fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
-    }
 
     @Override
     public void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
@@ -227,6 +222,11 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 cameraListener.onRoomOwnerChangedToOtherUser(chatRoomId, newOwner);
             }
         }
+    }
+
+    @Override
+    public void onAdminChanged() {
+
     }
 
     @Override
@@ -462,8 +462,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     private void endLiveStream() {
-        toolbarGroupView.setVisibility(View.GONE);
         closeIv.setVisibility(View.VISIBLE);
+        toolbarGroupView.setVisibility(View.INVISIBLE);
+
         imgBtClose.setVisibility(View.GONE);
         switchCameraView.setEnabled(false);
         commentIv.setEnabled(false);

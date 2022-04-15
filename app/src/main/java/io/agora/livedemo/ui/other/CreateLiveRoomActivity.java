@@ -32,6 +32,9 @@ import androidx.camera.core.PreviewConfig;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.io.File;
 import java.net.URI;
 
@@ -40,7 +43,6 @@ import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.databinding.ActivityCreateLiveRoomBinding;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
@@ -91,12 +93,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
             }
         });
 
-        int resIndex = DemoHelper.getAvatarResourceIndex();
-        if (-1 != resIndex) {
-            mBinding.coverImage.setImageResource(UserRepository.getInstance().getResDrawable(resIndex));
-        } else {
-            mBinding.coverImage.setImageResource(R.drawable.avatar_0);
-        }
+        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.coverImage);
         setEditTextEnable(false, mBinding.liveName);
 
         mBinding.liveName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(LIVE_NAME_MAX_LENGTH)});
@@ -257,6 +254,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
             return;
         }
         mViewModel.createLiveRoom(name, "", mCoverPath, LiveRoom.Type.agora_cdn_live.name());
+        Utils.hideKeyboard(mBinding.liveName);
     }
 
     @Override

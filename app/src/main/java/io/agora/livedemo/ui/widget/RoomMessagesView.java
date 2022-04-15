@@ -326,7 +326,6 @@ public class RoomMessagesView extends RelativeLayout {
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final ChatMessage message = messages[position];
             String from = message.getFrom();
-            String nickName = DemoHelper.getNickName(from);
             boolean isSelf = ChatClient.getInstance().getCurrentUser().equals(from);
             if (message.getBody() instanceof TextMessageBody) {
                 boolean memberAdd = false;
@@ -336,18 +335,18 @@ public class RoomMessagesView extends RelativeLayout {
                 }
                 String content = ((TextMessageBody) message.getBody()).getMessage();
                 if (memberAdd) {
-                    showMemberAddMsg(holder.name, nickName, content);
+                    showMemberAddMsg(holder.name, from, content);
                 } else {
-                    showText(holder.name, nickName, isSelf, content);
+                    showText(holder.name, from, isSelf, content);
                 }
             } else if (message.getBody() instanceof CustomMessageBody) {
                 DemoMsgHelper msgHelper = DemoMsgHelper.getInstance();
                 if (msgHelper.isGiftMsg(message)) {
-                    showGiftMessage(holder.name, nickName, isSelf, message);
+                    showGiftMessage(holder.name, from, isSelf, message);
                 } else if (msgHelper.isPraiseMsg(message)) {
-                    showPraiseMessage(holder.name, nickName, isSelf, message);
+                    showPraiseMessage(holder.name, from, isSelf, message);
                 } else if (msgHelper.isBarrageMsg(message)) {
-                    showBarrageMessage(holder.name, nickName, isSelf, message);
+                    showBarrageMessage(holder.name, from, isSelf, message);
                 }
             }
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -363,7 +362,7 @@ public class RoomMessagesView extends RelativeLayout {
 
         private void showMemberAddMsg(TextView name, String nickName, String content) {
             StringBuilder builder = new StringBuilder();
-            builder.append(nickName).append(" ").append(context.getString(R.string.em_live_msg_member_add));
+            builder.append(nickName).append(" ").append(context.getString(R.string.live_msg_member_add));
             SpannableString span = new SpannableString(builder.toString());
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),
@@ -388,7 +387,7 @@ public class RoomMessagesView extends RelativeLayout {
             if (bean != null) {
                 giftName = bean.getName();
             }
-            String content = context.getString(R.string.em_live_msg_gift, nickName, giftName, num);
+            String content = context.getString(R.string.live_msg_gift, nickName, giftName, num);
             SpannableString span = new SpannableString(content);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.white)), 0, nickName.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.gray)),

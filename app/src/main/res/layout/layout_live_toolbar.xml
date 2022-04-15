@@ -14,7 +14,6 @@
         android:background="@drawable/live_live_anchor_bg_shape"
         android:padding="1dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/horizontal_recycle_view"
         app:layout_constraintTop_toTopOf="parent">
 
         <io.agora.chat.uikit.widget.EaseImageView
@@ -159,19 +158,28 @@
         android:textColor="#ffffc700"
         android:textSize="@dimen/em_size_smaller"
         app:layout_constraintLeft_toRightOf="@id/tv_gift_num"
-        app:layout_constraintTop_toBottomOf="@id/layout_anchor"
-        tools:text="礼物200" />
+        app:layout_constraintTop_toBottomOf="@id/layout_anchor" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontal_recycle_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="@dimen/margin_10"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
+        app:layout_constraintRight_toLeftOf="@id/layout_member_num"
+        app:layout_constraintTop_toTopOf="@id/layout_anchor" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_member_num"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/margin_10"
-        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_10"
         android:background="@drawable/live_live_anchor_bg_shape"
         android:padding="1dp"
         app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/close_iv"
         app:layout_constraintTop_toTopOf="@id/layout_anchor">
 
         <ImageView
@@ -191,8 +199,6 @@
             android:layout_marginLeft="@dimen/margin_5"
             android:layout_marginEnd="@dimen/margin_10"
             android:gravity="center"
-            android:minWidth="30dp"
-            android:minHeight="30dp"
             android:textColor="@color/white"
             android:textSize="@dimen/em_size_normal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -201,30 +207,16 @@
             tools:text="500" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/horizontal_recycle_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/em_margin_10"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintLeft_toRightOf="@id/layout_anchor"
-        app:layout_constraintRight_toLeftOf="@id/layout_member_num"
-        app:layout_constraintTop_toTopOf="@id/layout_anchor" />
-
     <ImageView
         android:id="@+id/close_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_25"
+        android:layout_width="@dimen/margin_20"
+        android:layout_height="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
         android:src="@drawable/live_close"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/layout_anchor"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/layout_anchor" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_toolbar_info"

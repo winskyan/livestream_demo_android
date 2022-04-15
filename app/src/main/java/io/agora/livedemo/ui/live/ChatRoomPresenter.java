@@ -13,8 +13,10 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.TextMessageBody;
 import io.agora.custommessage.OnMsgCallBack;
+import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoMsgHelper;
+import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
@@ -25,11 +27,16 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     private String currentUser;
     private OnChatRoomListener onChatRoomListener;
     private Conversation conversation;
+    private String ownerNickname;
 
     public ChatRoomPresenter(BaseActivity context, String chatroomId) {
         this.mContext = context;
         this.chatroomId = chatroomId;
         currentUser = ChatClient.getInstance().getCurrentUser();
+    }
+
+    public void setOwnerNickname(String ownerNickname) {
+        this.ownerNickname = ownerNickname;
     }
 
     //===========================================  EMChatRoomChangeListener start =================================
@@ -73,44 +80,50 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     @Override
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
         if (mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.em_live_in_mute_list));
+            mContext.showToast(mContext.getString(R.string.live_in_mute_list));
         }
     }
 
     @Override
     public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
         if (mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.em_live_out_mute_list));
+            mContext.showToast(mContext.getString(R.string.live_out_mute_list));
         }
     }
 
     @Override
     public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
         if (whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.em_live_anchor_add_white));
+            mContext.showToast(mContext.getString(R.string.live_anchor_add_white));
         }
     }
 
     @Override
     public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
         if (whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.em_live_anchor_remove_from_white));
+            mContext.showToast(mContext.getString(R.string.live_anchor_remove_from_white));
         }
     }
 
     @Override
     public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
-        mContext.showToast(isMuted ? mContext.getString(R.string.em_live_mute_all) : mContext.getString(R.string.em_live_out_mute_all));
+        if (isMuted) {
+            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(mContext.getString(R.string.live_anchor_mute_all_attention_tip, ownerNickname));
+        } else {
+            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue("");
+        }
     }
 
     @Override
     public void onAdminAdded(String chatRoomId, String admin) {
         showMemberChangeEvent(admin, "被提升为房管");
+        onAdminChange(admin);
     }
 
     @Override
     public void onAdminRemoved(String chatRoomId, String admin) {
         showMemberChangeEvent(admin, "被解除房管");
+        onAdminChange(admin);
     }
 
     @Override
@@ -208,6 +221,13 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
             onChatRoomListener.onMessageSelectLast();
         }
     }
+
+    private void onAdminChange(String admin) {
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onAdminChanged();
+        }
+    }
+
 
     /**
      * 发送点赞消息
@@ -335,34 +355,17 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     public interface OnChatRoomListener {
         void onChatRoomOwnerChanged(String chatRoomId, String newOwner, String oldOwner);
 
-        /**
-         * 观众进入房间
-         *
-         * @param participant
-         */
         void onChatRoomMemberAdded(String participant);
 
-        /**
-         * 观众退出房间
-         *
-         * @param participant
-         */
         void onChatRoomMemberExited(String participant);
 
-        /**
-         * 收到新消息
-         */
         void onMessageReceived();
 
-        /**
-         * 需要消息列表滑动到最后
-         */
         void onMessageSelectLast();
 
-        /**
-         * 消息发生改变
-         */
         void onMessageChanged();
+
+        void onAdminChanged();
 
     }
 }

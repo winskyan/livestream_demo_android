@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import io.agora.livedemo.DemoApplication;
@@ -193,5 +197,18 @@ public class Utils {
             e.printStackTrace();
         }
         return versionName;
+    }
+
+    public static int getAgeByBirthday(String birthday) {
+        try {
+            SimpleDateFormat bDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date parseDate = bDate.parse(birthday);
+            Calendar c = Calendar.getInstance();
+            c.setTime(parseDate);
+            return Calendar.getInstance().get(Calendar.YEAR) - c.get(Calendar.YEAR);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

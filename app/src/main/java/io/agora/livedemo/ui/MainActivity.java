@@ -16,13 +16,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.io.Serializable;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.utils.EaseUserUtils;
+import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.databinding.ActivityMainBinding;
 import io.agora.livedemo.runtimepermissions.PermissionsManager;
@@ -53,13 +58,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     protected void initView() {
         super.initView();
         mBinding.titleBarMain.getTitle().setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
-        int resIndex = DemoHelper.getAvatarResourceIndex();
-        if (-1 != resIndex) {
-            mBinding.ivHomeSet.setImageResource(UserRepository.getInstance().getResDrawable(resIndex));
-        } else {
-            mBinding.ivHomeSet.setImageResource(R.drawable.live_set_selected);
-        }
-
+        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.ivHomeSet);
     }
 
     @Override
@@ -92,6 +91,11 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         skipToTarget(position);
         Log.e(TAG, "user = " + ChatClient.getInstance().getCurrentUser());
         requestPermissions();
+
+        LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
+                .observe(mContext, response -> {
+                    Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.ivHomeSet);
+                });
     }
 
     private void requestPermissions() {

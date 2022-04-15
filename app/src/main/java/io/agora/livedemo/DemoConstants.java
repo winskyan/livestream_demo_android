@@ -12,6 +12,7 @@ public interface DemoConstants {
     String REFRESH_GIFT_LIST = "refresh_gift_list";
     String REFRESH_LIKE_NUM = "refresh_like_num";
     String REFRESH_MEMBER = "refresh_member";
+    String REFRESH_MEMBER_STATE = "refresh_member_state";
     String REFRESH_MEMBER_COUNT = "refresh_member_count";
     String FINISH_LIVE = "finish_live";
     String LIVING_STATUS = "living_status";
@@ -30,4 +31,13 @@ public interface DemoConstants {
     int MAX_SHOW_MEMBERS_COUNT = 200;
 
     String NICKNAME_CHANGE = "nickname_change";
+    String AVATAR_CHANGE = "avatar_change";
+
+    String ROLE_TYPE_ALL = "All";
+    String ROLE_TYPE_MODERATORS = "Moderators";
+    String ROLE_TYPE_ALLOWED = "Allowed";
+    String ROLE_TYPE_MUTED = "Muted";
+    String ROLE_TYPE_BANNED = "Banned";
+
+    String SHOW_USER_DETAIL = "show_user_detail";
 }

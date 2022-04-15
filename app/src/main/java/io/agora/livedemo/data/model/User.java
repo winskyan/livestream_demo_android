@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private String id;
+    private String pwd;
     private String nickName;
-    private int avatarResource;
-    private int avatarResourceIndex;
+    private int avatarDefaultResource;
+    private String avatarUrl;
 
     public String getId() {
         return id;
@@ -14,6 +15,14 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getNickName() {
@@ -24,29 +33,30 @@ public class User implements Serializable {
         this.nickName = nickName;
     }
 
-    public int getAvatarResource() {
-        return avatarResource;
+    public int getAvatarDefaultResource() {
+        return avatarDefaultResource;
     }
 
-    public void setAvatarResource(int avatarResource) {
-        this.avatarResource = avatarResource;
+    public void setAvatarDefaultResource(int avatarDefaultResource) {
+        this.avatarDefaultResource = avatarDefaultResource;
     }
 
-    public int getAvatarResourceIndex() {
-        return avatarResourceIndex;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAvatarResourceIndex(int avatarResourceIndex) {
-        this.avatarResourceIndex = avatarResourceIndex;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
+                ", pwd='" + pwd + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", avatarResource=" + avatarResource +
-                ", avatarResourceIndex=" + avatarResourceIndex +
+                ", avatarDefaultResource=" + avatarDefaultResource +
+                ", avatarUrl=" + avatarUrl +
                 '}';
     }
 }

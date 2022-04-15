@@ -3,32 +3,38 @@ package io.agora.livedemo.ui.live.fragment;
 import android.util.Log;
 import android.view.View;
 
+import androidx.lifecycle.Observer;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.reponsitories.Resource;
 
 public class RoomWhiteManageFragment extends RoomUserManagementFragment {
 
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel.getWhitesObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(List<String> data) {
-                    Log.e("TAG", "getWhitesObservable = " + data.size());
-                    setAdapter(data);
-                }
+        viewModel.getWhitesObservable().observe(getViewLifecycleOwner(), new Observer<Resource<List<String>>>() {
+            @Override
+            public void onChanged(Resource<List<String>> response) {
+                RoomWhiteManageFragment.this.parseResource(response, new OnResourceParseCallback<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> data) {
+                        Log.e("TAG", "getWhitesObservable = " + data.size());
+                        setAdapter(data);
+                    }
 
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    finishRefresh();
-                }
-            });
+                    @Override
+                    public void hideLoading() {
+                        super.hideLoading();
+                        finishRefresh();
+                    }
+                });
+            }
         });
     }
 

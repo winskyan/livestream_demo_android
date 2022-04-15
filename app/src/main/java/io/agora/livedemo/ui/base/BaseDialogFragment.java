@@ -19,9 +19,6 @@ import androidx.fragment.app.DialogFragment;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.reponsitories.Resource;
 
-/**
- * 作为dialog fragment的基类
- */
 public abstract class BaseDialogFragment extends DialogFragment {
     public BaseActivity mContext;
 
@@ -42,9 +39,6 @@ public abstract class BaseDialogFragment extends DialogFragment {
         return view;
     }
 
-    /**
-     * 设置转场动画
-     */
     protected void setAnimation() {
 
     }
@@ -91,34 +85,16 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void initData() {
     }
 
-    /**
-     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
-     *
-     * @param id
-     * @param <T>
-     * @return
-     */
     protected <T extends View> T findViewById(@IdRes int id) {
         return getView().findViewById(id);
     }
 
-
-    /**
-     * 解析Resource<T>
-     *
-     * @param response
-     * @param callback
-     * @param <T>
-     */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
         if (mContext != null) {
             mContext.parseResource(response, callback);
         }
     }
 
-    /**
-     * dialog宽度占满，高度自定义
-     */
     public void setDialogParams() {
         try {
             Window dialogWindow = getDialog().getWindow();

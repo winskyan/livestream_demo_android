@@ -3,7 +3,11 @@ package io.agora.livedemo.data;
 import android.content.Context;
 import android.text.TextUtils;
 
+import java.util.List;
+
+import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
+import io.agora.livedemo.data.model.HeadImageInfo;
 import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.utils.Utils;
 
@@ -12,6 +16,8 @@ public class UserRepository {
 
     private Context mContext;
     private User mCurrentUser;
+
+    private List<HeadImageInfo> mHeadImageList;
 
     private UserRepository() {
     }
@@ -30,14 +36,17 @@ public class UserRepository {
     public void init(Context context) {
         this.mContext = context;
         String agoraId = DemoHelper.getAgoraId();
+        String pwd = DemoHelper.getPwd();
         String nickname = DemoHelper.getNickName();
-        int resIndex = DemoHelper.getAvatarResourceIndex();
-        if (!TextUtils.isEmpty(agoraId) && !TextUtils.isEmpty(nickname) && -1 != resIndex) {
+        int defaultRes = DemoHelper.getAvatarDefaultResource();
+        String avatarUrl = DemoHelper.getAvatarUrl();
+        if (!TextUtils.isEmpty(agoraId) && !TextUtils.isEmpty(pwd)) {
             mCurrentUser = new User();
             mCurrentUser.setId(agoraId);
+            mCurrentUser.setPwd(pwd);
             mCurrentUser.setNickName(nickname);
-            mCurrentUser.setAvatarResourceIndex(resIndex);
-            mCurrentUser.setAvatarResource(getResDrawable(resIndex));
+            mCurrentUser.setAvatarDefaultResource(defaultRes);
+            mCurrentUser.setAvatarUrl(avatarUrl);
         }
     }
 
@@ -49,11 +58,14 @@ public class UserRepository {
     public User getRandomUser() {
         mCurrentUser = new User();
         mCurrentUser.setId(Utils.getStringRandom(8));
-        mCurrentUser.setNickName(Utils.getStringRandom(8));
-        int index = (int) Math.round(Math.random() * 7 + 1);
-        int drawable = getResDrawable(index);
-        mCurrentUser.setAvatarResourceIndex(index);
-        mCurrentUser.setAvatarResource(drawable);
+        mCurrentUser.setPwd(Utils.getStringRandom(8));
+        mCurrentUser.setNickName(mCurrentUser.getId());
+        if (null != mHeadImageList) {
+            int index = (int) Math.round(Math.random() * mHeadImageList.size() + 1);
+            mCurrentUser.setAvatarUrl(mHeadImageList.get(index).getUrl());
+        } else {
+            mCurrentUser.setAvatarDefaultResource(R.drawable.avatar_default);
+        }
         return mCurrentUser;
     }
 
@@ -62,7 +74,14 @@ public class UserRepository {
     }
 
     public int getResDrawable(int index) {
-        return mContext.getResources().getIdentifier("avatar_" + index, "drawable", mContext.getPackageName());
+        if (null != mContext) {
+            return mContext.getResources().getIdentifier("avatar_" + index, "drawable", mContext.getPackageName());
+        } else {
+            return R.drawable.avatar_default;
+        }
     }
 
+    public void setHeadImageList(List<HeadImageInfo> headImageList) {
+        this.mHeadImageList = headImageList;
+    }
 }

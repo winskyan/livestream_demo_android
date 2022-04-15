@@ -58,6 +58,8 @@ public class SimpleDialogFragment extends DemoDialogFragment {
         }
         if (title != 0) {
             mTvDialogTitle.setText(title);
+        } else if (!TextUtils.isEmpty(titleStr)) {
+            mTvDialogTitle.setText(titleStr);
         }
         if (confirmTitle != 0) {
             mBtnDialogConfirm.setText(confirmTitle);
@@ -115,6 +117,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     public static class Builder {
         private Context context;
         private int title;
+        private String titleStr;
         private int confirm;
         private int confirmColor;
         private OnConfirmClickListener mOnConfirmClickListener;
@@ -126,6 +129,11 @@ public class SimpleDialogFragment extends DemoDialogFragment {
 
         public Builder setTitle(@StringRes int title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.titleStr = title;
             return this;
         }
 
@@ -153,7 +161,10 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             SimpleDialogFragment dialog = new SimpleDialogFragment();
             if (title != 0) {
                 dialog.setTitle(title);
+            } else if (!TextUtils.isEmpty(titleStr)) {
+                dialog.setTitle(titleStr);
             }
+
             if (confirm != 0) {
                 dialog.setConfirmTitle(confirm);
             }

@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Map;
+
+import io.agora.ValueCallBack;
+import io.agora.chat.ChatClient;
+import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
@@ -60,7 +65,34 @@ public class LiveListAdapter extends EaseBaseRecyclerViewAdapter<LiveRoom> {
 
             tvLivingAudienceNum.setText(NumberUtils.amountConversion(liveRoom.getAudienceNum()));
             liveRoomName.setText(liveRoom.getName());
-            author.setText(liveRoom.getOwner());
+            ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{liveRoom.getOwner()}, new ValueCallBack<Map<String, UserInfo>>() {
+                @Override
+                public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
+                    author.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
+                                if (liveRoom.getOwner().equals(user.getKey())) {
+                                    if (TextUtils.isEmpty(user.getValue().getNickname())) {
+                                        author.setText(liveRoom.getOwner());
+                                    } else {
+                                        author.setText(user.getValue().getNickname());
+                                    }
+                                    return;
+                                }
+                            }
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+            });
+
+
         }
     }
 }

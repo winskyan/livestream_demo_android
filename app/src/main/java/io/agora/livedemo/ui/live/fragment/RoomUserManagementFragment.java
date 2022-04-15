@@ -185,7 +185,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
         public void onBindViewHolder(ManagementViewHolder holder, final int position) {
             final String username = userList.get(position);
             holder.usernickView.setText(DemoHelper.getNickName(username));
-            holder.imgAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
+            //holder.imgAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
             showOtherInfo(holder, userList, position);
         }
 

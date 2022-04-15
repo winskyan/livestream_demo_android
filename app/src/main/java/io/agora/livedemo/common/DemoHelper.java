@@ -108,9 +108,10 @@ public class DemoHelper {
      */
     public static void saveCurrentUser() {
         PreferenceManager.getInstance().saveAgoraId(getCurrentDemoUser().getId());
+        PreferenceManager.getInstance().savePwd(getCurrentDemoUser().getPwd());
         PreferenceManager.getInstance().saveNickname(getCurrentDemoUser().getNickName());
-        PreferenceManager.getInstance().saveAvatarResourceIndex(getCurrentDemoUser().getAvatarResourceIndex());
-        PreferenceManager.getInstance().saveAvatarResource(getCurrentDemoUser().getAvatarResource());
+        PreferenceManager.getInstance().saveAvatarDefaultResource(getCurrentDemoUser().getAvatarDefaultResource());
+        PreferenceManager.getInstance().saveAvatarUrl(getCurrentDemoUser().getAvatarUrl());
     }
 
     /**
@@ -118,50 +119,30 @@ public class DemoHelper {
      */
     public static void clearUser() {
         PreferenceManager.getInstance().saveAgoraId("");
+        PreferenceManager.getInstance().savePwd("");
         PreferenceManager.getInstance().saveNickname("");
-        PreferenceManager.getInstance().saveAvatarResource(-1);
+        PreferenceManager.getInstance().saveAvatarDefaultResource(-1);
+        PreferenceManager.getInstance().saveAvatarUrl("");
     }
 
     public static String getAgoraId() {
         return PreferenceManager.getInstance().getAgoraId();
     }
 
+    public static String getPwd() {
+        return PreferenceManager.getInstance().getPwd();
+    }
+
     public static String getNickName() {
         return PreferenceManager.getInstance().getNickname();
     }
 
-    public static int getAvatarResource() {
-        return PreferenceManager.getInstance().getAvatarResource();
+    public static int getAvatarDefaultResource() {
+        return PreferenceManager.getInstance().getAvatarDefaultResource();
     }
 
-    public static int getAvatarResourceIndex() {
-        return PreferenceManager.getInstance().getAvatarResourceIndex();
-    }
-
-    /**
-     * get user avatar
-     *
-     * @param username
-     * @return
-     */
-    public static int getAvatarResource(String username) {
-        return getAvatarResource(username, 0);
-    }
-
-    /**
-     * get user avatar
-     *
-     * @param username
-     * @return
-     */
-    public static int getAvatarResource(String username, int defaultDrawable) {
-        User user = UserRepository.getInstance().getCurrentUser();
-        if (user == null) {
-            return defaultDrawable == 0 ? R.drawable.live_logo : defaultDrawable;
-        }
-        DemoApplication context = DemoApplication.getInstance();
-        int resId = context.getResources().getIdentifier("em_avatar_" + user.getAvatarResource(), "drawable", context.getPackageName());
-        return resId == 0 ? R.drawable.live_logo : resId;
+    public static String getAvatarUrl() {
+        return PreferenceManager.getInstance().getAvatarUrl();
     }
 
     /**

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.Random;
 
@@ -25,6 +26,7 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
@@ -55,13 +57,13 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     final int praiseSendDelay = 4 * 1000;
     private Thread sendPraiseThread;
     /**
-     * 是否是切换owner的操作，如果是切换owner的操作，则不调用退出聊天室的逻辑。防止新页面刚加入直播间，正在销毁的页面又调用了退出直播间的操作，导致聊天室出现异常。
+     * Whether it is an operation of switching the owner, if it is an operation of switching the owner, the logic of exiting the chat room will not be called. Prevent the new page from joining the live broadcast room, and the page being destroyed calls the operation of exiting the live broadcast room, resulting in an exception in the chat room.
      */
-    private boolean isSwitchOwner;//是否是切换owner的操作
+    private boolean isSwitchOwner;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_live_audience;
+        return R.layout.fragment_live_audience;
     }
 
     @Override
@@ -74,22 +76,43 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         switchCameraView.setVisibility(View.GONE);
-        likeImageView.setVisibility(View.VISIBLE);
+        closeIv.setVisibility(View.VISIBLE);
+        liveReceiveGift.setVisibility(View.VISIBLE);
         Glide.with(mContext).load(liveRoom.getCover()).placeholder(R.color.placeholder).into(coverView);
+    }
 
+    @Override
+    protected void updateAvatar() {
+        super.updateAvatar();
+        Glide.with(this).load(mAvatarUrl).apply(RequestOptions.placeholderOf(R.drawable.avatar_default)).into(ivIcon);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
         tvAttention.setOnClickListener(this);
+        closeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaveRoom();
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
-        usernameView.setText(DemoHelper.getNickName(liveRoom.getOwner()));
-        ivIcon.setImageResource(DemoHelper.getAvatarResource(liveRoom.getOwner()));
+        EaseUserUtils.showUserAvatar(mContext, liveRoom.getOwner(), ivIcon);
+        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION, String.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if (TextUtils.isEmpty(response)) {
+                        layoutAttention.setVisibility(View.GONE);
+                    } else {
+                        layoutAttention.setVisibility(View.VISIBLE);
+                        tvAttention.setText(response);
+                    }
+                });
+
         getLiveRoomDetail();
     }
 
@@ -147,26 +170,28 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     protected void skipToListDialog() {
         super.skipToListDialog();
-        LiveMemberListDialog dialog = (LiveMemberListDialog) getChildFragmentManager().findFragmentByTag("liveMember");
-        if (dialog == null) {
-            dialog = LiveMemberListDialog.getNewInstance(chatroomId);
-        }
-        if (dialog.isAdded()) {
-            return;
-        }
-        dialog.show(getChildFragmentManager(), "liveMember");
-        dialog.setOnItemClickListener(new LiveMemberListDialog.OnMemberItemClickListener() {
-            @Override
-            public void OnMemberItemClick(View view, int position, String member) {
-//                showUserDetailsDialog(member);
+        if (chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())) {
+            try {
+                showUserList();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        } else {
+            LiveMemberListDialog dialog = (LiveMemberListDialog) getChildFragmentManager().findFragmentByTag("liveMember");
+            if (dialog == null) {
+                dialog = LiveMemberListDialog.getNewInstance(chatroomId);
+            }
+            if (dialog.isAdded()) {
+                return;
+            }
+            dialog.show(getChildFragmentManager(), "liveMember");
+        }
     }
 
     @Override
     protected void anchorClick() {
         super.anchorClick();
-        showUserDetailsDialog(chatroom.getOwner());
+        //showUserDetailsDialog(chatroom.getOwner());
     }
 
     @Override
@@ -177,7 +202,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
     @Override
     protected void showPraise(int count) {
-        //观众端不展示动画
+        //The audience does not show animations
     }
 
     @Override
@@ -189,6 +214,11 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                 liveListener.onRoomOwnerChangedToCurrentUser(chatRoomId, newOwner);
             }
         }
+    }
+
+    @Override
+    public void onAdminChanged() {
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatroomId);
     }
 
     private void showGiftDialog() {
@@ -223,7 +253,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    //如果当前用户是主播，则进入主播房间
+                    //If the current user is the host, enter the host room
                     if (DemoHelper.isOwner(data.getOwner())) {
                         isSwitchOwner = true;
                         if (liveListener != null) {
@@ -233,7 +263,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                     }
                     LiveAudienceFragment.this.liveRoom = data;
                     if (DemoHelper.isLiving(data.getStatus())) {
-                        //直播正在进行
                         if (liveListener != null) {
                             liveListener.onLiveOngoing(data);
                         }
@@ -242,7 +271,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         joinChatRoom();
 
                     } else {
-                        mContext.showLongToast("直播已结束");
+                        mContext.showLongToast("Live stream End");
                         if (liveListener != null) {
                             liveListener.onLiveClosed();
                         }
@@ -260,7 +289,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     private void joinChatRoom() {
-        //loadingLayout.setVisibility(View.INVISIBLE);
         ChatClient.getInstance()
                 .chatroomManager()
                 .joinChatRoom(chatroomId, new ValueCallBack<ChatRoom>() {
@@ -271,20 +299,19 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         addChatRoomChangeListener();
                         onMessageListInit();
                         startCycleRefresh();
-                        //postUserChangeEvent(StatisticsType.JOIN, ChatClient.getInstance().getCurrentUser());
                     }
 
                     @Override
                     public void onError(int i, String s) {
                         EMLog.d(TAG, "audience join chat room fail message: " + s);
                         if (i == Error.GROUP_PERMISSION_DENIED || i == Error.CHATROOM_PERMISSION_DENIED) {
-                            mContext.showLongToast("你没有权限加入此房间");
+                            mContext.showLongToast("You do not have permission to join this room");
                             mContext.finish();
                         } else if (i == Error.CHATROOM_MEMBERS_FULL) {
-                            mContext.showLongToast("房间成员已满");
+                            mContext.showLongToast("Room is full");
                             mContext.finish();
                         } else {
-                            mContext.showLongToast("加入聊天室失败: " + s);
+                            mContext.showLongToast("Failed to join chat room: " + s);
                         }
                     }
                 });
@@ -308,12 +335,17 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
             if (isMessageListInited && !isSwitchOwner) {
-                ChatClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
-                isMessageListInited = false;
-                EMLog.d(TAG, "audience leave chat room");
+                leaveRoom();
                 //postUserChangeEvent(StatisticsType.LEAVE, ChatClient.getInstance().getCurrentUser());
             }
         }
+    }
+
+    private void leaveRoom() {
+        ChatClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+        isMessageListInited = false;
+        EMLog.d(TAG, "audience leave chat room");
+        mContext.finish();
     }
 
     @Override

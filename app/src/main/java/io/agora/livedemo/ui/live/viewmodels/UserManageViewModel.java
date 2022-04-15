@@ -38,20 +38,10 @@ public class UserManageViewModel extends AndroidViewModel {
         return whitesObservable;
     }
 
-    /**
-     * 获取白名单
-     *
-     * @param roomId
-     */
     public void getWhiteList(String roomId) {
         whitesObservable.addSource(repository.getWhiteList(roomId), response -> whitesObservable.postValue(response));
     }
 
-    /**
-     * 获取成员列表
-     *
-     * @param roomId
-     */
     public void getMembers(String roomId) {
         observable.addSource(repository.getMembers(roomId), response -> observable.postValue(response));
     }
@@ -60,11 +50,6 @@ public class UserManageViewModel extends AndroidViewModel {
         return muteObservable;
     }
 
-    /**
-     * 获取禁言列表
-     *
-     * @param roomId
-     */
     public void getMuteList(String roomId) {
         muteObservable.addSource(repository.getMuteList(roomId), response -> muteObservable.postValue(response));
     }
@@ -73,23 +58,11 @@ public class UserManageViewModel extends AndroidViewModel {
         return chatRoomObservable;
     }
 
-    /**
-     * 加入白名单
-     *
-     * @param chatRoomId
-     * @param members
-     */
     public void addToChatRoomWhiteList(String chatRoomId, List<String> members) {
         chatRoomObservable.addSource(repository.addToChatRoomWhiteList(chatRoomId, members),
                 response -> chatRoomObservable.postValue(response));
     }
 
-    /**
-     * 将用户从白名单中移除
-     *
-     * @param chatRoomId
-     * @param members
-     */
     public void removeFromChatRoomWhiteList(String chatRoomId, List<String> members) {
         chatRoomObservable.addSource(repository.removeFromChatRoomWhiteList(chatRoomId, members),
                 response -> chatRoomObservable.postValue(response));
@@ -99,56 +72,54 @@ public class UserManageViewModel extends AndroidViewModel {
         return checkInWhiteObservable;
     }
 
-    /**
-     * 检查是否在白名单中
-     *
-     * @param username
-     */
     public void checkIfInGroupWhiteList(String username) {
         checkInWhiteObservable.addSource(repository.checkIfInGroupWhiteList(username),
                 response -> checkInWhiteObservable.postValue(response));
     }
 
-    /**
-     * 禁止聊天室成员发言
-     *
-     * @param chatRoomId
-     * @param members
-     * @param duration
-     */
     public void muteChatRoomMembers(String chatRoomId, List<String> members, long duration) {
         chatRoomObservable.addSource(repository.MuteChatRoomMembers(chatRoomId, members, duration),
                 response -> chatRoomObservable.postValue(response));
     }
 
-    /**
-     * 取消禁言
-     *
-     * @param chatRoomId
-     * @param members
-     */
     public void unMuteChatRoomMembers(String chatRoomId, List<String> members) {
         chatRoomObservable.addSource(repository.unMuteChatRoomMembers(chatRoomId, members),
                 response -> chatRoomObservable.postValue(response));
     }
 
-    /**
-     * 一键禁言
-     *
-     * @param chatRoomId
-     */
+
     public void muteAllMembers(String chatRoomId) {
         chatRoomObservable.addSource(repository.muteAllMembers(chatRoomId),
                 response -> chatRoomObservable.postValue(response));
     }
 
-    /**
-     * 一键解除禁言
-     *
-     * @param chatRoomId
-     */
     public void unMuteAllMembers(String chatRoomId) {
         chatRoomObservable.addSource(repository.unmuteAllMembers(chatRoomId),
+                response -> chatRoomObservable.postValue(response));
+    }
+
+    public void banChatRoomMembers(String chatRoomId, List<String> members) {
+        chatRoomObservable.addSource(repository.banChatRoomMembers(chatRoomId, members),
+                response -> chatRoomObservable.postValue(response));
+    }
+
+    public void unbanChatRoomMembers(String chatRoomId, List<String> members) {
+        chatRoomObservable.addSource(repository.unbanChatRoomMembers(chatRoomId, members),
+                response -> chatRoomObservable.postValue(response));
+    }
+
+    public void addChatRoomAdmin(String chatRoomId, String member) {
+        chatRoomObservable.addSource(repository.addChatRoomAdmin(chatRoomId, member),
+                response -> chatRoomObservable.postValue(response));
+    }
+
+    public void removeChatRoomAdmin(String chatRoomId, String member) {
+        chatRoomObservable.addSource(repository.removeChatRoomAdmin(chatRoomId, member),
+                response -> chatRoomObservable.postValue(response));
+    }
+
+    public void fetchChatRoom(String chatRoomId) {
+        chatRoomObservable.addSource(repository.fetchChatRoom(chatRoomId),
                 response -> chatRoomObservable.postValue(response));
     }
 }

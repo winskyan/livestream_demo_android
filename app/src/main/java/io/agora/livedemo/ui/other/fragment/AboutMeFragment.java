@@ -6,6 +6,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
@@ -34,8 +37,8 @@ public class AboutMeFragment extends BaseLiveFragment {
         username = findViewById(R.id.username);
         itemAbout = findViewById(R.id.item_about);
 
-        EaseUserUtils.showUserAvatar(mContext, String.valueOf(DemoHelper.getAvatarResource()), userIcon);
-        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), username);
+        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(userIcon);
+        EaseUserUtils.setUserNick(DemoHelper.getNickName(), username);
 
         itemAbout.setContent("V" + Utils.getAppVersionName(mContext));
     }
@@ -60,6 +63,10 @@ public class AboutMeFragment extends BaseLiveFragment {
                     if (!TextUtils.isEmpty(response)) {
                         EaseUserUtils.setUserNick(response, username);
                     }
+                });
+        LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(userIcon);
                 });
     }
 }

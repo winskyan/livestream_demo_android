@@ -253,7 +253,7 @@ public class ShowGiveGiftView extends LinearLayout {
         User user = gift.getUser();
         if (user != null) {
             tvName.setText(DemoHelper.getNickName(user.getNickName()));
-            ivIcon.setImageResource(DemoHelper.getAvatarResource(user.getNickName()));
+            //ivIcon.setImageResource(DemoHelper.getAvatarResource(user.getNickName()));
         }
 
         // 添加标识，记录礼物个数

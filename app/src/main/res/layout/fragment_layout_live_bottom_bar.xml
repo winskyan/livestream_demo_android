@@ -15,7 +15,6 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
         android:background="@drawable/live_button_bg_shape"
         android:padding="@dimen/em_margin_10"
         android:src="@drawable/live_user_manager"
@@ -35,21 +34,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/live_receive_gift"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginEnd="@dimen/em_margin_10"
-        android:layout_marginRight="@dimen/em_margin_10"
-        android:background="@drawable/live_button_bg_gift_shape"
-        android:padding="@dimen/em_margin_10"
-        android:src="@drawable/live_gift"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -83,9 +67,22 @@
         android:padding="@dimen/margin_10"
         android:scaleType="fitCenter"
         android:src="@drawable/live_anchor_close"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/live_receive_gift"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginRight="@dimen/em_margin_20" />
+
+    <ImageView
+        android:id="@+id/live_receive_gift"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="@dimen/margin_10"
+        android:scaleType="fitCenter"
+        android:src="@drawable/live_gift"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

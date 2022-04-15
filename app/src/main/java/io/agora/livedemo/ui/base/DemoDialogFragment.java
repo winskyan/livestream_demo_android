@@ -19,6 +19,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     public Button mBtnDialogConfirm;
     public Group mGroupMiddle;
     public int title;
+    public String titleStr;
     public int confirmTitle;
     public boolean canceledOnTouchOutside;
     public int confirmColor;
@@ -104,6 +105,11 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     @Override
     public void setTitle(@StringRes int title) {
         this.title = title;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.titleStr = title;
     }
 
     @Override

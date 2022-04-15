@@ -1,16 +1,38 @@
 package io.agora.livedemo.ui.live.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
+import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import io.agora.ValueCallBack;
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatRoom;
+import io.agora.chat.ChatRoomManager;
+import io.agora.chat.UserInfo;
+import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
+import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.LiveDataBus;
@@ -18,21 +40,29 @@ import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
-import io.agora.livedemo.ui.live.adapter.FragmentAdapter;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
-
-/**
- * Created by wei on 2017/3/3.
- */
+import io.agora.livedemo.utils.StatusBarCompat;
+import io.agora.util.EMLog;
 
 public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private BaseActivity mContext;
     private String chatroomId;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    private FragmentAdapter adapter;
     private UserManageViewModel viewModel;
+    protected ChatRoomManager mChatRoomManager;
+    protected ChatRoom mChatRoom;
+
+    private RecyclerView mRoleTypeView;
+    private RecyclerView mUserListView;
+    private RoleTypeAdapter mRoleTypeAdapter;
+    private UserListAdapter mUserListAdapter;
+    private List<String> mRoleTypeListData;
+    private List<String> mUserListData;
+    private List<String> mMuteListData;
+    private List<String> mAdminListData;
+
+    private String mCurrentRoleType;
+
 
     public RoomUserManagementDialog() {
     }
@@ -52,11 +82,62 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
         return R.layout.dialog_room_user_management;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            final float screenHeight = EaseUtils.getScreenInfo(mContext)[1];
+            final int navBarHeight = StatusBarCompat.getNavigationBarHeight(mContext);
+            lp.height = (int) screenHeight * 2 / 5 + navBarHeight;
+            dialogWindow.setAttributes(lp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        mRoleTypeView = findViewById(R.id.rv_role_type_list);
+        mUserListView = findViewById(R.id.rv_user_list);
+
+        LinearLayoutManager ms = new LinearLayoutManager(mContext);
+        ms.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRoleTypeView.setLayoutManager(ms);
+
+        mRoleTypeAdapter = new RoleTypeAdapter();
+
+        mRoleTypeView.setAdapter(mRoleTypeAdapter);
+        mRoleTypeAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                mCurrentRoleType = mRoleTypeAdapter.getItem(position);
+                mRoleTypeAdapter.setCurrentRoleType(mCurrentRoleType);
+                updateUserList();
+            }
+        });
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        mUserListView.setLayoutManager(linearLayoutManager);
+
+        mUserListAdapter = new UserListAdapter();
+        mUserListAdapter.hideEmptyView(true);
+        mUserListView.setAdapter(mUserListAdapter);
+        mUserListAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                EMLog.i("lives", "user=" + mUserListAdapter.getItem(position));
+                RoomUserManagementDialog.this.dismiss();
+                LiveDataBus.get().with(DemoConstants.SHOW_USER_DETAIL).postValue(mUserListAdapter.getItem(position));
+            }
+        });
+
+        mUserListView.addItemDecoration(new UserListSpacesItemDecoration((int) EaseUtils.dip2px(mContext, 20)));
+
     }
 
     @Override
@@ -67,38 +148,29 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
-                    String title = getString(R.string.em_live_user_manage_users, data.getAudienceNum() + 1);
-                    adapter.getTitles().remove(0);
-                    adapter.getTitles().add(0, title);
-                    adapter.notifyDataSetChanged();
+
                 }
             });
         });
-        viewModel.getWhitesObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
+
+        viewModel.getChatRoomObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<ChatRoom>() {
                 @Override
-                public void onSuccess(List<String> data) {
-                    String title = getString(R.string.em_live_user_manage_white, data.size());
-                    adapter.getTitles().remove(1);
-                    adapter.getTitles().add(1, title);
-                    adapter.notifyDataSetChanged();
+                public void onSuccess(ChatRoom data) {
+                    mChatRoom = data;
                 }
             });
         });
-        viewModel.getMuteObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(List<String> data) {
-                    String title = getString(R.string.em_live_user_manage_mute, data.size());
-                    adapter.getTitles().remove(2);
-                    adapter.getTitles().add(2, title);
-                    adapter.notifyDataSetChanged();
-                }
-            });
-        });
+
         LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if (event != null && event) {
-                getDataFromServer();
+                updateChatRoom();
+            }
+        });
+
+        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_STATE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if (event != null && event) {
+                updateChatRoom();
             }
         });
     }
@@ -106,27 +178,235 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     @Override
     public void initData() {
         super.initData();
-        setupViewPager();
-        tabLayout.setupWithViewPager(viewPager);
+        mChatRoomManager = ChatClient.getInstance().chatroomManager();
+        updateChatRoom();
 
-        getDataFromServer();
+        mRoleTypeListData = new ArrayList<>(5);
+        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_ALL);
+        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_MODERATORS);
+        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_ALLOWED);
+        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_MUTED);
+        mRoleTypeListData.add(DemoConstants.ROLE_TYPE_BANNED);
+
+        mCurrentRoleType = mRoleTypeListData.get(0);
+        mRoleTypeAdapter.setCurrentRoleType(mCurrentRoleType);
+        mRoleTypeAdapter.setData(mRoleTypeListData);
+
+        mUserListData = new ArrayList<>();
+        mMuteListData = new ArrayList<>();
+        mAdminListData = new ArrayList<>();
+
+        updateUserList();
     }
 
-    private void getDataFromServer() {
-        viewModel.getMembers(chatroomId);
-        viewModel.getWhiteList(chatroomId);
-        viewModel.getMuteList(chatroomId);
+    private void updateChatRoom() {
+        mChatRoom = mChatRoomManager.getChatRoom(chatroomId);
     }
 
-    private void setupViewPager() {
-        adapter = new FragmentAdapter(getChildFragmentManager());
-        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.MEMBER), "成员");
-        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.BLACKLIST), "白名单");
-        adapter.addFragment(RoomUserManagementFragment.newInstance(chatroomId,
-                RoomUserManagementFragment.ManagementType.MUTE), "用户禁言");
-        viewPager.setAdapter(adapter);
+    private void updateUserList() {
+        if (null == mChatRoom) {
+            return;
+        }
+        mUserListAdapter.setOwner(mChatRoom.getOwner());
+
+        mAdminListData.clear();
+        mAdminListData.addAll(mChatRoom.getAdminList());
+        mUserListAdapter.setAdminList(mAdminListData);
+
+        Map<String, Long> muteMap = mChatRoom.getMuteList();
+        mMuteListData.clear();
+        for (Map.Entry<String, Long> entry : muteMap.entrySet()) {
+            mMuteListData.add(entry.getKey());
+        }
+        mUserListAdapter.setMuteList(mMuteListData);
+
+        mUserListData.clear();
+        if (DemoConstants.ROLE_TYPE_ALL.equals(mCurrentRoleType)) {
+            mUserListData.add(mChatRoom.getOwner());
+            mUserListData.addAll(mChatRoom.getAdminList());
+            mUserListData.addAll(mChatRoom.getMemberList());
+        } else if (DemoConstants.ROLE_TYPE_MODERATORS.equals(mCurrentRoleType)) {
+            mUserListData.addAll(mAdminListData);
+        } else if (DemoConstants.ROLE_TYPE_ALLOWED.equals(mCurrentRoleType)) {
+            mUserListData.addAll(mChatRoom.getWhitelist());
+        } else if (DemoConstants.ROLE_TYPE_MUTED.equals(mCurrentRoleType)) {
+            mUserListData.addAll(mMuteListData);
+        } else if (DemoConstants.ROLE_TYPE_BANNED.equals(mCurrentRoleType)) {
+            mUserListData.addAll(mChatRoom.getBlacklist());
+        }
+        if (mUserListData.size() == 0) {
+            mUserListAdapter.setData(mUserListData);
+        } else {
+            ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(mUserListData.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
+                @Override
+                public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
+                    if (null != RoomUserManagementDialog.this.getActivity()) {
+                        RoomUserManagementDialog.this.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mUserListAdapter.setStringUserInfoMap(stringUserInfoMap);
+                                mUserListAdapter.setData(mUserListData);
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+            });
+        }
+
+    }
+
+
+    private static class RoleTypeAdapter extends EaseBaseRecyclerViewAdapter<String> {
+
+        private static String mCurrentRoleType;
+
+        public void setCurrentRoleType(String currentRoleType) {
+            mCurrentRoleType = currentRoleType;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public RoleTypeViewHolder getViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.row_role_type, parent, false);
+            return new RoleTypeViewHolder(view);
+        }
+
+        private static class RoleTypeViewHolder extends ViewHolder<String> {
+            private TextView roleType;
+            private ConstraintLayout layout;
+
+            public RoleTypeViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+
+            @Override
+            public void initView(View itemView) {
+                layout = findViewById(R.id.layout);
+                roleType = findViewById(R.id.role_type);
+            }
+
+            @Override
+            public void setData(String item, int position) {
+                roleType.setText(item);
+                if (!TextUtils.isEmpty(mCurrentRoleType) && mCurrentRoleType.equals(item)) {
+                    layout.setBackgroundResource(R.drawable.bg_role_type_checked);
+                } else {
+                    layout.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        }
+    }
+
+    private static class UserListAdapter extends EaseBaseRecyclerViewAdapter<String> {
+        private static String owner;
+        private static List<String> adminList;
+        private static List<String> muteList;
+        private static Map<String, UserInfo> stringUserInfoMap;
+
+        public UserListAdapter() {
+        }
+
+        public void setOwner(String owner) {
+            this.owner = owner;
+        }
+
+        public void setAdminList(List<String> adminList) {
+            this.adminList = adminList;
+        }
+
+        public void setMuteList(List<String> muteList) {
+            this.muteList = muteList;
+        }
+
+        public void setStringUserInfoMap(Map<String, UserInfo> stringUserInfoMap) {
+            UserListAdapter.stringUserInfoMap = stringUserInfoMap;
+        }
+
+        public Map<String, UserInfo> getStringUserInfoMap() {
+            return stringUserInfoMap;
+        }
+
+        @Override
+        public UserListViewHolder getViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_user_list, parent, false);
+            return new UserListViewHolder(view, mContext);
+        }
+
+        private static class UserListViewHolder extends ViewHolder<String> {
+            private ImageView ivUserAvatar;
+            private TextView tvUserName;
+            private TextView tvRoleType;
+            private ImageView roleState;
+            private Context context;
+
+            public UserListViewHolder(@NonNull View itemView, Context context) {
+                super(itemView);
+                this.context = context;
+            }
+
+            @Override
+            public void initView(View itemView) {
+                ivUserAvatar = findViewById(R.id.iv_user_avatar);
+                tvUserName = findViewById(R.id.tv_user_name);
+                tvRoleType = findViewById(R.id.tv_role_type);
+                roleState = findViewById(R.id.iv_state_icon);
+            }
+
+            @Override
+            public void setData(String item, int position) {
+                tvUserName.setText(stringUserInfoMap.get(item).getNickname());
+                try {
+                    Glide.with(context).load(stringUserInfoMap.get(item).getAvatarUrl()).placeholder(R.drawable.avatar_default).error(R.drawable.avatar_default).into(ivUserAvatar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (item.equals(owner)) {
+                    tvRoleType.setText(context.getResources().getString(R.string.role_type_streamer));
+                    tvRoleType.setVisibility(View.VISIBLE);
+                    tvRoleType.setBackgroundResource(R.drawable.live_streamer_bg);
+                } else if (null != adminList && adminList.contains(item)) {
+                    tvRoleType.setText(context.getResources().getString(R.string.role_type_moderator));
+                    tvRoleType.setBackgroundResource(R.drawable.live_moderator_bg);
+                    tvRoleType.setVisibility(View.VISIBLE);
+                } else {
+                    tvRoleType.setVisibility(View.GONE);
+                }
+                if (null != muteList && muteList.contains(item)) {
+                    roleState.setVisibility(View.VISIBLE);
+                    roleState.setImageResource(R.drawable.live_mute_icon);
+                } else {
+                    roleState.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    private static class UserListSpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private final int space;
+
+        public UserListSpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, @NonNull View view,
+                                   RecyclerView parent, @NonNull RecyclerView.State state) {
+            outRect.left = 0;
+            outRect.right = 0;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = 0;
+            } else {
+                outRect.top = 0;
+            }
+        }
     }
 
 }

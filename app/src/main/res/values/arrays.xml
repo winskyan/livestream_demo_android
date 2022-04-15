@@ -11,8 +11,8 @@
     <string-array name="gender_types">
         <item>Male</item>
         <item>Female</item>
+        <item>Other</item>
         <item>Secret</item>
     </string-array>
-
 
 </resources>

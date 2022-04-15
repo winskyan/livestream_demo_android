@@ -20,7 +20,6 @@ import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
-import io.agora.chat.uikit.models.EaseUser;
 import io.agora.cloud.EMCloudOperationCallback;
 import io.agora.cloud.EMHttpClient;
 import io.agora.cloud.HttpClientManager;
@@ -30,7 +29,6 @@ import io.agora.livedemo.BuildConfig;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.LoginBean;
 import io.agora.livedemo.data.model.User;
-import io.agora.util.EMLog;
 
 public class ClientRepository extends BaseEMRepository {
 
@@ -47,7 +45,52 @@ public class ClientRepository extends BaseEMRepository {
                 runOnIOThread(() -> {
                     Map<String, String> headers = new HashMap<String, String>();
                     headers.put("Authorization", "Bearer " + ChatClient.getInstance().getAccessToken());
-                    EMHttpClient.getInstance().uploadFile(localPath, "", headers, new EMCloudOperationCallback() {
+                    String url = BuildConfig.BASE_URL + ChatClient.getInstance().getOptions().getAppKey().replace("#", "/") + "/chatfiles";
+                    EMHttpClient.getInstance().uploadFile(localPath, url, headers, new EMCloudOperationCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            try {
+                                JSONObject jsonObj = new JSONObject(result);
+                                JSONObject entitys = jsonObj.getJSONArray("entities").getJSONObject(0);
+                                String uuid = entitys.getString("uuid");
+                                String url = jsonObj.getString("uri");
+                                callBack.onSuccess(createLiveData(url + "/" + uuid));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            callBack.onError(ErrorCode.UNKNOWN_ERROR, msg);
+                        }
+
+                        @Override
+                        public void onProgress(int i) {
+
+                        }
+                    });
+                });
+            }
+        }.asLiveData();
+
+    }
+
+    /**
+     * upload avatar
+     *
+     * @param localPath
+     * @return
+     */
+    public LiveData<Resource<String>> updateAvatar(String localPath) {
+        return new NetworkOnlyResource<String, String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                runOnIOThread(() -> {
+                    Map<String, String> headers = new HashMap<String, String>();
+                    headers.put("Authorization", "Bearer " + ChatClient.getInstance().getAccessToken());
+                    String url = BuildConfig.BASE_URL + ChatClient.getInstance().getOptions().getAppKey().replace("#", "/") + "/chatfiles";
+                    EMHttpClient.getInstance().uploadFile(localPath, url, headers, new EMCloudOperationCallback() {
                         @Override
                         public void onSuccess(String result) {
                             try {
@@ -193,7 +236,7 @@ public class ClientRepository extends BaseEMRepository {
         return new NetworkOnlyResource<User, User>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
-                ChatClient.getInstance().login(user.getId(), user.getNickName(), new CallBack() {
+                ChatClient.getInstance().login(user.getId(), user.getPwd(), new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(user));
@@ -219,7 +262,7 @@ public class ClientRepository extends BaseEMRepository {
             protected void createCall(@NonNull ResultCallBack<LiveData<User>> callBack) {
                 ThreadManager.getInstance().runOnIOThread(() -> {
                     try {
-                        ChatClient.getInstance().createAccount(user.getId(), user.getNickName());
+                        ChatClient.getInstance().createAccount(user.getId(), user.getPwd());
                         callBack.onSuccess(createLiveData(user));
                     } catch (ChatException e) {
                         e.printStackTrace();
@@ -445,4 +488,98 @@ public class ClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<ChatRoom>> addChatRoomAdmin(String chatRoomId, String username) {
+        return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatRoom>> callBack) {
+                getChatRoomManager().asyncAddChatRoomAdmin(chatRoomId, username, new ValueCallBack<ChatRoom>() {
+                    @Override
+                    public void onSuccess(ChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<ChatRoom>> removeChatRoomAdmin(String chatRoomId, String username) {
+        return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatRoom>> callBack) {
+                getChatRoomManager().asyncRemoveChatRoomAdmin(chatRoomId, username, new ValueCallBack<ChatRoom>() {
+                    @Override
+                    public void onSuccess(ChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<ChatRoom>> banChatRoomMembers(String chatRoomId, List<String> members) {
+        return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatRoom>> callBack) {
+                getChatRoomManager().asyncBlockChatroomMembers(chatRoomId, members, new ValueCallBack<ChatRoom>() {
+                    @Override
+                    public void onSuccess(ChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<ChatRoom>> unbanChatRoomMembers(String chatRoomId, List<String> members) {
+        return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatRoom>> callBack) {
+                getChatRoomManager().asyncUnBlockChatRoomMembers(chatRoomId, members, new ValueCallBack<ChatRoom>() {
+                    @Override
+                    public void onSuccess(ChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<ChatRoom>> fetchChatRoom(String chatRoomId) {
+        return new NetworkOnlyResource<ChatRoom, ChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatRoom>> callBack) {
+                getChatRoomManager().asyncFetchChatRoomFromServer(chatRoomId, new ValueCallBack<ChatRoom>() {
+                    @Override
+                    public void onSuccess(ChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 }

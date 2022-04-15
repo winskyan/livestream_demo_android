@@ -27,6 +27,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.net.URI;
@@ -42,9 +47,12 @@ import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
+import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.databinding.ActivityEditProfileBinding;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
 import io.agora.livedemo.ui.live.fragment.ListDialogFragment;
+import io.agora.livedemo.ui.live.viewmodels.EditProfileViewModel;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.PathUtil;
 import io.agora.util.VersionUtils;
@@ -65,6 +73,8 @@ public class EditProfileActivity extends BaseLiveActivity {
     protected File mCameraFile;
     private Uri mCacheUri;
 
+    private EditProfileViewModel mViewModel;
+
     @Override
     protected View getContentView() {
         mBinding = ActivityEditProfileBinding.inflate(getLayoutInflater());
@@ -75,8 +85,8 @@ public class EditProfileActivity extends BaseLiveActivity {
     protected void initView() {
         super.initView();
 
-        EaseUserUtils.showUserAvatar(mContext, String.valueOf(DemoHelper.getAvatarResource()), mBinding.userIcon);
-        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
+        Glide.with(this).load(DemoHelper.getAvatarUrl()).into(mBinding.userIcon);
+        EaseUserUtils.setUserNick(DemoHelper.getNickName(), mBinding.itemUsername.getTvContent());
         mBinding.titlebarTitle.setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
     }
 
@@ -108,7 +118,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 Button cancelBtn = view.findViewById(R.id.cancel);
 
                 title.setText(mContext.getResources().getString(R.string.setting_username_title));
-                editContent.setText(DemoHelper.getAgoraId());
+                editContent.setText(DemoHelper.getNickName());
                 editContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_USERNAME_LENGTH)});
                 editContent.setSelection(editContent.getText().toString().length());
                 editContent.addTextChangedListener(new TextWatcher() {
@@ -129,7 +139,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 });
 
 
-                countTip.setText(DemoHelper.getAgoraId().length() + "/" + MAX_USERNAME_LENGTH);
+                countTip.setText(DemoHelper.getNickName().length() + "/" + MAX_USERNAME_LENGTH);
 
                 final Dialog dialog = builder.create();
                 dialog.show();
@@ -140,7 +150,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 confirmBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setUsername(editContent.getText().toString());
+                        setNickname(editContent.getText().toString());
                         dialog.cancel();
                     }
                 });
@@ -165,12 +175,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                         .setOnItemClickListener(new ListDialogFragment.OnDialogItemClickListener() {
                             @Override
                             public void OnItemClick(View view, int position) {
-                                if (position != 2) {
-                                    position = position + 1;
-                                } else {
-                                    position = 0;
-                                }
-                                setGender(position);
+                                setGender(position + 1);
                             }
                         })
                         .show();
@@ -224,19 +229,47 @@ public class EditProfileActivity extends BaseLiveActivity {
     @Override
     protected void initData() {
         super.initData();
+        mViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         mGenderArray = getResources().getStringArray(R.array.gender_types);
 
-        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{DemoHelper.getAgoraId()}, new ValueCallBack<Map<String, UserInfo>>() {
+        mViewModel.getUploadAvatarObservable().observe(mContext, new Observer<Resource<String>>() {
+            @Override
+            public void onChanged(Resource<String> stringResource) {
+                EditProfileActivity.this.parseResource(stringResource, new OnResourceParseCallback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.AVATAR_URL, DemoHelper.getAvatarUrl(), new ValueCallBack<String>() {
+                            @Override
+                            public void onSuccess(String value) {
+                                DemoHelper.getCurrentDemoUser().setAvatarUrl(data);
+                                DemoHelper.saveCurrentUser();
+                                LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE).postValue(true);
+                            }
+
+                            @Override
+                            public void onError(int i, String s) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{ChatClient.getInstance().getCurrentUser()}, new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
                 EditProfileActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
-                            Log.i(TAG, "user=" + user.getKey() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth());
-                            if (DemoHelper.getAgoraId().equals(user.getKey())) {
-                                updateGenderView(user.getValue().getGender());
-                                updateBirthdayView(user.getValue().getBirth());
+                            Log.i(TAG, "user=" + user.getKey() + "," + user.getValue().getNickname() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth() + "," + user.getValue().getAvatarUrl());
+                            if (ChatClient.getInstance().getCurrentUser().equals(user.getKey())) {
+                                updateUserAvatar(user.getValue().getAvatarUrl());
+                                updateNickname(user.getValue().getNickname());
+                                updateGender(user.getValue().getGender());
+                                updateBirthday(user.getValue().getBirth());
                                 break;
                             }
                         }
@@ -252,91 +285,10 @@ public class EditProfileActivity extends BaseLiveActivity {
 
     }
 
-    private void setGender(final int gender) {
-        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.GENDER, String.valueOf(gender), new ValueCallBack<String>() {
-            @Override
-            public void onSuccess(String value) {
-                EditProfileActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateGenderView(gender);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-    }
-
-    private void updateGenderView(int gender) {
-        if (gender < 0 || gender > mGenderArray.length) {
-            Log.e(TAG, "gender value is incorrect,gender=" + gender);
-            return;
+    private void updateUserAvatar(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            Glide.with(this).load(url).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.userIcon);
         }
-        if (0 == gender) {
-            mBinding.itemGender.setContent(mGenderArray[2]);
-        } else {
-            mBinding.itemGender.setContent(mGenderArray[gender - 1]);
-        }
-    }
-
-    private void setBirthday(int year, int month, int day) {
-        final String birthday = month + "/" + day + "/" + year;
-        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.BIRTH, birthday, new ValueCallBack<String>() {
-            @Override
-            public void onSuccess(String value) {
-                EditProfileActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateBirthdayView(birthday);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-
-
-    }
-
-    private void updateBirthdayView(String birthday) {
-        if (!TextUtils.isEmpty(birthday)) {
-            mBinding.itemBirthday.setContent(birthday);
-        } else {
-            mBinding.itemBirthday.setContent(this.getResources().getString(R.string.setting_unknown));
-        }
-    }
-
-    private void setUsername(final String username) {
-        if (TextUtils.isEmpty(username)) {
-            return;
-        }
-        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, username, new ValueCallBack<String>() {
-            @Override
-            public void onSuccess(String value) {
-                EditProfileActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        DemoHelper.getCurrentDemoUser().setId(username);
-                        DemoHelper.saveCurrentUser();
-                        DemoHelper.initDb();
-                        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
-                        LiveDataBus.get().with(DemoConstants.NICKNAME_CHANGE).postValue(username);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
     }
 
     private void selectImageFromLocal() {
@@ -432,13 +384,105 @@ public class EditProfileActivity extends BaseLiveActivity {
             mAvatarPath = new File(new URI(mCacheUri.toString())).getPath();
             Bitmap bitmap = BitmapFactory.decodeFile(mAvatarPath);
             mBinding.userIcon.setImageBitmap(bitmap);
-            setAvatar();
+            setUserAvatar();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void setAvatar() {
+    private void setUserAvatar() {
+        mViewModel.uploadAvatar(mAvatarPath);
+    }
+
+    private void updateNickname(String nickname) {
+        if (!TextUtils.isEmpty(nickname)) {
+            EaseUserUtils.setUserNick(nickname, mBinding.itemUsername.getTvContent());
+        }
+    }
+
+    private void setNickname(final String nickname) {
+        if (TextUtils.isEmpty(nickname)) {
+            return;
+        }
+        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
+            @Override
+            public void onSuccess(String value) {
+                EditProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DemoHelper.getCurrentDemoUser().setNickName(nickname);
+                        DemoHelper.saveCurrentUser();
+                        EaseUserUtils.setUserNick(DemoHelper.getNickName(), mBinding.itemUsername.getTvContent());
+                        LiveDataBus.get().with(DemoConstants.NICKNAME_CHANGE).postValue(nickname);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+    }
+
+    private void updateGender(int gender) {
+        if (gender < 1 || gender > mGenderArray.length) {
+            Log.e(TAG, "gender value is incorrect,gender=" + gender);
+            mBinding.itemGender.setContent(mGenderArray[mGenderArray.length - 1]);
+            return;
+        }
+        mBinding.itemGender.setContent(mGenderArray[gender - 1]);
+    }
+
+
+    private void setGender(final int gender) {
+        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.GENDER, String.valueOf(gender), new ValueCallBack<String>() {
+            @Override
+            public void onSuccess(String value) {
+                EditProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateGender(gender);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+    }
+
+    private void updateBirthday(String birthday) {
+        if (!TextUtils.isEmpty(birthday)) {
+            mBinding.itemBirthday.setContent(birthday);
+        } else {
+            mBinding.itemBirthday.setContent(this.getResources().getString(R.string.setting_unknown));
+        }
+    }
+
+    private void setBirthday(int year, int month, int day) {
+        final String birthday = year + "-" + month + "-" + day;
+        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.BIRTH, birthday, new ValueCallBack<String>() {
+            @Override
+            public void onSuccess(String value) {
+                EditProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateBirthday(birthday);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+
 
     }
+
+
 }

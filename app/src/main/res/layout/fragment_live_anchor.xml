@@ -55,7 +55,7 @@
 
     <include
         android:id="@+id/bottom_bar"
-        layout="@layout/em_layout_live_bottom_bar"
+        layout="@layout/fragment_layout_live_bottom_bar"
         android:visibility="visible" />
 
     <TextView

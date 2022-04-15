@@ -48,9 +48,6 @@ import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
 import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 
-/**
- * Created by wei on 2016/7/25.
- */
 public class RoomUserDetailsDialog extends DialogFragment {
     static boolean sAttentionClicked;
 
@@ -137,7 +134,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
         }
         if (username != null) {
             usernameView.setText(DemoHelper.getNickName(username));
-            ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
+            //ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
 
         if (TextUtils.equals(username, liveRoom.getOwner())) {
@@ -225,9 +222,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 public void onSuccess(List<String> data) {
                     whiteList = data;
                     if (data.contains(username)) {
-                        tvWhiteStatus.setText(getString(R.string.em_live_anchor_remove_from_white));
+                        tvWhiteStatus.setText(getString(R.string.live_anchor_remove_from_white));
                     } else {
-                        tvWhiteStatus.setText(getString(R.string.em_live_anchor_add_white));
+                        tvWhiteStatus.setText(getString(R.string.live_anchor_add_white));
                     }
                 }
             });

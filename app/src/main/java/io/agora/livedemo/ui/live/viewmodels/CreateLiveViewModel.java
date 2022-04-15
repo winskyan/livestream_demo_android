@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import io.agora.chat.ChatClient;
+import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.SingleSourceLiveData;
 import io.agora.livedemo.common.enums.Status;
 import io.agora.livedemo.common.reponsitories.AppServerRepository;
@@ -71,7 +72,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
     public void createLiveRoom(String name, String description, String localPath, String videoType) {
         LiveData<Resource<LiveRoom>> liveData = null;
         if (TextUtils.isEmpty(localPath)) {
-            LiveRoom liveRoom = getLiveRoom(name, description, videoType, null);
+            LiveRoom liveRoom = getLiveRoom(name, description, videoType, DemoHelper.getAvatarUrl());
             liveData = repository.createLiveRoom(liveRoom);
         } else {
             liveData = Transformations.switchMap(clientRepository.updateRoomCover(localPath), input -> {
