@@ -35,7 +35,7 @@ public class ImageGroupView extends ConstraintLayout {
     }
 
     private void initView(Context context) {
-        bgView = LayoutInflater.from(context).inflate(R.layout.em_layout_image_inlude_bg, this, false);
+        bgView = LayoutInflater.from(context).inflate(R.layout.layout_image_inlude_bg, this, false);
         ivIcon = findViewById(R.id.iv_icon);
     }
 

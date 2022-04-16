@@ -54,7 +54,6 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:src="@drawable/live_home_selected" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -67,10 +66,7 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintLeft_toRightOf="@id/ll_home_home"
             app:layout_constraintRight_toLeftOf="@id/ll_home_set"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_home_set"
@@ -89,9 +85,7 @@
                 android:layout_height="26dp"
                 android:src="@drawable/live_set_unselected"
                 app:ease_shape_type="round" />
-
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
@@ -109,7 +103,5 @@
             android:layout_height="match_parent"
             android:padding="5dp"
             android:src="@drawable/live" />
-
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

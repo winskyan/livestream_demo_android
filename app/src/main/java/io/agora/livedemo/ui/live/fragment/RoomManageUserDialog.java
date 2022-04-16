@@ -192,8 +192,8 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
             muteState.setVisibility(View.GONE);
         }
 
-        if (ChatClient.getInstance().getCurrentUser().equals(mChatRoom.getOwner()) || mChatRoom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())) {
-            if (mChatRoom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
+        if (mChatRoom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
+            if (mChatRoom.getOwner().equals(username)) {
                 banAll.setVisibility(View.VISIBLE);
                 if (initView) {
                     banAll.setOnCheckedChangeListener(null);
@@ -201,8 +201,25 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
                     banAll.setOnCheckedChangeListener(this);
                 }
             } else {
-                if (username.equals(mChatRoom.getOwner()) || username.equals(ChatClient.getInstance().getCurrentUser())) {
-                    banAll.setVisibility(View.GONE);
+                if (mChatRoom.getWhitelist().contains(username)) {
+                    removeFromAllowedListItem.setVisibility(View.VISIBLE);
+                    moveToAllowedListItem.setVisibility(View.GONE);
+                } else {
+                    removeFromAllowedListItem.setVisibility(View.GONE);
+                    moveToAllowedListItem.setVisibility(View.VISIBLE);
+                }
+
+                if (mChatRoom.getMuteList().containsKey(username)) {
+                    unmuteItem.setVisibility(View.VISIBLE);
+                    timeoutItem.setVisibility(View.GONE);
+                    muteItem.setVisibility(View.GONE);
+                } else {
+                    unmuteItem.setVisibility(View.GONE);
+                    timeoutItem.setVisibility(View.VISIBLE);
+                    muteItem.setVisibility(View.VISIBLE);
+                }
+
+                if (mChatRoom.getBlacklist().contains(username)) {
                     moveToAllowedListItem.setVisibility(View.GONE);
                     removeFromAllowedListItem.setVisibility(View.GONE);
                     assignAsModeratorItem.setVisibility(View.GONE);
@@ -211,62 +228,20 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
                     muteItem.setVisibility(View.GONE);
                     unmuteItem.setVisibility(View.GONE);
                     banItem.setVisibility(View.GONE);
-                    unbanItem.setVisibility(View.GONE);
+                    unbanItem.setVisibility(View.VISIBLE);
                 } else {
-                    if (mChatRoom.getWhitelist().contains(username)) {
-                        removeFromAllowedListItem.setVisibility(View.VISIBLE);
-                        moveToAllowedListItem.setVisibility(View.GONE);
-                    } else {
-                        removeFromAllowedListItem.setVisibility(View.GONE);
-                        moveToAllowedListItem.setVisibility(View.VISIBLE);
-                    }
+                    banItem.setVisibility(View.VISIBLE);
+                    unbanItem.setVisibility(View.GONE);
+                }
 
+                if (mChatRoom.getAdminList().contains(username)) {
+                    removeAsModeratorItem.setVisibility(View.VISIBLE);
+                    assignAsModeratorItem.setVisibility(View.GONE);
                     if (mChatRoom.getMuteList().containsKey(username)) {
-                        unmuteItem.setVisibility(View.VISIBLE);
                         timeoutItem.setVisibility(View.GONE);
-                        muteItem.setVisibility(View.GONE);
-                    } else {
-                        unmuteItem.setVisibility(View.GONE);
-                        timeoutItem.setVisibility(View.VISIBLE);
-                        muteItem.setVisibility(View.VISIBLE);
-                    }
-
-                    if (mChatRoom.getBlacklist().contains(username)) {
-                        moveToAllowedListItem.setVisibility(View.GONE);
                         removeFromAllowedListItem.setVisibility(View.GONE);
-                        assignAsModeratorItem.setVisibility(View.GONE);
-                        removeAsModeratorItem.setVisibility(View.GONE);
-                        timeoutItem.setVisibility(View.GONE);
-                        muteItem.setVisibility(View.GONE);
-                        unmuteItem.setVisibility(View.GONE);
-                        banItem.setVisibility(View.GONE);
-                        unbanItem.setVisibility(View.VISIBLE);
+                        moveToAllowedListItem.setVisibility(View.GONE);
                     } else {
-                        banItem.setVisibility(View.VISIBLE);
-                        unbanItem.setVisibility(View.GONE);
-                    }
-
-                    if (ChatClient.getInstance().getCurrentUser().equals(mChatRoom.getOwner())) {
-                        if (mChatRoom.getAdminList().contains(username)) {
-                            removeAsModeratorItem.setVisibility(View.VISIBLE);
-                            assignAsModeratorItem.setVisibility(View.GONE);
-                            if (mChatRoom.getMuteList().containsKey(username)) {
-                                timeoutItem.setVisibility(View.GONE);
-                                removeFromAllowedListItem.setVisibility(View.GONE);
-                                moveToAllowedListItem.setVisibility(View.GONE);
-                            } else {
-                                if (mChatRoom.getWhitelist().contains(username)) {
-                                    timeoutItem.setVisibility(View.GONE);
-                                    muteItem.setVisibility(View.GONE);
-                                    unmuteItem.setVisibility(View.GONE);
-                                    banItem.setVisibility(View.GONE);
-                                    unbanItem.setVisibility(View.GONE);
-                                }
-                            }
-                        } else {
-                            removeAsModeratorItem.setVisibility(View.GONE);
-                            assignAsModeratorItem.setVisibility(View.VISIBLE);
-                        }
                         if (mChatRoom.getWhitelist().contains(username)) {
                             timeoutItem.setVisibility(View.GONE);
                             muteItem.setVisibility(View.GONE);
@@ -275,8 +250,88 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
                             unbanItem.setVisibility(View.GONE);
                         }
                     }
+                } else {
+                    removeAsModeratorItem.setVisibility(View.GONE);
+                    assignAsModeratorItem.setVisibility(View.VISIBLE);
+                }
+                if (mChatRoom.getWhitelist().contains(username)) {
+                    timeoutItem.setVisibility(View.GONE);
+                    muteItem.setVisibility(View.GONE);
+                    unmuteItem.setVisibility(View.GONE);
+                    banItem.setVisibility(View.GONE);
+                    unbanItem.setVisibility(View.GONE);
                 }
             }
+        } else if (mChatRoom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())) {
+            banAll.setVisibility(View.GONE);
+            if (mChatRoom.getOwner().equals(username)) {
+                moveToAllowedListItem.setVisibility(View.GONE);
+                removeFromAllowedListItem.setVisibility(View.GONE);
+                assignAsModeratorItem.setVisibility(View.GONE);
+                removeAsModeratorItem.setVisibility(View.GONE);
+                timeoutItem.setVisibility(View.GONE);
+                muteItem.setVisibility(View.GONE);
+                unmuteItem.setVisibility(View.GONE);
+                banItem.setVisibility(View.GONE);
+                unbanItem.setVisibility(View.GONE);
+            } else {
+                if (mChatRoom.getWhitelist().contains(username)) {
+                    removeFromAllowedListItem.setVisibility(View.VISIBLE);
+                    moveToAllowedListItem.setVisibility(View.GONE);
+                } else {
+                    removeFromAllowedListItem.setVisibility(View.GONE);
+                    moveToAllowedListItem.setVisibility(View.VISIBLE);
+                }
+
+                if (mChatRoom.getMuteList().containsKey(username)) {
+                    unmuteItem.setVisibility(View.VISIBLE);
+                    timeoutItem.setVisibility(View.GONE);
+                    muteItem.setVisibility(View.GONE);
+                } else {
+                    unmuteItem.setVisibility(View.GONE);
+                    timeoutItem.setVisibility(View.VISIBLE);
+                    muteItem.setVisibility(View.VISIBLE);
+                }
+
+                if (mChatRoom.getAdminList().contains(username)) {
+                    removeAsModeratorItem.setVisibility(View.GONE);
+                    assignAsModeratorItem.setVisibility(View.GONE);
+                    if (mChatRoom.getMuteList().containsKey(username)) {
+                        timeoutItem.setVisibility(View.GONE);
+                        removeFromAllowedListItem.setVisibility(View.GONE);
+                        moveToAllowedListItem.setVisibility(View.GONE);
+                    } else {
+                        if (mChatRoom.getWhitelist().contains(username)) {
+                            timeoutItem.setVisibility(View.GONE);
+                            muteItem.setVisibility(View.GONE);
+                            unmuteItem.setVisibility(View.GONE);
+                            banItem.setVisibility(View.GONE);
+                            unbanItem.setVisibility(View.GONE);
+                        }
+                    }
+                } else {
+                    removeAsModeratorItem.setVisibility(View.GONE);
+                    assignAsModeratorItem.setVisibility(View.VISIBLE);
+                }
+                if (mChatRoom.getWhitelist().contains(username)) {
+                    timeoutItem.setVisibility(View.GONE);
+                    muteItem.setVisibility(View.GONE);
+                    unmuteItem.setVisibility(View.GONE);
+                    banItem.setVisibility(View.GONE);
+                    unbanItem.setVisibility(View.GONE);
+                }
+            }
+        } else {
+            banAll.setVisibility(View.GONE);
+            moveToAllowedListItem.setVisibility(View.GONE);
+            removeFromAllowedListItem.setVisibility(View.GONE);
+            assignAsModeratorItem.setVisibility(View.GONE);
+            removeAsModeratorItem.setVisibility(View.GONE);
+            timeoutItem.setVisibility(View.GONE);
+            muteItem.setVisibility(View.GONE);
+            unmuteItem.setVisibility(View.GONE);
+            banItem.setVisibility(View.GONE);
+            unbanItem.setVisibility(View.GONE);
         }
     }
 

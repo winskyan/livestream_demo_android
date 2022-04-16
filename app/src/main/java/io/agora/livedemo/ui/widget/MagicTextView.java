@@ -28,10 +28,6 @@ import java.util.WeakHashMap;
 import io.agora.livedemo.R;
 
 
-/**
- * 该自定义view是用于显示礼物数字的,加了些效果，内发光，阴影等
- * https://github.com/345166018/AndroidUI/tree/master/HxZhibo
- */
 @SuppressLint("AppCompatCustomView")
 public class MagicTextView extends TextView {
 

@@ -16,7 +16,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/close_iv"
         android:layout_width="@dimen/margin_20"
@@ -99,7 +98,6 @@
             android:src="@drawable/edit"
             app:layout_constraintRight_toRightOf="@id/live_name"
             app:layout_constraintTop_toBottomOf="@id/live_name" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <io.agora.chat.uikit.widget.EaseImageView
@@ -152,6 +150,4 @@
         app:layout_constraintLeft_toLeftOf="@id/go_live"
         app:layout_constraintRight_toRightOf="@id/go_live"
         app:layout_constraintTop_toTopOf="@id/go_live" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

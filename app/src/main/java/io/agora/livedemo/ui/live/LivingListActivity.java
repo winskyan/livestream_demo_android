@@ -21,7 +21,7 @@ public class LivingListActivity extends BaseLiveActivity implements EaseTitleBar
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_living;
+        return R.layout.activity_living;
     }
 
     @Override

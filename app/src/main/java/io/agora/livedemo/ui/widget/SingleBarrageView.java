@@ -55,7 +55,7 @@ public class SingleBarrageView extends BarrageView {
 
             @Override
             public int getItemLayout(MessageBean messageBean) {
-                return R.layout.em_barrage_item;
+                return R.layout.barrage_item;
             }
         };
 

@@ -29,15 +29,9 @@ public class GiftFragmentAdapter extends FragmentStateAdapter {
                 }
             }
         });
-        //添加参数
         return fragment;
     }
 
-    /**
-     * 根据礼物类型，此处仅为测试
-     *
-     * @return
-     */
     @Override
     public int getItemCount() {
         return 1;

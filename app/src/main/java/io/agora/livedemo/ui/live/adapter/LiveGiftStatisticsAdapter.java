@@ -19,7 +19,7 @@ public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<Recei
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.em_layout_live_gift_statistics_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_live_gift_statistics_item, parent, false);
         return new GiftViewHolder(view);
     }
 
@@ -48,9 +48,9 @@ public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<Recei
             if (giftBean != null) {
                 ivGiftIcon.setImageResource(giftBean.getResource());
             }
-            tvGiftInfo.setText(mContext.getString(R.string.em_live_gift_gift_info, item.getGift_num()));
+            tvGiftInfo.setText(mContext.getString(R.string.live_gift_gift_info, item.getGift_num()));
 
-            txtUsernick.setText(mContext.getString(R.string.em_live_gift_sender_info, DemoHelper.getNickName(item.getFrom())));
+            txtUsernick.setText(mContext.getString(R.string.live_gift_sender_info, DemoHelper.getNickName(item.getFrom())));
             //imgAvatar.setImageResource(DemoHelper.getAvatarResource(item.getFrom()));
 
         }

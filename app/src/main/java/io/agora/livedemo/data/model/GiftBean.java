@@ -11,6 +11,8 @@ public class GiftBean implements Serializable {
     private int resource;
     private String name;
     private boolean isChecked;
+    private int value;
+    private int leftTime;
 
     public String getId() {
         return id;
@@ -74,5 +76,37 @@ public class GiftBean implements Serializable {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public int getLeftTime() {
+        return leftTime;
+    }
+
+    public void setLeftTime(int leftTime) {
+        this.leftTime = leftTime;
+    }
+
+    @Override
+    public String toString() {
+        return "GiftBean{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", type=" + type +
+                ", gift='" + gift + '\'' +
+                ", num=" + num +
+                ", resource=" + resource +
+                ", name='" + name + '\'' +
+                ", isChecked=" + isChecked +
+                ", value=" + value +
+                ", leftTime=" + leftTime +
+                '}';
     }
 }

@@ -28,7 +28,7 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
 
     @Override
     public int getMiddleLayoutId() {
-        return R.layout.em_layout_give_gift_info;
+        return R.layout.layout_give_gift_info;
     }
 
     @Override
@@ -68,10 +68,10 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mTvDialogTitle.setText(getString(R.string.em_gift_send_confirm));
-        mBtnDialogConfirm.setText(getString(R.string.dialog_btn_give));
+        mTvDialogTitle.setText(getString(R.string.gift_send_confirm));
+        mBtnDialogConfirm.setText(getString(R.string.gift_send));
         ivGiftIcon.setImageResource(gift.getResource());
-        tvGiftInfo.setText(getString(R.string.em_gift_send_info, gift.getNum(), gift.getName()));
+        tvGiftInfo.setText(getString(R.string.gift_send_info, gift.getNum(), gift.getName()));
     }
 
     @Override

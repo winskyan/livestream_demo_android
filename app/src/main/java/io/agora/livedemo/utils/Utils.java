@@ -203,6 +203,9 @@ public class Utils {
         try {
             SimpleDateFormat bDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date parseDate = bDate.parse(birthday);
+            if (null == parseDate) {
+                return 0;
+            }
             Calendar c = Calendar.getInstance();
             c.setTime(parseDate);
             return Calendar.getInstance().get(Calendar.YEAR) - c.get(Calendar.YEAR);

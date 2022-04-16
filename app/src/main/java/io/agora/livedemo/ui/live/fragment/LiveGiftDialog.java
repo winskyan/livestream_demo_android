@@ -25,7 +25,7 @@ public class LiveGiftDialog extends BaseLiveDialogFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_dialog_live_gift;
+        return R.layout.fragment_dialog_live_gift;
     }
 
     @Override
@@ -34,17 +34,14 @@ public class LiveGiftDialog extends BaseLiveDialogFragment {
         vpList = findViewById(R.id.vp_list);
         tabLayout = findViewById(R.id.tab_layout);
 
-        //禁止ViewPager2滑动翻页
         vpList.setUserInputEnabled(false);
         adapter = new GiftFragmentAdapter(mContext);
         vpList.setAdapter(adapter);
-        //设置缓冲页数
-        vpList.setOffscreenPageLimit(1);//根据礼物类型进行变化
-        //关联TabLayout
+        vpList.setOffscreenPageLimit(1);
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, vpList, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText(getString(R.string.em_live_gift_name));
+                tab.setText(getString(R.string.live_gift_name));
             }
         });
         mediator.attach();

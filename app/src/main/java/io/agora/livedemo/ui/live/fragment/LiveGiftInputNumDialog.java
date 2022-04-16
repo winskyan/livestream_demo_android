@@ -1,6 +1,8 @@
 package io.agora.livedemo.ui.live.fragment;
 
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -34,7 +36,7 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
 
     @Override
     public int getMiddleLayoutId() {
-        return R.layout.em_layout_give_gift_num;
+        return R.layout.layout_give_gift_num;
     }
 
     @Override
@@ -44,12 +46,13 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
         middleParent.addView(child);
 
         etInputNum = child.findViewById(R.id.et_input_num);
+        etInputNum.setFilters(new InputFilter[]{new InputFilterMinMax("1", "99")});
     }
 
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mTvDialogTitle.setText(getString(R.string.em_gift_input_num_title));
+        mTvDialogTitle.setText(getString(R.string.gift_input_num_title));
         etInputNum.setText(String.valueOf(giftNum));
     }
 
@@ -58,12 +61,12 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
         super.onConfirmClick(v);
         String num = etInputNum.getText().toString().trim();
         if (TextUtils.isEmpty(num)) {
-            Toast.makeText(mContext, "请输入送礼物的数目", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "input number", Toast.LENGTH_SHORT).show();
             return;
         }
         if (this.listener != null) {
             dismiss();
-            listener.onConfirmClick(v, Integer.valueOf(num));
+            listener.onConfirmClick(v, Integer.parseInt(num));
         }
     }
 
@@ -73,5 +76,45 @@ public class LiveGiftInputNumDialog extends DemoDialogFragment {
 
     public interface OnConfirmClickListener {
         void onConfirmClick(View v, int num);
+    }
+
+    static class InputFilterMinMax implements InputFilter {
+        private float min, max;
+
+        public InputFilterMinMax(float min, float max) {
+            this.min = min;
+            this.max = max;
+        }
+
+        public InputFilterMinMax(String min, String max) {
+            this.min = Float.parseFloat(min);
+            this.max = Float.parseFloat(max);
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            try {
+                if (source.equals(".") && dest.toString().length() == 0) {
+                    return "0.";
+                }
+                if (dest.toString().contains(".")) {
+                    int index = dest.toString().indexOf(".");
+                    int mlength = dest.toString().substring(index).length();
+                    if (mlength == 3) {
+                        return "";
+                    }
+                }
+                float input = Float.parseFloat(dest.toString() + source.toString());
+                if (isInRange(min, max, input))
+                    return null;
+            } catch (Exception nfe) {
+                nfe.printStackTrace();
+            }
+            return "";
+        }
+
+        private boolean isInRange(float a, float b, float c) {
+            return b > a ? c >= a && c <= b : c >= b && c <= a;
+        }
     }
 }

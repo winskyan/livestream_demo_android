@@ -23,7 +23,7 @@ public class FastLivingListActivity extends BaseLiveActivity implements EaseTitl
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_living;
+        return R.layout.activity_living;
     }
 
     @Override

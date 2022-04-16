@@ -6,9 +6,6 @@
     <color name="colorTextPrimary">#ffffff</color>
     <color name="textColorSecondary">@color/gray</color>
 
-    <color name="common_bottom_bar_normal_bg">#323232</color>
-    <color name="common_bottom_bar_selected_bg">#fff</color>
-    <color name="common_botton_bar_text_noral">#5E5E5E</color>
     <color name="placeholder">#ddd</color>
     <color name="author_background">#66000000</color>
 
@@ -22,13 +19,10 @@
     <color name="common_white">#fff</color>
     <color name="common_black">#3B3B3B</color>
 
-    <color name="color_progress">#2196F3</color>
-
     <color name="common_btn_white_normal">@color/common_white</color>
     <color name="common_btn_white_pressed">#ccc</color>
 
     <color name="common_btn_black_normal">#1A1A1A</color>
-    <color name="black_323232">#323232</color>
     <color name="common_btn_black_pressed">#111010</color>
     <color name="common_btn_blue_normal">#19A3FF</color>
     <color name="common_btn_blue_pressed">#1887cd</color>
@@ -39,11 +33,9 @@
 
     <color name="color_text_primary">#5E5E5E</color>
 
-    <color name="gray_pressed">#b5b5b6</color>
     <color name="gray_normal">#666667</color>
 
     <color name="btn_blue_normal">#1e90ff</color>
-    <color name="btn_blue_pressed">#0066FF</color>
 
     <color name="holo_blue_bright">#ff00ddff</color>
     <color name="holo_green_light">#ff99cc00</color>
@@ -56,19 +48,9 @@
     <color name="em_color_warning">#ffff2b2b</color>
     <color name="em_color_disable">#ff999999</color>
 
-    <color name="em_color_common_text_black">#ff333333</color>
-    <color name="em_color_common_text_gray">#ff999999</color>
-
-    <color name="em_main_color_tab_normal">@color/em_color_common_text_black</color>
-    <color name="em_main_color_tab_selected">#ff04aef0</color>
-
-    <color name="em_color_gift_dialog_half_bg">#80000000</color>
 
     <color name="em_switch_color_checked">#ff04aef0</color>
     <color name="em_switch_color_unchecked">#ffe9e9e9</color>
-
-    <color name="em_toolbar_color_title">@color/white</color>
-    <color name="em_toolbar_color_title_right">@color/white</color>
 
     <color name="color_search_bg">#212226</color>
     <color name="color_search_hint">#5CFFFFFF</color>

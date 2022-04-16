@@ -14,11 +14,11 @@ import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 
 public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.OnClickListener, LiveGiftInputNumDialog.OnConfirmClickListener {
-    private TextView tvGiftName;
     private ImageView ivGiftMinus;
     private ImageView ivGiftPlus;
     private TextView tvGiftNum;
     private Button btnSend;
+    private TextView tvGiftTotalValues;
     private int giftNum = 1;
     private GiftBean giftBean;
     private OnGiftNumListener clickListener;
@@ -39,7 +39,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_dialog_live_gift_num;
+        return R.layout.fragment_dialog_live_gift_num;
     }
 
     @Override
@@ -54,16 +54,15 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        tvGiftName = findViewById(R.id.tv_gift_name);
         ivGiftMinus = findViewById(R.id.iv_gift_minus);
         tvGiftNum = findViewById(R.id.tv_gift_num);
         ivGiftPlus = findViewById(R.id.iv_gift_plus);
+        tvGiftTotalValues = findViewById(R.id.gift_total_values);
         btnSend = findViewById(R.id.btn_send);
 
-        if (giftBean != null) {
-            tvGiftName.setText(giftBean.getName());
-        }
-        tvGiftNum.setText(giftNum + "");
+        tvGiftNum.setText(String.valueOf(giftNum));
+
+        tvGiftTotalValues.setText(mContext.getString(R.string.gift_send_total_values, String.valueOf(giftNum * giftBean.getValue())));
     }
 
     @Override
@@ -83,12 +82,14 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
                 if (giftNum > 1) {
                     giftNum--;
                 }
-                tvGiftNum.setText(String.valueOf(giftNum));
+                updateNumAndValues(giftNum);
                 break;
             case R.id.iv_gift_plus:
                 giftNum = getNum();
-                giftNum++;
-                tvGiftNum.setText(String.valueOf(giftNum));
+                if (giftNum < 99) {
+                    giftNum++;
+                }
+                updateNumAndValues(giftNum);
                 break;
             case R.id.btn_send:
                 dismiss();
@@ -106,7 +107,7 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     private void showInputNumDialog() {
         LiveGiftInputNumDialog dialog = (LiveGiftInputNumDialog) getChildFragmentManager().findFragmentByTag("gift_input_num");
         if (dialog == null) {
-            dialog = LiveGiftInputNumDialog.getNewInstance(Integer.valueOf(tvGiftNum.getText().toString().trim()));
+            dialog = LiveGiftInputNumDialog.getNewInstance(Integer.parseInt(tvGiftNum.getText().toString().trim()));
         }
         if (dialog.isAdded()) {
             return;
@@ -124,8 +125,13 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
     }
 
     private int getNum() {
-        String num = tvGiftNum.getText().toString().trim();
-        return Integer.valueOf(num);
+        try {
+            String num = tvGiftNum.getText().toString().trim();
+            return Integer.parseInt(num);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1;
     }
 
     public void setOnGiftNumListener(OnGiftNumListener clickListener) {
@@ -134,7 +140,13 @@ public class LiveGiftNumDialog extends BaseLiveDialogFragment implements View.On
 
     @Override
     public void onConfirmClick(View v, int num) {
+        updateNumAndValues(num);
+    }
+
+    private void updateNumAndValues(int num) {
         tvGiftNum.setText(String.valueOf(num));
+        tvGiftTotalValues.setText(mContext.getString(R.string.gift_send_total_values, String.valueOf(num * giftBean.getValue())));
+
     }
 
     public interface OnGiftNumListener {

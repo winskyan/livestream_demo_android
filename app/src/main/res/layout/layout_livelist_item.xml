@@ -21,7 +21,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/view_lived_bg"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/live_list_item_lived_bg_shape"

@@ -178,7 +178,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
 
         @Override
         public ManagementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ManagementViewHolder(LayoutInflater.from(context).inflate(R.layout.em_layout_live_member_item, parent, false));
+            return new ManagementViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_live_member_item, parent, false));
         }
 
         @Override

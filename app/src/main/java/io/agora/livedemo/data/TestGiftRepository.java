@@ -6,34 +6,36 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agora.chat.ChatClient;
 import io.agora.livedemo.DemoApplication;
+import io.agora.livedemo.R;
+import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.User;
 
-/**
- * 用于获取本地礼物信息
- */
+
 public class TestGiftRepository {
-    static int SIZE = 8;
-    static String[] names = {};
 
     public static List<GiftBean> getDefaultGifts() {
         Context context = DemoApplication.getInstance().getApplicationContext();
         List<GiftBean> gifts = new ArrayList<>();
         GiftBean bean;
         User user;
-        for (int i = 1; i <= SIZE; i++) {
+        String[] giftNames = context.getResources().getStringArray(R.array.gift_names);
+        String[] giftResNames = context.getResources().getStringArray(R.array.gift_res_names);
+        int[] giftValues = context.getResources().getIntArray(R.array.gift_values);
+        for (int i = 0; i < giftNames.length; i++) {
             bean = new GiftBean();
-            String name = "gift_default_" + i;
-            int resId = context.getResources().getIdentifier(name, "drawable", context.getPackageName());
-            int nameId = context.getResources().getIdentifier("em_gift_default_name_" + i, "string", context.getPackageName());
+            int resId = context.getResources().getIdentifier(giftResNames[i], "drawable", context.getPackageName());
             bean.setResource(resId);
-            bean.setName(context.getString(nameId));
+            bean.setName(giftNames[i]);
             bean.setId("gift_" + i);
+            bean.setValue(giftValues[i]);
             user = new User();
-            user.setNickName(ChatClient.getInstance().getCurrentUser());
+            user.setId(DemoHelper.getAgoraId());
+            user.setNickName(DemoHelper.getNickName());
+            user.setAvatarUrl(DemoHelper.getAvatarUrl());
             bean.setUser(user);
+            bean.setLeftTime(0);
             gifts.add(bean);
         }
         return gifts;

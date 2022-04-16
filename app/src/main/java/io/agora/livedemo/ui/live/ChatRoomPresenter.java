@@ -10,6 +10,7 @@ import io.agora.Error;
 import io.agora.MessageListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
+import io.agora.chat.CmdMessageBody;
 import io.agora.chat.Conversation;
 import io.agora.chat.TextMessageBody;
 import io.agora.custommessage.OnMsgCallBack;
@@ -168,14 +169,14 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
     @Override
     public void onCmdMessageReceived(List<ChatMessage> messages) {
-//        ChatMessage message = messages.get(messages.size() - 1);
-//        if (DemoConstants.CMD_GIFT.equals(((EMCmdMessageBody) message.getBody()).action())) {
-//            //showLeftGiftView(message.getFrom());
-//        } else if(DemoConstants.CMD_PRAISE.equals(((EMCmdMessageBody) message.getBody()).action())) {
-//            if(onChatRoomListener != null) {
-//                onChatRoomListener.onReceivePraiseMsg(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
-//            }
-//        }
+        ChatMessage message = messages.get(messages.size() - 1);
+        if (DemoConstants.CMD_GIFT.equals(((CmdMessageBody) message.getBody()).action())) {
+            //showLeftGiftView(message.getFrom());
+        } else if(DemoConstants.CMD_PRAISE.equals(((CmdMessageBody) message.getBody()).action())) {
+            if(onChatRoomListener != null) {
+               // onChatRoomListener.onReceivePraiseMsg(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
+            }
+        }
     }
 
     @Override
@@ -263,12 +264,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         this.onChatRoomListener = listener;
     }
 
-    /**
-     * 发送礼物消息
-     *
-     * @param bean
-     * @param callBack
-     */
     public void sendGiftMsg(GiftBean bean, OnMsgCallBack callBack) {
         DemoMsgHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnMsgCallBack() {
             @Override

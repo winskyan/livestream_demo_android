@@ -29,7 +29,7 @@ public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_dialog_live_gift_statistics;
+        return R.layout.fragment_dialog_live_gift_statistics;
     }
 
     @Override
@@ -56,13 +56,13 @@ public class LiveGiftStatisticsDialog extends BaseLiveDialogFragment {
         viewModel = new ViewModelProvider(this).get(GiftStatisticsViewModel.class);
         viewModel.getGiftObservable().observe(getViewLifecycleOwner(), response -> {
             if (response != null) {
-                tvGiftNum.setText(getString(R.string.em_live_gift_total, response.size()));
+                tvGiftNum.setText(getString(R.string.live_gift_total, response.size()));
                 adapter.setData(response);
             }
         });
         viewModel.getSenderNumObservable().observe(getViewLifecycleOwner(), response -> {
             if (response != null) {
-                tvSenderNum.setText(getString(R.string.em_live_gift_send_total, response));
+                tvSenderNum.setText(getString(R.string.live_gift_send_total, response));
             }
         });
         LiveDataBus.get().with(DemoConstants.REFRESH_GIFT_LIST, Boolean.class)

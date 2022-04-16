@@ -48,11 +48,6 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     }
 
-    /**
-     * 获取中间布局的id
-     *
-     * @return
-     */
     public int getMiddleLayoutId() {
         return 0;
     }
