@@ -26,8 +26,8 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
 import io.agora.chat.uikit.utils.EaseUserUtils;
-import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -50,6 +50,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     ImageView coverView;
     @BindView(R.id.group_ui)
     ConstraintLayout groupUi;
+    @BindView(R.id.live_stream_end_tip)
+    TextView liveStreamEndTip;
 
     private Unbinder unbinder;
     private OnLiveListener liveListener;
@@ -113,6 +115,17 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                     }
                 });
 
+        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
+            if (liveRoom != null
+                    && !TextUtils.isEmpty(liveRoom.getVideo_type())
+                    && !DemoHelper.isVod(liveRoom.getVideo_type())) {
+                liveStreamEndTip.setVisibility(View.VISIBLE);
+                liveReceiveGift.setEnabled(false);
+                liveReceiveGift.setImageResource(R.drawable.live_gift_disable);
+                commentIv.setEnabled(false);
+            }
+        });
+
         getLiveRoomDetail();
     }
 
@@ -131,9 +144,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         mContext.finish();
     }
 
-    /**
-     * 点赞
-     */
     @OnClick(R.id.like_image)
     void Praise() {
         periscopeLayout.addHeart();
@@ -234,7 +244,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             @Override
             public void onConfirmClick(View view, Object bean) {
                 if (bean instanceof GiftBean) {
-                    presenter.sendGiftMsg((GiftBean) bean, new OnMsgCallBack() {
+                    presenter.sendGiftMsg((GiftBean) bean, new OnLiveMessageCallBack() {
                         @Override
                         public void onSuccess(ChatMessage message) {
                             ThreadManager.getInstance().runOnMainThread(() -> {

@@ -104,7 +104,6 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
         mUserListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                EMLog.i("lives", "user=" + mUserListAdapter.getItem(position));
                 LiveMemberListDialog.this.dismiss();
                 LiveDataBus.get().with(DemoConstants.SHOW_USER_DETAIL).postValue(mUserListAdapter.getItem(position));
             }
@@ -269,7 +268,7 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
                 }
                 if (null != adminList && adminList.contains(item)) {
                     tvRoleType.setText(context.getResources().getString(R.string.role_type_moderator));
-                    tvRoleType.setBackgroundResource(R.drawable.live_moderator_bg);
+                    tvRoleType.setBackgroundResource(R.drawable.ease_live_moderator_bg);
                     tvRoleType.setVisibility(View.VISIBLE);
                 } else {
                     tvRoleType.setVisibility(View.GONE);

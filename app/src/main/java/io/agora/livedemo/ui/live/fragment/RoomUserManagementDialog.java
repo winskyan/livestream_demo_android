@@ -130,7 +130,6 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
         mUserListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                EMLog.i("lives", "user=" + mUserListAdapter.getItem(position));
                 RoomUserManagementDialog.this.dismiss();
                 LiveDataBus.get().with(DemoConstants.SHOW_USER_DETAIL).postValue(mUserListAdapter.getItem(position));
             }
@@ -368,10 +367,10 @@ public class RoomUserManagementDialog extends BaseLiveDialogFragment {
                 if (item.equals(owner)) {
                     tvRoleType.setText(context.getResources().getString(R.string.role_type_streamer));
                     tvRoleType.setVisibility(View.VISIBLE);
-                    tvRoleType.setBackgroundResource(R.drawable.live_streamer_bg);
+                    tvRoleType.setBackgroundResource(R.drawable.ease_live_streamer_bg);
                 } else if (null != adminList && adminList.contains(item)) {
                     tvRoleType.setText(context.getResources().getString(R.string.role_type_moderator));
-                    tvRoleType.setBackgroundResource(R.drawable.live_moderator_bg);
+                    tvRoleType.setBackgroundResource(R.drawable.ease_live_moderator_bg);
                     tvRoleType.setVisibility(View.VISIBLE);
                 } else {
                     tvRoleType.setVisibility(View.GONE);

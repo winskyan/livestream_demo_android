@@ -3,9 +3,10 @@ package io.agora.livedemo.common;
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
-import io.agora.custommessage.EmCustomMsgHelper;
-import io.agora.custommessage.OnCustomMsgReceiveListener;
-import io.agora.custommessage.OnMsgCallBack;
+import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
+import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
+import io.agora.chat.uikit.lives.OnLiveMessageReceiveListener;
+import io.agora.livedemo.ui.live.fragment.LiveMemberListDialog;
 
 
 public class DemoMsgHelper {
@@ -36,7 +37,7 @@ public class DemoMsgHelper {
         this.chatroomId = chatroomId;
         setCustomMsgListener();
         //设置相关的直播间信息
-        EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId);
+        EaseLiveMessageHelper.getInstance().setChatRoomInfo(chatroomId);
     }
 
     public String getCurrentRoomId() {
@@ -47,14 +48,14 @@ public class DemoMsgHelper {
      * 设置自定义消息监听
      */
     public void setCustomMsgListener() {
-        EmCustomMsgHelper.getInstance().init();
+        EaseLiveMessageHelper.getInstance().init();
     }
 
     /**
      * 移除自定义消息监听
      */
     public void removeCustomMsgLisenter() {
-        EmCustomMsgHelper.getInstance().removeListener();
+        EaseLiveMessageHelper.getInstance().removeListener();
     }
 
     /**
@@ -64,7 +65,7 @@ public class DemoMsgHelper {
      * @param isBarrageMsg
      * @param callBack
      */
-    public void sendMsg(String content, boolean isBarrageMsg, OnMsgCallBack callBack) {
+    public void sendMsg(String content, boolean isBarrageMsg, OnLiveMessageCallBack callBack) {
         if (isBarrageMsg) {
             sendBarrageMsg(content, callBack);
         } else {
@@ -78,7 +79,7 @@ public class DemoMsgHelper {
      * @param content
      * @param callBack
      */
-    public void sendTxtMsg(String content, OnMsgCallBack callBack) {
+    public void sendTxtMsg(String content, OnLiveMessageCallBack callBack) {
         ChatMessage message = ChatMessage.createTxtSendMessage(content, chatroomId);
         message.setChatType(ChatMessage.ChatType.ChatRoom);
         message.setMessageStatusCallback(new CallBack() {
@@ -109,8 +110,8 @@ public class DemoMsgHelper {
      * @param num
      * @param callBack
      */
-    public void sendGiftMsg(String giftId, int num, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendGiftMsg(giftId, num, new OnMsgCallBack() {
+    public void sendGiftMsg(String giftId, int num, OnLiveMessageCallBack callBack) {
+        EaseLiveMessageHelper.getInstance().sendGiftMsg(giftId, num, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveGiftInfo(message);
@@ -144,8 +145,8 @@ public class DemoMsgHelper {
      * @param num
      * @param callBack
      */
-    public void sendLikeMsg(int num, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendPraiseMsg(num, new OnMsgCallBack() {
+    public void sendLikeMsg(int num, OnLiveMessageCallBack callBack) {
+        EaseLiveMessageHelper.getInstance().sendPraiseMsg(num, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveLikeInfo(message);
@@ -178,8 +179,8 @@ public class DemoMsgHelper {
      * @param content
      * @param callBack
      */
-    public void sendBarrageMsg(String content, OnMsgCallBack callBack) {
-        EmCustomMsgHelper.getInstance().sendBarrageMsg(content, callBack);
+    public void sendBarrageMsg(String content, OnLiveMessageCallBack callBack) {
+        EaseLiveMessageHelper.getInstance().sendBarrageMsg(content, callBack);
     }
 
     /**
@@ -189,7 +190,7 @@ public class DemoMsgHelper {
      * @return
      */
     public String getMsgGiftId(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().getMsgGiftId(msg);
+        return EaseLiveMessageHelper.getInstance().getMsgGiftId(msg);
     }
 
     /**
@@ -199,7 +200,7 @@ public class DemoMsgHelper {
      * @return
      */
     public int getMsgGiftNum(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().getMsgGiftNum(msg);
+        return EaseLiveMessageHelper.getInstance().getMsgGiftNum(msg);
     }
 
     /**
@@ -209,7 +210,7 @@ public class DemoMsgHelper {
      * @return
      */
     public int getMsgPraiseNum(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().getMsgPraiseNum(msg);
+        return EaseLiveMessageHelper.getInstance().getMsgPraiseNum(msg);
     }
 
     /**
@@ -219,7 +220,7 @@ public class DemoMsgHelper {
      * @return
      */
     public String getMsgBarrageTxt(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().getMsgBarrageTxt(msg);
+        return EaseLiveMessageHelper.getInstance().getMsgBarrageTxt(msg);
     }
 
 
@@ -230,7 +231,7 @@ public class DemoMsgHelper {
      * @return
      */
     public boolean isGiftMsg(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().isGiftMsg(msg);
+        return EaseLiveMessageHelper.getInstance().isGiftMsg(msg);
     }
 
     /**
@@ -240,7 +241,7 @@ public class DemoMsgHelper {
      * @return
      */
     public boolean isPraiseMsg(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().isPraiseMsg(msg);
+        return EaseLiveMessageHelper.getInstance().isPraiseMsg(msg);
     }
 
     /**
@@ -250,10 +251,10 @@ public class DemoMsgHelper {
      * @return
      */
     public boolean isBarrageMsg(ChatMessage msg) {
-        return EmCustomMsgHelper.getInstance().isBarrageMsg(msg);
+        return EaseLiveMessageHelper.getInstance().isBarrageMsg(msg);
     }
 
-    public void setOnCustomMsgReceiveListener(OnCustomMsgReceiveListener listener) {
-        EmCustomMsgHelper.getInstance().setOnCustomMsgReceiveListener(listener);
+    public void setOnCustomMsgReceiveListener(OnLiveMessageReceiveListener listener) {
+        EaseLiveMessageHelper.getInstance().setOnCustomMsgReceiveListener(listener);
     }
 }

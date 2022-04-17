@@ -13,7 +13,8 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.CmdMessageBody;
 import io.agora.chat.Conversation;
 import io.agora.chat.TextMessageBody;
-import io.agora.custommessage.OnMsgCallBack;
+import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
+import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoMsgHelper;
@@ -21,6 +22,7 @@ import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
+import io.agora.util.EMLog;
 
 public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListener {
     private BaseActivity mContext;
@@ -44,7 +46,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     @Override
     public void onChatRoomDestroyed(String roomId, String roomName) {
         if (roomId.equals(chatroomId)) {
-            mContext.showToast("房间已销毁！");
             mContext.finish();
         }
     }
@@ -68,7 +69,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         if (roomId.equals(chatroomId)) {
             if (currentUser.equals(participant)) {
                 ChatClient.getInstance().chatroomManager().leaveChatRoom(roomId);
-                mContext.showToast("你已被移除出此房间");
                 mContext.finish();
             } else {
                 if (onChatRoomListener != null) {
@@ -117,13 +117,13 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
     @Override
     public void onAdminAdded(String chatRoomId, String admin) {
-        showMemberChangeEvent(admin, "被提升为房管");
+        EMLog.i("lives", "onAdminAdded admin=" + admin);
         onAdminChange(admin);
     }
 
     @Override
     public void onAdminRemoved(String chatRoomId, String admin) {
-        showMemberChangeEvent(admin, "被解除房管");
+        EMLog.i("lives", "onAdminRemoved admin=" + admin);
         onAdminChange(admin);
     }
 
@@ -172,9 +172,9 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         ChatMessage message = messages.get(messages.size() - 1);
         if (DemoConstants.CMD_GIFT.equals(((CmdMessageBody) message.getBody()).action())) {
             //showLeftGiftView(message.getFrom());
-        } else if(DemoConstants.CMD_PRAISE.equals(((CmdMessageBody) message.getBody()).action())) {
-            if(onChatRoomListener != null) {
-               // onChatRoomListener.onReceivePraiseMsg(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
+        } else if (DemoConstants.CMD_PRAISE.equals(((CmdMessageBody) message.getBody()).action())) {
+            if (onChatRoomListener != null) {
+                // onChatRoomListener.onReceivePraiseMsg(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
             }
         }
     }
@@ -203,12 +203,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
 //===========================================  ChatMessageListener end =================================
 
-    /**
-     * 成员变化
-     *
-     * @param username
-     * @param event
-     */
     public void showMemberChangeEvent(String username, String event) {
         ChatMessage message = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
         message.setTo(chatroomId);
@@ -230,13 +224,8 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     }
 
 
-    /**
-     * 发送点赞消息
-     *
-     * @param praiseCount
-     */
     public void sendPraiseMessage(int praiseCount) {
-        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnMsgCallBack() {
+        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 Log.e("TAG", "send praise message success");
@@ -264,8 +253,8 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         this.onChatRoomListener = listener;
     }
 
-    public void sendGiftMsg(GiftBean bean, OnMsgCallBack callBack) {
-        DemoMsgHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnMsgCallBack() {
+    public void sendGiftMsg(GiftBean bean, OnLiveMessageCallBack callBack) {
+        EaseLiveMessageHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
@@ -298,15 +287,8 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         });
     }
 
-    /**
-     * 发送文本或者弹幕消息
-     *
-     * @param content
-     * @param isBarrageMsg
-     * @param callBack
-     */
-    public void sendTxtMsg(String content, boolean isBarrageMsg, OnMsgCallBack callBack) {
-        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnMsgCallBack() {
+    public void sendTxtMsg(String content, boolean isBarrageMsg, OnLiveMessageCallBack callBack) {
+        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
@@ -331,19 +313,12 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         });
     }
 
-    /**
-     * 删除被禁言期间的消息
-     *
-     * @param messageId
-     * @param code
-     */
     private void deleteMuteMsg(String messageId, int code) {
         if (code == Error.USER_MUTED || code == Error.MESSAGE_ILLEGAL_WHITELIST) {
             if (conversation == null) {
                 conversation = ChatClient.getInstance().chatManager().getConversation(chatroomId, Conversation.ConversationType.ChatRoom, true);
             }
             conversation.removeMessage(messageId);
-            mContext.showToast("您已被禁言");
         }
     }
 

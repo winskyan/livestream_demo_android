@@ -33,10 +33,11 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.lives.EaseChatRoomMessagesView;
+import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
+import io.agora.chat.uikit.lives.OnLiveMessageReceiveListener;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
-import io.agora.custommessage.OnCustomMsgReceiveListener;
-import io.agora.custommessage.OnMsgCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -53,14 +54,13 @@ import io.agora.livedemo.ui.live.adapter.MemberAvatarAdapter;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
 import io.agora.livedemo.ui.widget.PeriscopeLayout;
-import io.agora.livedemo.ui.widget.RoomMessagesView;
 import io.agora.livedemo.ui.widget.ShowGiveGiftView;
 import io.agora.livedemo.ui.widget.SingleBarrageView;
 import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
-public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnCustomMsgReceiveListener {
+public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnLiveMessageReceiveListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "lives";
     protected static final int CYCLE_REFRESH = 100;
@@ -68,7 +68,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @BindView(R.id.iv_icon)
     EaseImageView ivIcon;
     @BindView(R.id.message_view)
-    RoomMessagesView messageView;
+    EaseChatRoomMessagesView messageView;
     @BindView(R.id.periscope_layout)
     PeriscopeLayout periscopeLayout;
     @BindView(R.id.bottom_bar)
@@ -143,6 +143,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     private List<String> mMemberIconList;
     protected String mAvatarUrl;
+    private boolean mShowMessageListView;
 
 
     @Override
@@ -281,6 +282,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initData() {
         super.initData();
+        mShowMessageListView = true;
         joinTime = System.currentTimeMillis();
         barrageView.initBarrage();
         mMemberIconList = new ArrayList<>(2);
@@ -361,16 +363,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     private void showInputView() {
-        bottomBar.setVisibility(View.INVISIBLE);
-        messageView.setShowInputView(true);
-        messageView.getInputView().requestFocus();
-        messageView.getInputView().requestFocusFromTouch();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Utils.showKeyboard(messageView.getInputView());
-            }
-        }, 200);
+        if (mShowMessageListView) {
+            messageView.setShow(false);
+            commentIv.setImageResource(R.drawable.live_comment);
+        } else {
+            messageView.setShow(true);
+            commentIv.setImageResource(R.drawable.live_comment_close);
+        }
+        mShowMessageListView = messageView.isShowing();
     }
 
 
@@ -419,6 +419,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
             notifyDataSetChanged();
         });
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatroomId);
     }
 
     private synchronized void onRoomMemberAdded(String name) {
@@ -427,7 +428,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             membersCount++;
             if (memberList.size() >= MAX_SIZE)
                 memberList.removeLast();
-            memberList.addFirst(name);
+            memberList.add(name);
             presenter.showMemberChangeEvent(name, getString(R.string.live_msg_member_add));
             EMLog.d(TAG, name + " added");
             ThreadManager.getInstance().runOnMainThread(new Runnable() {
@@ -451,6 +452,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         } else {
             mMemberIconList.addAll(memberList);
         }
+        if (mMemberIconList.size() == 0) {
+            avatarAdapter.setData(mMemberIconList);
+            return;
+        }
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(mMemberIconList.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
@@ -459,7 +464,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                         @Override
                         public void run() {
                             avatarAdapter.setStringUserInfoMap(stringUserInfoMap);
-                            avatarAdapter.setData(memberList);
+                            avatarAdapter.setData(mMemberIconList);
                         }
                     });
                 }
@@ -477,10 +482,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     private synchronized void onRoomMemberExited(final String name) {
         EMLog.e(TAG, name + " exited");
+        watchedCount--;
         memberList.remove(name);
         ThreadManager.getInstance().runOnMainThread(new Runnable() {
             @Override
             public void run() {
+                tvMemberNum.setText(String.valueOf(watchedCount));
+                notifyDataSetChanged();
                 if (name.equals(chatroom.getOwner())) {
                     LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
                     LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
@@ -494,14 +502,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             @Override
             public void run() {
                 messageView.init(chatroomId);
-                messageView.setMessageViewListener(new RoomMessagesView.MessageViewListener() {
+                messageView.setMessageViewListener(new EaseChatRoomMessagesView.MessageViewListener() {
                     @Override
                     public void onMessageSend(String content, boolean isBarrageMsg) {
-                        presenter.sendTxtMsg(content, isBarrageMsg, new OnMsgCallBack() {
+                        presenter.sendTxtMsg(content, isBarrageMsg, new OnLiveMessageCallBack() {
                             @Override
                             public void onSuccess(ChatMessage message) {
                                 messageView.refreshSelectLast();
-
                                 if (isBarrageMsg) {
                                     barrageView.addData(message);
                                 }
@@ -511,19 +518,21 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
                     @Override
                     public void onItemClickListener(final ChatMessage message) {
-                        //if(message.getFrom().equals(ChatClient.getInstance().getCurrentUser())){
-                        //    return;
-                        //}
                         String clickUsername = message.getFrom();
                         showUserDetailsDialog(clickUsername);
                     }
 
                     @Override
-                    public void onHiderBottomBar() {
-                        bottomBar.setVisibility(View.VISIBLE);
+                    public void onHiderBottomBar(boolean hide) {
+                        if (hide) {
+                            bottomBar.setVisibility(View.GONE);
+                        } else {
+                            bottomBar.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
-                messageView.setVisibility(View.VISIBLE);
+
+                messageView.setShow(mShowMessageListView);
                 bottomBar.setVisibility(View.VISIBLE);
                 if (!chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())
                         && !chatroom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
@@ -567,6 +576,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         layoutManager = new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(layoutManager);
         avatarAdapter = new MemberAvatarAdapter();
+        avatarAdapter.hideEmptyView(true);
         horizontalRecyclerView.setAdapter(avatarAdapter);
         horizontalRecyclerView.addItemDecoration(new MemberIconSpacesItemDecoration((int) EaseUtils.dip2px(mContext, -10)));
 
@@ -672,7 +682,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     private void hideSoftKeyBoard() {
-        messageView.hideSoftKeyBoard();
+        Utils.hideKeyboard(messageView);
     }
 
     @Override

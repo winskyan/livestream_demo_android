@@ -10,12 +10,11 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.MessageBody;
-import io.agora.custommessage.EmCustomMsgType;
-import io.agora.custommessage.MsgConstant;
+import io.agora.chat.uikit.lives.EaseLiveMessageConstant;
+import io.agora.chat.uikit.lives.EaseLiveMessageType;
 import io.agora.fastlive.FastLiveHelper;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.DemoConstants;
-import io.agora.livedemo.R;
 import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
@@ -182,16 +181,16 @@ public class DemoHelper {
             return;
         }
         String event = ((CustomMessageBody) body).event();
-        if (!TextUtils.equals(event, EmCustomMsgType.CHATROOM_GIFT.getName())) {
+        if (!TextUtils.equals(event, EaseLiveMessageType.CHATROOM_GIFT.getName())) {
             return;
         }
         Map<String, String> params = ((CustomMessageBody) body).getParams();
         Set<String> keySet = params.keySet();
         String gift_id = null;
         String gift_num = null;
-        if (keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_ID) && keySet.contains(MsgConstant.CUSTOM_GIFT_KEY_NUM)) {
-            gift_id = params.get(MsgConstant.CUSTOM_GIFT_KEY_ID);
-            gift_num = params.get(MsgConstant.CUSTOM_GIFT_KEY_NUM);
+        if (keySet.contains(EaseLiveMessageConstant.LIVE_MESSAGE_GIFT_KEY_ID) && keySet.contains(EaseLiveMessageConstant.LIVE_MESSAGE_GIFT_KEY_NUM)) {
+            gift_id = params.get(EaseLiveMessageConstant.LIVE_MESSAGE_GIFT_KEY_ID);
+            gift_num = params.get(EaseLiveMessageConstant.LIVE_MESSAGE_GIFT_KEY_NUM);
             ReceiveGiftEntity entity = new ReceiveGiftEntity();
             entity.setFrom(message.getFrom());
             entity.setTo(message.getTo());
@@ -220,14 +219,14 @@ public class DemoHelper {
             return;
         }
         String event = ((CustomMessageBody) body).event();
-        if (!TextUtils.equals(event, EmCustomMsgType.CHATROOM_PRAISE.getName())) {
+        if (!TextUtils.equals(event, EaseLiveMessageType.CHATROOM_PRAISE.getName())) {
             return;
         }
         Map<String, String> params = ((CustomMessageBody) body).getParams();
         Set<String> keySet = params.keySet();
         String num = null;
-        if (keySet.contains(MsgConstant.CUSTOM_PRAISE_KEY_NUM)) {
-            num = params.get(MsgConstant.CUSTOM_PRAISE_KEY_NUM);
+        if (keySet.contains(EaseLiveMessageConstant.LIVE_MESSAGE_PRAISE_KEY_NUM)) {
+            num = params.get(EaseLiveMessageConstant.LIVE_MESSAGE_PRAISE_KEY_NUM);
         }
         if (!TextUtils.isEmpty(num)) {
             int like_num = Integer.parseInt(num);

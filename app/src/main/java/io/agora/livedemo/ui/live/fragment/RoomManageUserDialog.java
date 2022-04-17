@@ -186,6 +186,10 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
             roleType.setVisibility(View.GONE);
         }
 
+        if (!mChatRoom.getMemberList().contains(username) && !mChatRoom.getAdminList().contains(username) && !username.equals(mChatRoom.getOwner())) {
+            return;
+        }
+
         if (mChatRoom.getMuteList().containsKey(username)) {
             muteState.setVisibility(View.VISIBLE);
         } else {

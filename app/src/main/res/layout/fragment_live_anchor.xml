@@ -25,12 +25,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <io.agora.livedemo.ui.widget.RoomMessagesView
+    <io.agora.chat.uikit.lives.EaseChatRoomMessagesView
         android:id="@+id/message_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"
+        app:ease_live_input_edit_margin_bottom="10dp"
+        app:ease_live_input_edit_margin_end="180dp"
+        app:ease_live_message_list_margin_end="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -75,6 +76,7 @@
         android:id="@+id/end_live_stream_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_10"
         android:text="@string/anchor_end_live_stream_tip"
         android:textColor="#BDBDBD"
         android:textSize="18sp"

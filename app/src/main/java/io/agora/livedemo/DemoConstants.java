@@ -26,7 +26,7 @@ public interface DemoConstants {
     String TYPE_ANCHOR = "anchor";
     String TYPE_AUDIENCE = "audience";
 
-    String MSG_KEY_MEMBER_ADD = "member_add";
+
 
     int MAX_SHOW_MEMBERS_COUNT = 200;
 

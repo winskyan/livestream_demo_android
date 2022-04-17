@@ -154,7 +154,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 });
 
 
-
         startLive();
     }
 
@@ -438,6 +437,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
             parseResource(response, new OnResourceParseCallback<LiveRoom>() {
                 @Override
                 public void onSuccess(LiveRoom data) {
+                    try {
+                        ChatClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     DemoHelper.removeTarget(data.getId());
                     DemoHelper.removeSaveLivingId();
                     if (DemoHelper.getReceiveGiftDao() != null) {
@@ -464,6 +469,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     private void endLiveStream() {
         closeIv.setVisibility(View.VISIBLE);
         toolbarGroupView.setVisibility(View.INVISIBLE);
+        messageView.setVisibility(View.GONE);
 
         imgBtClose.setVisibility(View.GONE);
         switchCameraView.setEnabled(false);
@@ -512,12 +518,16 @@ public class LiveAnchorFragment extends LiveBaseFragment {
 
     @Override
     public void onBackPressed() {
-        showDialog(new OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view, Object bean) {
-                mContext.onBackPressed();
-            }
-        });
+        if (isOnGoing) {
+            showDialog(new OnConfirmClickListener() {
+                @Override
+                public void onConfirmClick(View view, Object bean) {
+                    mContext.onBackPressed();
+                }
+            });
+        } else {
+            mContext.onBackPressed();
+        }
     }
 
     public void setOnStopLiveClickListener(OnConfirmClickListener onStopLiveClickListener) {

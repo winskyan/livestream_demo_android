@@ -44,7 +44,7 @@
         android:clickable="true"
         android:padding="@dimen/margin_10"
         android:scaleType="fitCenter"
-        android:src="@drawable/live_comment"
+        android:src="@drawable/live_comment_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/switch_camera_image"
         app:layout_constraintTop_toTopOf="parent" />

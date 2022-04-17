@@ -30,5 +30,5 @@ dependencies {
     //api 'io.agora.rtc:chat-uikit:1.0.1'
 //    implementation project(path: ':ChatClient-android')
 //    api project(path: ':ChatClient-android:hyphenatechatsdk')
-    api project(path: ':chat-uikit')
+
 }

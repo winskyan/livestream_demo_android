@@ -115,4 +115,5 @@ dependencies {
     implementation project(path: ':fastlive')
     // agora cdn live
 //    implementation project(path: ':cdn_live')
+    implementation project(path: ':chat-uikit')
 }

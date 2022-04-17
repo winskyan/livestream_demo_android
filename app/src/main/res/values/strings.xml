@@ -128,4 +128,7 @@
     <string name="gift_send_info">%1$d X %2$s</string>
     <string name="gift_input_num_title">Input number</string>
     <string name="gift_show_send">send %1$s</string>
+
+    <string name="live_stream_end_tip">The Live Stream has ended</string>
+
 </resources>

@@ -38,10 +38,10 @@
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/em_live_logo"
+        android:icon="@mipmap/live_logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/em_live_logo"
+        android:roundIcon="@mipmap/live_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
@@ -117,6 +117,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.cdn.CdnLiveHostActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
 
 
@@ -124,13 +125,10 @@
         <activity
             android:name=".ui.other.AssociateLiveRoomActivity"
             android:screenOrientation="portrait" />
-        <!--启动页-->
 
         <!-- 直播间列表 -->
         <activity android:name=".ui.live.LiveAllActivity" />
-        <!-- 关于环信 -->
         <activity android:name=".ui.other.AboutActivity" />
-        <!-- 极速直播主播端 -->
         <activity
             android:name=".ui.fast.FastLiveHostActivity"
             android:launchMode="singleTop"

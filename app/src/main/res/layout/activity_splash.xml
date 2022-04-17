@@ -5,18 +5,24 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_splash">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:gravity="center_horizontal|bottom"
-        android:paddingBottom="123dp"
-        android:text="@string/live_welcome"
-        android:textColor="#565656"
-        android:textSize="@dimen/em_size_big"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@drawable/live_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="1" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/live_agora_log"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
