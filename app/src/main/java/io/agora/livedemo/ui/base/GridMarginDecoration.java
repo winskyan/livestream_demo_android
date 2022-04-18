@@ -1,4 +1,3 @@
-
 package io.agora.livedemo.ui.base;
 
 import android.content.Context;

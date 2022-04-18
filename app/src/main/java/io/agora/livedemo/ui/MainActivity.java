@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
-import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;

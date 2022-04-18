@@ -9,10 +9,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 专门用于维护声明周期
- */
-
 public class UserActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks, ActivityState {
     private List<Activity> activityList = new ArrayList<>();
     private List<Activity> resumeActivity = new ArrayList<>();
@@ -49,7 +45,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         Log.e("ActivityLifecycle", "onActivityStopped " + activity.getLocalClassName());
         resumeActivity.remove(activity);
         if (resumeActivity.isEmpty()) {
-            Log.e("TAG", "在后台了");
+            Log.e("TAG", "in background");
         }
     }
 
@@ -84,11 +80,6 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         return resumeActivity.size() > 0;
     }
 
-    /**
-     * 跳转到目标activity
-     *
-     * @param cls
-     */
     public void skipToTarget(Class<?> cls) {
         if (activityList != null && activityList.size() > 0) {
             current().startActivity(new Intent(current(), cls));

@@ -12,7 +12,7 @@ import io.agora.chat.CustomMessageBody;
 import io.agora.chat.MessageBody;
 import io.agora.chat.uikit.lives.EaseLiveMessageConstant;
 import io.agora.chat.uikit.lives.EaseLiveMessageType;
-import io.agora.fastlive.FastLiveHelper;
+import io.agora.live.FastLiveHelper;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.common.db.DemoDbHelper;
@@ -76,21 +76,6 @@ public class DemoHelper {
 
     public static void setCanRegister(boolean canRegister) {
         PreferenceManager.setCanRegister(canRegister);
-    }
-
-    /**
-     * get nick name
-     *
-     * @param username
-     * @return
-     */
-    public static String getNickName(String username) {
-        /*User user = UserRepository.getInstance().getUserByUsername(username);
-        if (user == null) {
-            return username;
-        }
-        return user.getNickname();*/
-        return "";
     }
 
     /**
@@ -205,11 +190,6 @@ public class DemoHelper {
         }
     }
 
-    /**
-     * 保存点赞数量
-     *
-     * @param message
-     */
     public static void saveLikeInfo(ChatMessage message) {
         if (message == null) {
             return;

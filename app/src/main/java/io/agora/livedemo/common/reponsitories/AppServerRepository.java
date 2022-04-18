@@ -13,9 +13,6 @@ import io.agora.livedemo.data.restapi.LiveManager;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 import okhttp3.RequestBody;
 
-/**
- * 用于从app server获取数据
- */
 public class AppServerRepository {
     private ApiService apiService;
 

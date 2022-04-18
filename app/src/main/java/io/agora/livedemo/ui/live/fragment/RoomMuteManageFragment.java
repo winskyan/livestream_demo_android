@@ -41,10 +41,10 @@ public class RoomMuteManageFragment extends RoomUserManagementFragment {
     @Override
     protected void showOtherInfo(ManagementAdapter.ManagementViewHolder holder, List<String> userList, int position) {
         holder.tvLabel.setVisibility(View.VISIBLE);
-        holder.tvLabel.setText(getString(R.string.em_live_audience_muted));
+        holder.tvLabel.setText(getString(R.string.live_anchor_muted));
         holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.live_user_item_muted_bg_shape));
         holder.managerButton.setVisibility(View.VISIBLE);
-        holder.managerButton.setText(getString(R.string.em_live_anchor_remove_mute));
+        holder.managerButton.setText(getString(R.string.live_anchor_remove_mute));
         holder.managerButton.setBackground(null);
 
         holder.managerButton.setOnClickListener(new View.OnClickListener() {

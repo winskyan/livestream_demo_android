@@ -20,38 +20,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.agora.livedemo.R;
 
-/**
- * 基础的适配器
- * Created by wangjie on 2019/3/7.
- * 项目地址：https://github.com/mCyp/Muti-Barrage
- */
-
 @SuppressWarnings({"unchecked"})
 public abstract class BarrageAdapter<T extends DataSource>
         implements View.OnClickListener {
 
     private static final int MSG_CREATE_VIEW = 1;
 
-    // View的点击监听
     private AdapterListener<T> mAdapterListener;
-    // 类型List
     private Set<Integer> mTypeList;
-    // 持有的barrageView
     private IBarrageView barrageView;
-    // 当前的数据
     private LinkedList<T> mDataList;
 
     private Context mContext;
-    // 默认的间隔
     private long interval;
-    // 循环的次数
     private int repeat;
-    // 当前的
     private AtomicBoolean isDestroy = new AtomicBoolean(false);
 
-    // 单线程的消息对立
     private ExecutorService mService = Executors.newSingleThreadExecutor();
-    // 主线程的Handler
     private BarrageAdapterHandler<T> mHandler = new BarrageAdapterHandler<>(Looper.getMainLooper(), this);
 
 
@@ -74,18 +59,7 @@ public abstract class BarrageAdapter<T extends DataSource>
         this.repeat = barrageView.getRepeat();
     }
 
-    // TODO 数据的增加处理
-
-    /**
-     * 创建子视图的过程
-     *
-     * @param cacheView 缓存视图
-     */
     private void createItemView(T data, View cacheView) {
-        // 1.获取子布局
-        // 2. 创建ViewHolder
-        // 3. 绑定ViewHolder
-        // 4. 返回视图
         int layoutType = getItemLayout(data);
         BarrageViewHolder<T> holder = null;
         if (cacheView != null) {
@@ -100,44 +74,25 @@ public abstract class BarrageAdapter<T extends DataSource>
             barrageView.addBarrageItem(holder.getItemView());
     }
 
-    /**
-     * 创建ViewHolder
-     *
-     * @param type 布局类型
-     * @return ViewHolder
-     */
+
     private BarrageViewHolder<T> createViewHolder(Context context, int type) {
         View root = LayoutInflater.from(context).inflate(type, null);
         BarrageViewHolder<T> holder = onCreateViewHolder(root, type);
 
-        // 设置点击事件
+
         root.setTag(R.id.barrage_view_holder, holder);
         root.setOnClickListener(this);
         return holder;
     }
 
-    /**
-     * 真正创建ViewHolder的方法
-     *
-     * @param type 类型
-     * @return ViewHolder
-     */
+
     protected abstract BarrageViewHolder<T> onCreateViewHolder(View root, int type);
 
-    /**
-     * 得到布局的xml文件
-     *
-     * @return xml文件
-     */
+
     public abstract @LayoutRes
     int getItemLayout(T t);
 
-    /**
-     * 绑定数据
-     *
-     * @param holder BarrageViewHolder
-     * @param data   T
-     */
+
     private void bindViewHolder(BarrageViewHolder<T> holder, T data) {
         if (null == data)
             return;
@@ -158,11 +113,7 @@ public abstract class BarrageAdapter<T extends DataSource>
         }
     }
 
-    /**
-     * 添加一组数据
-     *
-     * @param data T
-     */
+
     public void add(T data) {
         if (data == null)
             return;
@@ -170,11 +121,7 @@ public abstract class BarrageAdapter<T extends DataSource>
         mService.submit(new DelayRunnable(1));
     }
 
-    /**
-     * 添加一组数据
-     *
-     * @param dataList 一组数据
-     */
+
     public void addList(List<T> dataList) {
         if (dataList == null || dataList.size() == 0)
             return;
@@ -187,7 +134,6 @@ public abstract class BarrageAdapter<T extends DataSource>
     public void destroy() {
         while (!isDestroy.get())
             isDestroy.compareAndSet(false, true);
-        // 数据清空
         mDataList.clear();
         if (!mService.isShutdown())
             mService.shutdownNow();
@@ -216,9 +162,7 @@ public abstract class BarrageAdapter<T extends DataSource>
         protected abstract void onBind(T data);
     }
 
-    /**
-     * 延迟的Runnable
-     */
+
     public class DelayRunnable implements Runnable {
 
         private int len;

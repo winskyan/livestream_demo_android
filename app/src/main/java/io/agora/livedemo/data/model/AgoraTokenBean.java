@@ -37,5 +37,15 @@ public class AgoraTokenBean {
     public void setAgoraUserId(int agoraUserId) {
         this.agoraUserId = agoraUserId;
     }
+
+    @Override
+    public String toString() {
+        return "AgoraTokenBean{" +
+                "code='" + code + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", agoraUserId=" + agoraUserId +
+                ", expireTime=" + expireTime +
+                '}';
+    }
 }
 

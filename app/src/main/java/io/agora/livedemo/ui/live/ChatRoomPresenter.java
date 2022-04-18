@@ -149,17 +149,13 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     public void onMessageReceived(List<ChatMessage> messages) {
         for (ChatMessage message : messages) {
             String username = null;
-            // 群组消息
             if (message.getChatType() == ChatMessage.ChatType.GroupChat
                     || message.getChatType() == ChatMessage.ChatType.ChatRoom) {
                 username = message.getTo();
             } else {
-                // 单聊消息
                 username = message.getFrom();
             }
-            // 如果是当前会话的消息，刷新聊天页面
             if (username.equals(chatroomId)) {
-                //判断是否是自定消息，然后区分礼物，点赞及弹幕消息
                 if (onChatRoomListener != null) {
                     onChatRoomListener.onMessageReceived();
                 }

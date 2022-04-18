@@ -8,9 +8,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import io.agora.chat.ChatClient;
-import io.agora.fastlive.FastLiveHelper;
-import io.agora.fastlive.fragment.FastLiveHostFragment;
-import io.agora.fastlive.widgets.VideoGridContainer;
+import io.agora.live.FastLiveHelper;
+import io.agora.live.fast.fragment.FastLiveHostFragment;
+import io.agora.live.widgets.VideoGridContainer;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.data.model.LiveRoom;

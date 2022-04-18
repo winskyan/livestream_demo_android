@@ -50,7 +50,7 @@ public class LiveGiftStatisticsAdapter extends EaseBaseRecyclerViewAdapter<Recei
             }
             tvGiftInfo.setText(mContext.getString(R.string.live_gift_gift_info, item.getGift_num()));
 
-            txtUsernick.setText(mContext.getString(R.string.live_gift_sender_info, DemoHelper.getNickName(item.getFrom())));
+            txtUsernick.setText(mContext.getString(R.string.live_gift_sender_info, item.getFrom()));
             //imgAvatar.setImageResource(DemoHelper.getAvatarResource(item.getFrom()));
 
         }

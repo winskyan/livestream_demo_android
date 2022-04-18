@@ -73,14 +73,6 @@ public class UserRepository {
         return mCurrentUser;
     }
 
-    public int getResDrawable(int index) {
-        if (null != mContext) {
-            return mContext.getResources().getIdentifier("avatar_" + index, "drawable", mContext.getPackageName());
-        } else {
-            return R.drawable.avatar_default;
-        }
-    }
-
     public void setHeadImageList(List<HeadImageInfo> headImageList) {
         this.mHeadImageList = headImageList;
     }

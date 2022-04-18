@@ -240,6 +240,5 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                 adapter.setData(data);
             }
         }
-
     }
 }

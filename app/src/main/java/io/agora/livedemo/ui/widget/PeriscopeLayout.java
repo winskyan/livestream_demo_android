@@ -81,7 +81,6 @@ public class PeriscopeLayout extends RelativeLayout {
 
     private void init() {
 
-        //初始化显示的图片
         drawables = new Drawable[3];
         Drawable red = getResources().getDrawable(R.drawable.pl_red);
         Drawable yellow = getResources().getDrawable(R.drawable.pl_yellow);
@@ -90,17 +89,13 @@ public class PeriscopeLayout extends RelativeLayout {
         drawables[0] = red;
         drawables[1] = yellow;
         drawables[2] = blue;
-        //获取图的宽高 用于后面的计算
-        //注意 我这里3张图片的大小都是一样的,所以我只取了一个
         dHeight = red.getIntrinsicHeight();
         dWidth = red.getIntrinsicWidth();
 
-        //底部 并且 水平居中
         lp = new LayoutParams(dWidth, dHeight);
-        lp.addRule(CENTER_HORIZONTAL, TRUE);//这里的TRUE 要注意 不是true
+        lp.addRule(CENTER_HORIZONTAL, TRUE);
         lp.addRule(ALIGN_PARENT_BOTTOM, TRUE);
 
-        // 初始化插补器
         interpolators = new Interpolator[4];
         interpolators[0] = line;
         interpolators[1] = acc;
@@ -121,7 +116,6 @@ public class PeriscopeLayout extends RelativeLayout {
     public void addHeart() {
 
         ImageView imageView = new ImageView(getContext());
-        //随机选一个
         imageView.setImageDrawable(drawables[random.nextInt(3)]);
         imageView.setLayoutParams(lp);
 
@@ -160,10 +154,8 @@ public class PeriscopeLayout extends RelativeLayout {
 
     private ValueAnimator getBezierValueAnimator(View target) {
 
-        //初始化一个贝塞尔计算器- - 传入
         BezierEvaluator evaluator = new BezierEvaluator(getPointF(2), getPointF(1));
 
-        //这里最好画个图 理解一下 传入了起点 和 终点
         ValueAnimator animator = ValueAnimator.ofObject(evaluator, new PointF((mWidth - dWidth) / 2, mHeight - dHeight), new PointF(random.nextInt(getWidth()), 0));
         animator.addUpdateListener(new BezierListener(target));
         animator.setTarget(target);
@@ -171,16 +163,10 @@ public class PeriscopeLayout extends RelativeLayout {
         return animator;
     }
 
-    /**
-     * 获取中间的两个 点
-     *
-     * @param scale
-     */
     private PointF getPointF(int scale) {
 
         PointF pointF = new PointF();
-        pointF.x = random.nextInt((mWidth - 100));//减去100 是为了控制 x轴活动范围,看效果 随意~~
-        //再Y轴上 为了确保第二个点 在第一个点之上,我把Y分成了上下两半 这样动画效果好一些  也可以用其他方法
+        pointF.x = random.nextInt((mWidth - 100));
         pointF.y = random.nextInt((mHeight - 100)) / scale;
         return pointF;
     }
@@ -195,11 +181,9 @@ public class PeriscopeLayout extends RelativeLayout {
 
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-            //这里获取到贝塞尔曲线计算出来的的x y值 赋值给view 这样就能让爱心随着曲线走啦
             PointF pointF = (PointF) animation.getAnimatedValue();
             target.setX(pointF.x);
             target.setY(pointF.y);
-            // 这里顺便做一个alpha动画
             target.setAlpha(1 - animation.getAnimatedFraction());
         }
     }
@@ -215,7 +199,6 @@ public class PeriscopeLayout extends RelativeLayout {
         @Override
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
-            //因为不停的add 导致子view数量只增不减,所以在view动画结束后remove掉
             removeView((target));
         }
     }

@@ -102,7 +102,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
-    implementation project(path: ':custommessage')
     // RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     // Use the most recent version of CameraX, currently that is alpha04

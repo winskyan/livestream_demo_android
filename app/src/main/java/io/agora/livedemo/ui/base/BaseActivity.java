@@ -16,12 +16,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.ThreadPoolManager;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.common.enums.Status;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.utils.StatusBarCompat;
+import io.agora.livedemo.utils.ThreadPoolManager;
 import io.agora.livedemo.utils.Utils;
 
 public class BaseActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected Toolbar getActionBarToolbar() {
         if (mActionBarToolbar == null) {
-            mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+            mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
             if (mActionBarToolbar != null) {
                 setSupportActionBar(mActionBarToolbar);
                 getSupportActionBar().setDisplayShowTitleEnabled(false);

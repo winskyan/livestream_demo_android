@@ -15,9 +15,6 @@ import butterknife.ButterKnife;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 
-/**
- * Created by wei on 2016/6/7.
- */
 @RemoteViews.RemoteView
 public class LiveLeftGiftView extends RelativeLayout {
     @BindView(R.id.avatar)

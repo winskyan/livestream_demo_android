@@ -60,7 +60,7 @@ public class LiveDataCallAdapter<T> implements CallAdapter<T, LiveData<T>> {
                         @Override
                         public void onFailure(Call<T> call, Throwable t) {
                             BaseBean result = new BaseBean();
-                            result.code = ErrorCode.EM_REQUEST_ERROR;
+                            result.code = ErrorCode.REQUEST_ERROR;
                             result.message = t.getMessage();
                             T body = null;
                             try {
@@ -82,7 +82,7 @@ public class LiveDataCallAdapter<T> implements CallAdapter<T, LiveData<T>> {
             result.message = response.errorBody().string();
         } catch (IOException e) {
             e.printStackTrace();
-            result.code = ErrorCode.EM_REQUEST_ERROR;
+            result.code = ErrorCode.REQUEST_ERROR;
             result.message = e.getMessage();
         }
     }

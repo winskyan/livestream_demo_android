@@ -50,7 +50,7 @@ public class Resource<T> {
     }
 
     /**
-     * 获取错误信息
+     * get error message
      *
      * @return
      */

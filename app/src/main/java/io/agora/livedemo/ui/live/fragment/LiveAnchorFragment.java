@@ -96,13 +96,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         ReceiveGiftDao giftDao = DemoHelper.getReceiveGiftDao();
         if (giftDao != null) {
             int totalNum = giftDao.loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
+            tvGiftNum.setText(getString(R.string.live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
         } else {
-            tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(0)));
+            tvGiftNum.setText(getString(R.string.live_anchor_receive_gift_info, NumberUtils.amountConversion(0)));
         }
 
         int likeNum = DemoHelper.getLikeNum(liveId);
-        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
+        tvLikeNum.setText(getString(R.string.live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if (response != null && response) {
                         int totalNum = DemoHelper.getReceiveGiftDao().loadGiftTotalNum(DemoMsgHelper.getInstance().getCurrentRoomId());
-                        tvGiftNum.setText(getString(R.string.em_live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
+                        tvGiftNum.setText(getString(R.string.live_anchor_receive_gift_info, NumberUtils.amountConversion(totalNum)));
                     }
                 });
 
@@ -133,7 +133,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                 .observe(getViewLifecycleOwner(), response -> {
                     if (response != null && response) {
                         int likeNum = DemoHelper.getLikeNum(liveId);
-                        tvLikeNum.setText(getString(R.string.em_live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
+                        tvLikeNum.setText(getString(R.string.live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
                     }
                 });
         LiveDataBus.get().with(DemoConstants.FINISH_LIVE, Boolean.class)
@@ -493,7 +493,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         // background
         ChatClient.getInstance().chatManager().removeMessageListener(presenter);
 
-        // 把此activity 从foreground activity 列表里移除
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
             if (isMessageListInited && !isSwitchOwnerToOther) {

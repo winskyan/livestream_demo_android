@@ -12,9 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.agora.livedemo.R;
 
-/**
- * Created by wei on 2016/7/27.
- */
+
 public class ScreenshotDialog extends Dialog {
 
     @BindView(R.id.imageview)

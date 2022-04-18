@@ -44,7 +44,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 解析Resource<T>
+     * pares Resource<T>
      *
      * @param response
      * @param callback
@@ -57,7 +57,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     * Getting the current view control by id needs to be called in the lifetime after onViewCreated().
      *
      * @param id
      * @param <T>

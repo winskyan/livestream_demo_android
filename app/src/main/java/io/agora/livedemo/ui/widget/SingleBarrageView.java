@@ -39,12 +39,12 @@ public class SingleBarrageView extends BarrageView {
 
     public void initBarrage() {
         Options options = new Options()
-                .setGravity(BarrageView.GRAVITY_TOP)                // 设置弹幕的位置
-                .setInterval(100)                                     // 设置弹幕的发送间隔
-                .setSpeed(200, 29)                   // 设置速度和波动值
-                .setModel(BarrageView.MODEL_COLLISION_DETECTION)     // 设置弹幕生成模式
-                .setRepeat(1)                                       // 循环播放 默认为1次 -1 为无限循环
-                .setClick(false);                                    // 设置弹幕是否可以点击
+                .setGravity(BarrageView.GRAVITY_TOP)
+                .setInterval(100)
+                .setSpeed(200, 29)
+                .setModel(BarrageView.MODEL_COLLISION_DETECTION)
+                .setRepeat(1)
+                .setClick(false);
         setOptions(options);
 
         mAdapter = new BarrageAdapter<MessageBean>(null, getContext()) {

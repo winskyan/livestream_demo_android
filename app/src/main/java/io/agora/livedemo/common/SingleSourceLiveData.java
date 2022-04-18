@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 /**
- * 设置并监听单一数据源时使用 LiveData
- * 方便于当需要切换数据源时自动取消掉前一个数据源的监听
+ * Use LiveData when setting up and listening to a single data source
+ * It is convenient to automatically cancel the listening of the previous data source when it is necessary to switch data sources
  *
- * @param <T> 监听的数据源类型
+ * @param <T> The type of data source that is listening
  */
 public class SingleSourceLiveData<T> extends MutableLiveData<T> {
     private LiveData<T> lastSource;
@@ -26,7 +26,7 @@ public class SingleSourceLiveData<T> extends MutableLiveData<T> {
     };
 
     /**
-     * 设置数据源，当有已设置过的数据源时会取消该数据源的监听
+     * Set up a data source that is unmonitored when there is a data source that has already been provisioned
      *
      * @param source
      */

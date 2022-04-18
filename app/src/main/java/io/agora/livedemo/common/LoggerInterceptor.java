@@ -16,9 +16,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 
-/**
- * Created by songyuqiang on 16/11/3.
- */
 public class LoggerInterceptor implements Interceptor {
     public static final String TAG = "OkHttpResponse";
     private String mTag;

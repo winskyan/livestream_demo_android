@@ -32,9 +32,9 @@ public class FastLivingListActivity extends BaseLiveActivity implements EaseTitl
         titleBar = findViewById(R.id.title_bar);
         boolean isFast = getIntent().getBooleanExtra(EXTRA_IS_FAST, true);
         if (isFast) {
-            titleBar.setTitle(getString(R.string.em_live_type_fast_title));
+            titleBar.setTitle(getString(R.string.live_type_fast_title));
         } else {
-            titleBar.setTitle(getString(R.string.em_live_type_interaction_title));
+            titleBar.setTitle(getString(R.string.live_type_interaction_title));
         }
     }
 

@@ -12,5 +12,12 @@ public class ExtBean extends BaseBean {
     public void setPlay(Map<String, String> play) {
         this.play = play;
     }
+
+    @Override
+    public String toString() {
+        return "ExtBean{" +
+                "play=" + play +
+                '}';
+    }
 }
 

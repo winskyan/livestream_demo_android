@@ -21,10 +21,7 @@ import io.agora.livedemo.ui.live.adapter.FragmentAdapter;
 import io.agora.livedemo.ui.live.fragment.LiveListFragment;
 import io.agora.livedemo.ui.other.SearchActivity;
 
-/**
- * Created by wei on 2016/5/27.
- * 直播广场
- */
+
 public class LiveSquareFragment extends Fragment {
     private Unbinder unbinder;
 
@@ -59,9 +56,9 @@ public class LiveSquareFragment extends Fragment {
 
     private void setupViewPager() {
         FragmentAdapter adapter = new FragmentAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new LiveListFragment(), "热门");
-        adapter.addFragment(new LiveListFragment(), "女神");
-        adapter.addFragment(new LiveListFragment(), "男神");
+        adapter.addFragment(new LiveListFragment(), "title1");
+        adapter.addFragment(new LiveListFragment(), "title2");
+        adapter.addFragment(new LiveListFragment(), "title3");
         viewPager.setAdapter(adapter);
     }
 

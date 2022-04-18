@@ -32,5 +32,13 @@ public class MemberBean extends BaseBean {
         }
         return member;
     }
+
+    @Override
+    public String toString() {
+        return "MemberBean{" +
+                "owner='" + owner + '\'' +
+                ", member='" + member + '\'' +
+                '}';
+    }
 }
 

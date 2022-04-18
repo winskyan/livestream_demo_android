@@ -1,11 +1,6 @@
 package io.agora.livedemo.common.reponsitories;
 
 
-/**
- * 结果基础类
- *
- * @param <T> 请求结果的实体类
- */
 public class Result<T> {
     public int code;
     public T result;

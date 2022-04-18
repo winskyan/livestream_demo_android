@@ -59,14 +59,14 @@ public class SwitchItemView extends ConstraintLayout {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwitchItemView);
         int titleResourceId = a.getResourceId(R.styleable.SwitchItemView_switchItemTitle, -1);
         title = a.getString(R.styleable.SwitchItemView_switchItemTitle);
-        if(titleResourceId != -1) {
+        if (titleResourceId != -1) {
             title = getContext().getString(titleResourceId);
         }
         tvTitle.setText(title);
 
         int titleColorId = a.getResourceId(R.styleable.SwitchItemView_switchItemTitleColor, -1);
         titleColor = a.getColor(R.styleable.SwitchItemView_switchItemTitleColor, ContextCompat.getColor(getContext(), R.color.color_black_333333));
-        if(titleColorId != -1) {
+        if (titleColorId != -1) {
             titleColor = ContextCompat.getColor(getContext(), titleColorId);
         }
         tvTitle.setTextColor(titleColor);
@@ -74,7 +74,7 @@ public class SwitchItemView extends ConstraintLayout {
         int titleSizeId = a.getResourceId(R.styleable.SwitchItemView_switchItemTitleSize, -1);
         titleSize = a.getDimension(R.styleable.SwitchItemView_switchItemTitleSize, sp2px(getContext(), 14));
 
-        if(titleSizeId != -1) {
+        if (titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);
         }
         tvTitle.getPaint().setTextSize(titleSize);
@@ -84,7 +84,7 @@ public class SwitchItemView extends ConstraintLayout {
 
         int hintResourceId = a.getResourceId(R.styleable.SwitchItemView_switchItemHint, -1);
         hint = a.getString(R.styleable.SwitchItemView_switchItemHint);
-        if(hintResourceId != -1) {
+        if (hintResourceId != -1) {
             hint = getContext().getString(hintResourceId);
         }
         tvHint.setText(hint);
@@ -99,27 +99,27 @@ public class SwitchItemView extends ConstraintLayout {
         avatar.setVisibility(showAvatar ? VISIBLE : GONE);
 
         int avatarSrcResourceId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarSrc, -1);
-        if(avatarSrcResourceId != -1) {
+        if (avatarSrcResourceId != -1) {
             avatar.setImageResource(avatarSrcResourceId);
         }
 
         int avatarHeightId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarHeight, -1);
         float height = a.getDimension(R.styleable.SwitchItemView_switchItemAvatarHeight, 0);
-        if(avatarHeightId != -1) {
+        if (avatarHeightId != -1) {
             height = getResources().getDimension(avatarHeightId);
         }
 
         int avatarWidthId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarWidth, -1);
         float width = a.getDimension(R.styleable.SwitchItemView_switchItemAvatarWidth, 0);
-        if(avatarWidthId != -1) {
+        if (avatarWidthId != -1) {
             width = getResources().getDimension(avatarWidthId);
         }
 
         a.recycle();
 
         ViewGroup.LayoutParams params = avatar.getLayoutParams();
-        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)height;
-        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)width;
+        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) height;
+        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) width;
 
         setListener();
 
@@ -130,13 +130,13 @@ public class SwitchItemView extends ConstraintLayout {
         switchItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onCheckedChanged(SwitchItemView.this, isChecked);
                 }
             }
         });
     }
-    
+
     public EaseImageView getAvatar() {
         return avatar;
     }
@@ -149,7 +149,7 @@ public class SwitchItemView extends ConstraintLayout {
         return switchItem;
     }
 
-    public TextView getTvHint(){
+    public TextView getTvHint() {
         return tvHint;
     }
 
@@ -159,6 +159,7 @@ public class SwitchItemView extends ConstraintLayout {
 
     /**
      * sp to px
+     *
      * @param context
      * @param value
      * @return

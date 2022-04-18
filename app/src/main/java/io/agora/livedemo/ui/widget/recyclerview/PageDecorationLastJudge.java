@@ -1,8 +1,5 @@
 package io.agora.livedemo.ui.widget.recyclerview;
 
-/**
- * 参考博文：https://blog.csdn.net/Y_sunny_U/article/details/89500464
- */
 public interface PageDecorationLastJudge {
     /**
      * Is the last row in one page

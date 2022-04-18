@@ -15,22 +15,13 @@ import android.view.WindowManager;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * 页面沉浸式工具，需要用到RomUtils
- */
 
 public class StatusBarCompat {
 
     private static final int INVALID_VAL = -1;
     private static final int COLOR_DEFAULT = Color.parseColor("#20000000");
 
-    /**
-     * 设置页面是否是沉浸式，并可以修改状态栏的颜色
-     *
-     * @param activity
-     * @param fitSystemForTheme 是否设置为沉浸式 true 则页面侵入状态栏; false 保留状态栏
-     * @param color             状态栏的颜色
-     */
+
     public static void setFitSystemForTheme(Activity activity, boolean fitSystemForTheme, String color) {
         setFitSystemForTheme(activity, fitSystemForTheme, Color.parseColor(color));
     }
@@ -59,7 +50,6 @@ public class StatusBarCompat {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void compat(Activity activity, int statusColor) {
 
-        //当前手机版本为5.0及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (statusColor != INVALID_VAL) {
                 activity.getWindow().setStatusBarColor(statusColor);
@@ -67,7 +57,6 @@ public class StatusBarCompat {
             return;
         }
 
-        //当前手机版本为4.4
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int color = COLOR_DEFAULT;
             ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
@@ -119,7 +108,6 @@ public class StatusBarCompat {
     }
 
     public static void setLightStatusBar(Activity activity, boolean dark) {
-        //针对4.4以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             switch (RomUtils.getLightStatusBarAvailableRomType()) {
                 case RomUtils.AvailableRomType.MIUI:
@@ -154,7 +142,6 @@ public class StatusBarCompat {
                 result = true;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && RomUtils.isMiUIV7OrAbove()) {
-                    //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
                     if (dark) {
                         activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                     } else {

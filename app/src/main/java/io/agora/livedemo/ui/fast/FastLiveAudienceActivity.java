@@ -8,8 +8,8 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 
 import io.agora.chat.ChatClient;
-import io.agora.fastlive.FastLiveHelper;
-import io.agora.fastlive.fragment.FastLiveAudienceFragment;
+import io.agora.live.FastLiveHelper;
+import io.agora.live.fast.fragment.FastLiveAudienceFragment;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -131,8 +131,8 @@ public class FastLiveAudienceActivity extends LiveBaseActivity implements LiveAu
 
     @Override
     public void onRoomOwnerChangedToCurrentUser(String chatRoomId, String newOwner) {
-        // 如果直播间主播被调整为自己
-        //切换直播场景之前先调用离开频道的逻辑，否则会造成当前用户还没有离开频道，又在新的页面加入频道的问题
+        // If the live streamer is adjusted to himself
+        //Call the logic of leaving the channel before switching the live broadcast scene, otherwise it will cause the problem that the current user has not left the channel and joined the channel on the new page
         if (presenter != null) {
             presenter.leaveChannel();
         }

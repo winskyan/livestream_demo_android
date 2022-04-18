@@ -49,7 +49,6 @@ public class LiveGiftSendDialog extends DemoDialogFragment {
                 View child = LayoutInflater.from(mContext).inflate(layoutId, middleParent, false);
                 middleParent.removeAllViews();
                 middleParent.addView(child);
-                //同时使middleParent可见
                 view.findViewById(R.id.group_middle).setVisibility(View.VISIBLE);
                 initChildView(middleParent, child);
             }

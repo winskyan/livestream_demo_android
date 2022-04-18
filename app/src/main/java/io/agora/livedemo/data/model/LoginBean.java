@@ -19,4 +19,12 @@ public class LoginBean {
     public void setUserNickname(String userNickname) {
         this.userNickname = userNickname;
     }
+
+    @Override
+    public String toString() {
+        return "LoginBean{" +
+                "accessToken='" + accessToken + '\'' +
+                ", userNickname='" + userNickname + '\'' +
+                '}';
+    }
 }

@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorPrimary">@color/common_black</item>
     </style>
@@ -53,7 +53,7 @@
     </style>
 
     <style name="SwitchTheme" parent="@android:style/TextAppearance.Small">
-        <item name="android:textColor">@color/em_switch_text_selector</item>
+        <item name="android:textColor">@color/switch_text_selector</item>
     </style>
 
     <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">

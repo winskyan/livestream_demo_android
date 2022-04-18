@@ -20,9 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.agora.livedemo.R;
 
-/**
- * Created by wei on 2016/6/13.
- */
+
 public class BarrageLayout extends LinearLayout {
     @BindView(R.id.container1)
     RelativeLayout container1;

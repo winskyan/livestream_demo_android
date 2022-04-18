@@ -37,7 +37,6 @@ import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
 import io.agora.livedemo.utils.StatusBarCompat;
-import io.agora.util.EMLog;
 
 
 public class LiveMemberListDialog extends BaseLiveDialogFragment {

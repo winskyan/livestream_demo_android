@@ -773,7 +773,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             barrageLayout.destroy();
         }
         RoomUserDetailsDialog.sAttentionClicked = false;
-        DemoMsgHelper.getInstance().removeCustomMsgLisenter();
+        DemoMsgHelper.getInstance().removeCustomMsgListener();
     }
 
     private static class MemberIconSpacesItemDecoration extends RecyclerView.ItemDecoration {

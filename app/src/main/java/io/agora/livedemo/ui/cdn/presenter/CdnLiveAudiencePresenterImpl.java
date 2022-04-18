@@ -1,6 +1,6 @@
 package io.agora.livedemo.ui.cdn.presenter;
 
-import io.agora.cdn.presenter.CdnAudiencePresenter;
+import io.agora.live.cdn.presenter.CdnAudiencePresenter;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.CdnUrlBean;

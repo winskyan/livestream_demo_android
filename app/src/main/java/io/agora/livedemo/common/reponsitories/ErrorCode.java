@@ -2,66 +2,38 @@ package io.agora.livedemo.common.reponsitories;
 
 import io.agora.Error;
 
-/**
- * 定义一些本地的错误code
- */
 public class ErrorCode extends Error {
-    /**
-     * 当前网络不可用
-     */
-    public static final int EM_NETWORK_ERROR = -2;
+    public static final int NETWORK_ERROR = -2;
 
-    /**
-     * 未登录过环信
-     */
-    public static final int EM_NOT_LOGIN = -8;
+    public static final int NOT_LOGIN = -8;
 
-    /**
-     * result解析错误
-     */
-    public static final int EM_PARSE_ERROR = -10;
+    public static final int PARSE_ERROR = -10;
 
-    /**
-     * 网络问题请稍后重试
-     */
-    public static final int EM_ERR_UNKNOWN = -20;
 
-    /**
-     * 安卓版本问题,只支持4.4以上
-     */
-    public static final int EM_ERR_IMAGE_ANDROID_MIN_VERSION = -50;
+    public static final int ERR_UNKNOWN = -20;
 
-    /**
-     * 文件不存在
-     */
-    public static final int EM_ERR_FILE_NOT_EXIST = -55;
+    public static final int ERR_IMAGE_ANDROID_MIN_VERSION = -50;
 
-    /**
-     * 添加自己为好友
-     */
+
+    public static final int ERR_FILE_NOT_EXIST = -55;
+
     public static final int EM_ADD_SELF_ERROR = -100;
 
-    /**
-     * 已经是好友
-     */
-    public static final int EM_FRIEND_ERROR = -101;
+
+    public static final int FRIEND_ERROR = -101;
+
+
+    public static final int FRIEND_BLACK_ERROR = -102;
+
+
+    public static final int DELETE_CONVERSATION_ERROR = -110;
+
+    public static final int DELETE_SYS_MSG_ERROR = -115;
 
     /**
-     * 已经添加到黑名单中
+     * request error
      */
-    public static final int EM_FRIEND_BLACK_ERROR = -102;
-
-    /**
-     * 删除对话失败
-     */
-    public static final int EM_DELETE_CONVERSATION_ERROR = -110;
-
-    public static final int EM_DELETE_SYS_MSG_ERROR = -115;
-
-    /**
-     * 请求错误
-     */
-    public static final int EM_REQUEST_ERROR = -9998;
+    public static final int REQUEST_ERROR = -9998;
     public static final int UNKNOWN_ERROR = -9999;
 
     public enum Error {

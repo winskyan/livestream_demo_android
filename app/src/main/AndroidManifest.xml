@@ -49,33 +49,32 @@
         <!--Solve the problem of forcing the use of https in Android 9.0 and add android:usesCleartextTraffic="true" in the application tag-->
         <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
 
-        <!-- IM SDK required start -->
         <!-- Set your agora chat AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="${AGORA_CHAT_APPKEY}" />
-
-        <!-- 声明SDK所需的service SDK核心功能-->
+        <!-- SDK service -->
         <service
-            android:name="com.hyphenate.chat.EMChatService"
+            android:name="io.agora.chat.ChatService"
             android:exported="true" />
         <service
-            android:name="com.hyphenate.chat.EMJobService"
+            android:name="io.agora.chat.ChatJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <!-- 声明SDK所需的receiver -->
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+        <!-- SDK receiver -->
+        <receiver android:name="io.agora.chat.MonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
-            <!-- 可选filter -->
+            <!-- optional filter -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <!-- 环信SDK配置 end -->
+        <!-- IM SDK required end -->
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -117,31 +116,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.cdn.CdnLiveHostActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
-
-        <!-- 关联的直播间（废弃） -->
-        <activity
-            android:name=".ui.other.AssociateLiveRoomActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 直播间列表 -->
-        <activity android:name=".ui.live.LiveAllActivity" />
         <activity android:name=".ui.other.AboutActivity" />
         <activity
             android:name=".ui.fast.FastLiveHostActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <!-- 极速直播观众端 -->
+
         <activity
             android:name=".ui.fast.FastLiveAudienceActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <!-- 正在直播的房间列表 -->
-        <!--        <activity android:name=".ui.live.LivingListActivity"-->
-        <!--            android:screenOrientation="portrait"/>-->
-        <!-- 正在极速直播的房间列表 -->
         <activity
             android:name=".ui.fast.FastLivingListActivity"
             android:screenOrientation="portrait" />

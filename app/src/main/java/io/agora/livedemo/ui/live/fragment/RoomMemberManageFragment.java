@@ -60,13 +60,13 @@ public class RoomMemberManageFragment extends RoomUserManagementFragment {
             holder.switchMute.setVisibility(View.VISIBLE);
             holder.switchMute.setChecked(isAllMuted);
             holder.tvLabel.setVisibility(View.VISIBLE);
-            holder.tvLabel.setText(getString(R.string.em_live_anchor_self));
+            holder.tvLabel.setText(getString(R.string.live_anchor_self));
             holder.tvMuteHint.setVisibility(View.VISIBLE);
         } else {
             holder.managerButton.setVisibility(View.GONE);
             holder.tvLabel.setVisibility(View.GONE);
             holder.tvLabel.setBackground(ContextCompat.getDrawable(mContext, R.drawable.live_member_label_mute_shape));
-            holder.tvLabel.setText(getString(R.string.em_live_anchor_muted));
+            holder.tvLabel.setText(getString(R.string.live_anchor_muted));
             holder.tvMuteHint.setVisibility(View.GONE);
             holder.switchMute.setVisibility(View.GONE);
         }

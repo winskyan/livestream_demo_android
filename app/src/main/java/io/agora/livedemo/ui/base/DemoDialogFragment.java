@@ -37,7 +37,6 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
             RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
             if (middleParent != null) {
                 View child = LayoutInflater.from(mContext).inflate(layoutId, middleParent, false);
-                //同时使middleParent可见
                 view.findViewById(R.id.group_middle).setVisibility(View.VISIBLE);
                 initChildView(middleParent, child);
             }
@@ -79,20 +78,10 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         }
     }
 
-    /**
-     * 点击了取消按钮
-     *
-     * @param v
-     */
     public void onCancelClick(View v) {
         dismiss();
     }
 
-    /**
-     * 点击了确认按钮
-     *
-     * @param v
-     */
     public void onConfirmClick(View v) {
 
     }

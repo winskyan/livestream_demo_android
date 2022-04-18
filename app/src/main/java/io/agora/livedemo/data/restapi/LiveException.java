@@ -3,10 +3,6 @@ package io.agora.livedemo.data.restapi;
 
 import io.agora.exceptions.ChatException;
 
-/**
- * Created by wei on 2017/2/15.
- */
-
 public class LiveException extends ChatException {
     protected int errorCode = -1;
 

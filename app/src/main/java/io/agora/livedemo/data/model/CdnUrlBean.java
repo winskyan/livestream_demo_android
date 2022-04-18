@@ -1,8 +1,5 @@
 package io.agora.livedemo.data.model;
 
-/**
- * @author GaoYuan
- */
 public class CdnUrlBean {
     public String getData() {
         return data;
@@ -13,4 +10,11 @@ public class CdnUrlBean {
     }
 
     private String data;
+
+    @Override
+    public String toString() {
+        return "CdnUrlBean{" +
+                "data='" + data + '\'' +
+                '}';
+    }
 }

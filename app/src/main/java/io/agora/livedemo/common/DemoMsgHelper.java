@@ -6,7 +6,6 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
 import io.agora.chat.uikit.lives.OnLiveMessageReceiveListener;
-import io.agora.livedemo.ui.live.fragment.LiveMemberListDialog;
 
 
 public class DemoMsgHelper {
@@ -29,14 +28,14 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 需要在直播页面开始的时候初始化，防止chatroomId为空或不正确
+     * It needs to be initialized at the beginning of the live page to prevent the chatroomId from being empty or incorrect
      *
      * @param chatroomId
      */
     public void init(String chatroomId) {
         this.chatroomId = chatroomId;
         setCustomMsgListener();
-        //设置相关的直播间信息
+        //Set the relevant live room information
         EaseLiveMessageHelper.getInstance().setChatRoomInfo(chatroomId);
     }
 
@@ -45,21 +44,21 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 设置自定义消息监听
+     * Set up custom message listeners
      */
     public void setCustomMsgListener() {
         EaseLiveMessageHelper.getInstance().init();
     }
 
     /**
-     * 移除自定义消息监听
+     * Remove custom message listeners
      */
-    public void removeCustomMsgLisenter() {
+    public void removeCustomMsgListener() {
         EaseLiveMessageHelper.getInstance().removeListener();
     }
 
     /**
-     * 发送文本消息
+     * Send a text message
      *
      * @param content
      * @param isBarrageMsg
@@ -74,7 +73,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 发送文本消息
+     * Send a text message
      *
      * @param content
      * @param callBack
@@ -104,7 +103,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 发送礼物消息
+     * Send a gift message
      *
      * @param giftId
      * @param num
@@ -140,7 +139,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 发送点赞消息
+     * Send a like message
      *
      * @param num
      * @param callBack
@@ -174,7 +173,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 发送弹幕消息
+     * Send a barrage message
      *
      * @param content
      * @param callBack
@@ -184,7 +183,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 获取礼物消息中礼物的id
+     * Gets the id of the gift in the gift message
      *
      * @param msg
      * @return
@@ -194,7 +193,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 获取礼物消息中礼物的数量
+     * Gets the number of gifts in the gift message
      *
      * @param msg
      * @return
@@ -204,7 +203,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 获取点赞消息中点赞的数目
+     * Gets the number of likes in the like message
      *
      * @param msg
      * @return
@@ -214,7 +213,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 获取弹幕消息中的文本
+     * Gets the text in the bullet screen message
      *
      * @param msg
      * @return
@@ -225,7 +224,7 @@ public class DemoMsgHelper {
 
 
     /**
-     * 判断是否是礼物消息
+     * Determine if it is a gift message
      *
      * @param msg
      * @return
@@ -235,7 +234,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 判断是否是点赞消息
+     * Determine if it is a like message
      *
      * @param msg
      * @return
@@ -245,7 +244,7 @@ public class DemoMsgHelper {
     }
 
     /**
-     * 判断是否是弹幕消息
+     * Determine if it is a bullet screen message
      *
      * @param msg
      * @return

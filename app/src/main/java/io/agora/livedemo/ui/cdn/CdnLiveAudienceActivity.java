@@ -8,9 +8,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
-import io.agora.cdn.fragment.CdnLiveAudienceFragment;
 import io.agora.chat.ChatClient;
-import io.agora.fastlive.FastLiveHelper;
+import io.agora.live.FastLiveHelper;
+import io.agora.live.cdn.fragment.CdnLiveAudienceFragment;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;

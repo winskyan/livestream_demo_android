@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 作为线程的管理类，可以实现工作线程和主线程的切换
+ * As a thread management class, you can switch between worker threads and main threads
  */
 public class ThreadManager {
     private static volatile ThreadManager instance;
@@ -47,29 +47,17 @@ public class ThreadManager {
         mMainThreadHandler = new Handler(Looper.getMainLooper());
     }
 
-    /**
-     * 在异步线程执行
-     *
-     * @param runnable
-     */
+
     public void runOnIOThread(Runnable runnable) {
         mIOThreadExecutor.execute(runnable);
     }
 
-    /**
-     * 在UI线程执行
-     *
-     * @param runnable
-     */
+
     public void runOnMainThread(Runnable runnable) {
         mMainThreadHandler.post(runnable);
     }
 
-    /**
-     * 判断是否是主线程
-     *
-     * @return true is main thread
-     */
+
     public boolean isMainThread() {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }

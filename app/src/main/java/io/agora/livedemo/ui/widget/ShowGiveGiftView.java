@@ -86,7 +86,7 @@ public class ShowGiveGiftView extends LinearLayout {
         addView(newGiftView);
 
 
-        TranslateAnimation inAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.em_gift_in); // 礼物进入时动画
+        TranslateAnimation inAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.gift_in); // 礼物进入时动画
         newGiftView.startAnimation(inAnim);
         final MagicTextView mtv_giftNum = newGiftView.findViewById(R.id.tv_gift_num);
         inAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -197,7 +197,7 @@ public class ShowGiveGiftView extends LinearLayout {
     private void removeGiftView(final View removeGiftView) {
         Animation animation = removeGiftView.getAnimation();
         if (animation == null) {
-            TranslateAnimation outAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.em_gift_out); // 礼物退出时动画
+            TranslateAnimation outAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.gift_out); // 礼物退出时动画
             outAnim.setAnimationListener(new Animation.AnimationListener() {
 
                 @Override
@@ -252,12 +252,6 @@ public class ShowGiveGiftView extends LinearLayout {
         private Animator lastAnimator;
 
         public void showAnimator(View v) {
-
-//            if (lastAnimator != null) {
-//                lastAnimator.removeAllListeners();
-//                lastAnimator.cancel();
-//                lastAnimator.end();
-//            }
             ObjectAnimator animScaleX = ObjectAnimator.ofFloat(v, "scaleX", 1.3f, 1.0f);
             ObjectAnimator animScaleY = ObjectAnimator.ofFloat(v, "scaleY", 1.3f, 1.0f);
             AnimatorSet animSet = new AnimatorSet();

@@ -43,7 +43,6 @@ import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
 import io.agora.livedemo.utils.StatusBarCompat;
-import io.agora.util.EMLog;
 
 public class RoomUserManagementDialog extends BaseLiveDialogFragment {
     private BaseActivity mContext;

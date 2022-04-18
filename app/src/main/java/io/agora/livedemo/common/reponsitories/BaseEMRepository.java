@@ -31,7 +31,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * 获取当前用户
+     * get current user
      *
      * @return
      */
@@ -57,20 +57,10 @@ public class BaseEMRepository {
         return ChatClient.getInstance().chatroomManager();
     }
 
-    /**
-     * 在主线程执行
-     *
-     * @param runnable
-     */
     public void runOnMainThread(Runnable runnable) {
         ThreadManager.getInstance().runOnMainThread(runnable);
     }
 
-    /**
-     * 在异步线程
-     *
-     * @param runnable
-     */
     public void runOnIOThread(Runnable runnable) {
         ThreadManager.getInstance().runOnIOThread(runnable);
     }

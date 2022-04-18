@@ -47,7 +47,7 @@ public class RoomWhiteManageFragment extends RoomUserManagementFragment {
     protected void showOtherInfo(ManagementAdapter.ManagementViewHolder holder, List<String> userList, int position) {
         holder.tvLabel.setVisibility(View.GONE);
         holder.managerButton.setVisibility(View.VISIBLE);
-        holder.managerButton.setText(getString(R.string.em_live_anchor_remove_white));
+        holder.managerButton.setText(getString(R.string.live_anchor_remove_white));
         holder.managerButton.setBackground(null);
         if (DemoHelper.isOwner(userList.get(position))) {
             holder.managerButton.setVisibility(View.GONE);

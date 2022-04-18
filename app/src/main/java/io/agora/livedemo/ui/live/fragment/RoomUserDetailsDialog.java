@@ -133,7 +133,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
             managementLayout.setVisibility(View.VISIBLE);
         }
         if (username != null) {
-            usernameView.setText(DemoHelper.getNickName(username));
+            usernameView.setText(username);
             //ivAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
         }
 
@@ -158,7 +158,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
     }
 
     private void setBtnAttentionChecked() {
-        btnAttention.setText("已关注");
+        btnAttention.setText("attention");
         btnAttention.setTextColor(getResources().getColor(R.color.author_background));
         btnAttention.setBackgroundColor(Color.TRANSPARENT);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_done_24, null);
@@ -209,9 +209,9 @@ public class RoomUserDetailsDialog extends DialogFragment {
                 public void onSuccess(List<String> data) {
                     muteList = data;
                     if (data.contains(username)) {
-                        tvMuteStatus.setText(getString(R.string.em_live_anchor_muted));
+                        tvMuteStatus.setText(getString(R.string.live_anchor_muted));
                     } else {
-                        tvMuteStatus.setText(getString(R.string.em_live_anchor_mute));
+                        tvMuteStatus.setText(getString(R.string.live_anchor_mute));
                     }
                 }
             });
@@ -327,21 +327,6 @@ public class RoomUserDetailsDialog extends DialogFragment {
                         showToast("设置房管失败");
                     }
                 });
-        //ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<Void>() {
-        //  @Override public Void onRequest() throws HyphenateException {
-        //    ApiManager.getInstance().grantLiveRoomAdmin(liveId, username);
-        //    return null;
-        //  }
-        //
-        //  @Override public void onSuccess(Void aVoid) {
-        //    showToast("设置管理员成功");
-        //  }
-        //
-        //  @Override public void onError(HyphenateException exception) {
-        //    showToast("设置管理员失败");
-        //  }
-        //});
-        //ChatClient.getInstance().chatroomManager().asyncAddChatRoomAdmin(chatroomId, a);
     }
 
     @OnClick(R.id.iv_close)
@@ -381,7 +366,7 @@ public class RoomUserDetailsDialog extends DialogFragment {
 
 
     /**
-     * 解析Resource<T>
+     * parse Resource<T>
      *
      * @param response
      * @param callback

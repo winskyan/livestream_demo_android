@@ -31,12 +31,11 @@ import io.agora.chat.ChatRoomManager;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.exceptions.ChatException;
 import io.agora.livedemo.R;
-import io.agora.livedemo.ThreadPoolManager;
-import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
+import io.agora.livedemo.utils.ThreadPoolManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -140,18 +139,10 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
     protected void executeFetchTask() {
     }
 
-    /**
-     * 设置数据
-     *
-     * @param list
-     */
     protected void setAdapter(List<String> list) {
         adapter.setData(list);
     }
 
-    /**
-     * 停止刷新
-     */
     protected void finishRefresh() {
         if (refreshLayout != null) {
             refreshLayout.setRefreshing(false);
@@ -184,7 +175,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
         @Override
         public void onBindViewHolder(ManagementViewHolder holder, final int position) {
             final String username = userList.get(position);
-            holder.usernickView.setText(DemoHelper.getNickName(username));
+            holder.usernickView.setText(username);
             //holder.imgAvatar.setImageResource(DemoHelper.getAvatarResource(username, R.drawable.ease_default_avatar));
             showOtherInfo(holder, userList, position);
         }
@@ -230,14 +221,14 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
                     holder.managerButton.setVisibility(View.INVISIBLE);
                 } else {
                     holder.managerButton.setVisibility(View.VISIBLE);
-                    holder.managerButton.setText("移除房管");
+                    holder.managerButton.setText("remove from admin");
                 }
                 break;
             case MUTE:
-                holder.managerButton.setText("解除禁言");
+                holder.managerButton.setText("unmute");
                 break;
             case BLACKLIST:
-                holder.managerButton.setText("移除黑名单");
+                holder.managerButton.setText("remove from blocklist");
                 break;
         }
 
@@ -268,7 +259,7 @@ public class RoomUserManagementFragment extends BaseFragment implements SwipeRef
 
                     @Override
                     public void onError(ChatException exception) {
-                        Toast.makeText(mContext, "操作失败：" + exception.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "error：" + exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
             }

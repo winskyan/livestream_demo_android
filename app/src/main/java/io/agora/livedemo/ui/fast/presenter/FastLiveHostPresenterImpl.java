@@ -1,7 +1,7 @@
 package io.agora.livedemo.ui.fast.presenter;
 
 
-import io.agora.fastlive.presenter.FastHostPresenter;
+import io.agora.live.fast.presenter.FastHostPresenter;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.restapi.LiveException;

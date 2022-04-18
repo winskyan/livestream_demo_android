@@ -12,9 +12,6 @@ import io.agora.livedemo.R;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
 
-/**
- * Created by wei on 2016/6/12.
- */
 public abstract class LiveBaseActivity extends BaseActivity {
     protected static final String TAG = "LiveActivity";
     protected ImageView coverImage;

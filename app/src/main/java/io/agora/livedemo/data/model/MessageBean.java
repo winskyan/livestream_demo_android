@@ -23,4 +23,12 @@ public class MessageBean implements DataSource {
     public int getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "MessageBean{" +
+                "message=" + message +
+                ", type=" + type +
+                '}';
+    }
 }
