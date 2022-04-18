@@ -7,26 +7,39 @@
     android:background="@color/black"
     android:orientation="vertical">
 
-    <io.agora.chat.uikit.widget.EaseTitleBar
-        android:id="@+id/title_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/em_common_title_bar_height"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:text="@string/home_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_big"
+        app:layout_constraintBottom_toBottomOf="@id/titlebar_icon"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/titlebar_icon" />
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/titlebar_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:scaleType="fitCenter"
+        android:src="@drawable/search"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleBarDisplayHomeAsUpEnabled="false"
-        app:titleBarTitle="@string/home_title"
-        app:titleBarTitlePosition="left"
-        app:titleBarTitleTextColor="@color/white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/fl_main_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar_main" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_bottom"

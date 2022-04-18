@@ -2,18 +2,21 @@ package io.agora.live.cdn.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.easemob.fastlive.R;
 
-import io.agora.live.cdn.presenter.CdnAudiencePresenter;
-import io.agora.live.cdn.presenter.ICdnAudienceView;
 import io.agora.live.FastLiveHelper;
 import io.agora.live.FastPrefManager;
+import io.agora.live.cdn.presenter.CdnAudiencePresenter;
+import io.agora.live.cdn.presenter.ICdnAudienceView;
 import io.agora.live.stats.LocalStatsData;
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.IRtcEngineEventHandler;
@@ -43,6 +46,11 @@ import io.agora.rtc2.video.VideoCanvas;
 public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdnAudienceView {
     public CdnAudiencePresenter presenter;
     private View loading;
+    private ImageView bluePoint;
+    private ImageView redPoint;
+    private final static int MESSAGE_UPDATE_LOADING_STATE = 1;
+    private final static int LOADING_UPDATE_INTERVAL_TIME = 250;
+    private boolean loadingStateBluePointSmall = true;
 
     public CdnLiveAudienceFragment(CdnAudiencePresenter presenter) {
         this.presenter = presenter;
@@ -51,7 +59,6 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //将presenter与生命周期等关联
         if (this.presenter != null) {
             if (context instanceof AppCompatActivity) {
                 ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);
@@ -70,6 +77,8 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
         super.initView(savedInstanceState);
         mVideoGridContainer = findViewById(R.id.vg_container);
         loading = findViewById(R.id.ll_stream_loading);
+        bluePoint = findViewById(R.id.blue_point);
+        redPoint = findViewById(R.id.red_point);
         role = Constants.CLIENT_ROLE_AUDIENCE;
     }
 
@@ -163,11 +172,22 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
         super.onRtcConnectionStateChanged(state, reason);
         if (state == Constants.CONNECTION_STATE_CONNECTING || state == Constants.CONNECTION_STATE_RECONNECTING) {
             if (this.presenter.isActive()) {
-                this.presenter.runOnUI(() -> loading.setVisibility(View.VISIBLE));
+                this.presenter.runOnUI(() -> {
+                    if (View.VISIBLE != loading.getVisibility()) {
+                        loading.setVisibility(View.VISIBLE);
+                        mHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_LOADING_STATE, LOADING_UPDATE_INTERVAL_TIME);
+                    }
+                });
+
             }
         } else if (state == Constants.CONNECTION_STATE_CONNECTED) {
             if (this.presenter.isActive()) {
-                this.presenter.runOnUI(() -> loading.setVisibility(View.GONE));
+                this.presenter.runOnUI(() -> {
+                    if (View.VISIBLE == loading.getVisibility()) {
+                        loading.setVisibility(View.GONE);
+                        mHandler.removeMessages(MESSAGE_UPDATE_LOADING_STATE);
+                    }
+                });
             }
         }
     }
@@ -248,6 +268,40 @@ public class CdnLiveAudienceFragment extends CdnLiveBaseFragment implements ICdn
             }
             presenter.attachView(this);
         }
+    }
+
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case MESSAGE_UPDATE_LOADING_STATE:
+                    updateLoadingState();
+                    break;
+            }
+            return false;
+        }
+    });
+
+    private void updateLoadingState() {
+        if (null != loading && View.VISIBLE != loading.getVisibility()) {
+            mHandler.removeMessages(MESSAGE_UPDATE_LOADING_STATE);
+            return;
+        }
+        if (loadingStateBluePointSmall) {
+            bluePoint.setImageResource(R.drawable.bluepoint_large);
+            redPoint.setImageResource(R.drawable.redpoint_small);
+        } else {
+            bluePoint.setImageResource(R.drawable.bluepoint_small);
+            redPoint.setImageResource(R.drawable.redpoint_large);
+        }
+        loadingStateBluePointSmall = !loadingStateBluePointSmall;
+        mHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE_LOADING_STATE, LOADING_UPDATE_INTERVAL_TIME);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
 }
 

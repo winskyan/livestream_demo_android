@@ -71,7 +71,6 @@ public class CdnLiveHostFragment extends CdnLiveBaseFragment implements ICdnHost
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //将presenter与生命周期等关联
         if (this.presenter != null) {
             if (context instanceof AppCompatActivity) {
                 ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);

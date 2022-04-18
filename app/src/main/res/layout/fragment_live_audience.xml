@@ -88,29 +88,6 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/loading_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Loading..."
-                android:textColor="#fff" />
-
-        </LinearLayout>
-
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

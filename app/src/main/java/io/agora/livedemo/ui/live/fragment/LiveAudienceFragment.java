@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,10 +41,6 @@ import io.agora.util.EMLog;
 public class LiveAudienceFragment extends LiveBaseFragment {
     @BindView(R.id.loading_layout)
     RelativeLayout loadingLayout;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.loading_text)
-    TextView loadingText;
     @BindView(R.id.cover_image)
     ImageView coverView;
     @BindView(R.id.group_ui)

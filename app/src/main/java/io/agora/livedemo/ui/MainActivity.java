@@ -56,7 +56,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     @Override
     protected void initView() {
         super.initView();
-        mBinding.titleBarMain.getTitle().setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
+        mBinding.title.setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
         Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.ivHomeSet);
     }
 
@@ -67,7 +67,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
         mBinding.llHomeSet.setOnClickListener(this);
         mBinding.rlHomeLive.setOnClickListener(this);
 
-        mBinding.titleBarMain.getRightImage().setOnClickListener(new View.OnClickListener() {
+        mBinding.titlebarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCurrentFragment instanceof CdnLivingListFragment) {
@@ -205,17 +205,16 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
 
     private void skipToTarget(int position) {
         this.position = position;
-        mBinding.titleBarMain.setVisibility(View.VISIBLE);
         switch (position) {
             case 0:
                 switchToHome();
-                mBinding.titleBarMain.setTitle(getResources().getString(R.string.home_title));
-                mBinding.titleBarMain.setRightImageResource(R.drawable.home_search);
+                mBinding.title.setText(getResources().getString(R.string.home_title));
+                mBinding.titlebarIcon.setImageResource(R.drawable.home_search);
                 break;
             case 1:
                 switchToAboutMe();
-                mBinding.titleBarMain.setTitle(getResources().getString(R.string.profile_title));
-                mBinding.titleBarMain.setRightImageResource(R.drawable.profile_edit);
+                mBinding.title.setText(getResources().getString(R.string.profile_title));
+                mBinding.titlebarIcon.setImageResource(R.drawable.profile_edit);
                 break;
         }
     }
