@@ -57,7 +57,7 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
 
     private static final int REQUEST_CODE_PICK = 1;
     private static final int REQUEST_CODE_CUTTING = 2;
-    private static final String[] calls = {"Take Photo", "Upload Photo"};
+    private static final String[] calls = {/*"Take Photo",*/ "Upload Photo"};
     private static final int REQUEST_CODE_CAMERA = 100;
     private static final int LIVE_NAME_MAX_LENGTH = 50;
 
@@ -291,10 +291,10 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
                     @Override
                     public void OnItemClick(View view, int position) {
                         switch (position) {
-                            case 0:
+                            /*case 0:
                                 selectPicFromCamera();
-                                break;
-                            case 1:
+                                break;*/
+                            case 0:
                                 selectImageFromLocal();
                                 break;
                         }

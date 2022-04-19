@@ -175,7 +175,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                             for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
                                 Log.i(TAG, "user=" + user.getKey() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth() + "," + user.getValue().getNickname());
                                 if (anchorId.equals(user.getKey())) {
-
                                     usernameView.setText(user.getValue().getNickname());
                                     int gender = user.getValue().getGender();
                                     if (1 == gender) {
@@ -546,9 +545,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     protected void showUserDetailsDialog(String username) {
-        RoomManageUserDialog fragment = (RoomManageUserDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
+        RoomUserDetailDialog fragment = (RoomUserDetailDialog) getChildFragmentManager().findFragmentByTag("RoomManageUserDialog");
         if (fragment == null) {
-            fragment = RoomManageUserDialog.getNewInstance(chatroomId, username);
+            fragment = RoomUserDetailDialog.getNewInstance(chatroomId, username);
         }
         if (fragment.isAdded()) {
             return;

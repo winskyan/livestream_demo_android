@@ -44,7 +44,7 @@ import io.agora.livedemo.ui.widget.ArrowItemView;
 import io.agora.livedemo.ui.widget.SwitchItemView;
 import io.agora.livedemo.utils.Utils;
 
-public class RoomManageUserDialog extends BaseLiveDialogFragment implements SwitchItemView.OnCheckedChangeListener {
+public class RoomUserDetailDialog extends BaseLiveDialogFragment implements SwitchItemView.OnCheckedChangeListener {
     private EaseImageView userIcon;
     private TextView userNameTv;
     private ConstraintLayout sexLayout;
@@ -72,8 +72,8 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
     protected ChatRoom mChatRoom;
 
 
-    public static RoomManageUserDialog getNewInstance(String chatroomId, String username) {
-        RoomManageUserDialog dialog = new RoomManageUserDialog();
+    public static RoomUserDetailDialog getNewInstance(String chatroomId, String username) {
+        RoomUserDetailDialog dialog = new RoomUserDetailDialog();
         Bundle bundle = new Bundle();
         bundle.putString("username", username);
         bundle.putString("chatroomid", chatroomId);
@@ -121,13 +121,13 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{username}, new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                if (null != RoomManageUserDialog.this.getActivity()) {
-                    RoomManageUserDialog.this.getActivity().runOnUiThread(new Runnable() {
+                if (null != RoomUserDetailDialog.this.getActivity()) {
+                    RoomUserDetailDialog.this.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
                                 if (username.equals(user.getKey())) {
-                                    Glide.with(RoomManageUserDialog.this).load(user.getValue().getAvatarUrl()).apply(RequestOptions.placeholderOf(R.drawable.avatar_default)).into(userIcon);
+                                    Glide.with(RoomUserDetailDialog.this).load(user.getValue().getAvatarUrl()).apply(RequestOptions.placeholderOf(R.drawable.avatar_default)).into(userIcon);
                                     int gender = user.getValue().getGender();
                                     if (1 == gender) {
                                         sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
@@ -349,8 +349,8 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
             parseResource(response, new OnResourceParseCallback<ChatRoom>() {
                 @Override
                 public void onSuccess(ChatRoom data) {
-                    if (null != RoomManageUserDialog.this.getActivity()) {
-                        RoomManageUserDialog.this.getActivity().runOnUiThread(new Runnable() {
+                    if (null != RoomUserDetailDialog.this.getActivity()) {
+                        RoomUserDetailDialog.this.getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mChatRoom = data;
@@ -528,7 +528,7 @@ public class RoomManageUserDialog extends BaseLiveDialogFragment implements Swit
             if (isChecked) {
                 viewModel.muteAllMembers(roomId);
                 viewModel.muteChatRoomMembers(roomId, mChatRoom.getMemberList(), Integer.MAX_VALUE);
-                LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(RoomManageUserDialog.this.getResources().getString(R.string.attention_ban_all));
+                LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(RoomUserDetailDialog.this.getResources().getString(R.string.attention_ban_all));
             } else {
                 viewModel.unMuteAllMembers(roomId);
                 viewModel.unMuteChatRoomMembers(roomId, mChatRoom.getMemberList());

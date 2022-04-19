@@ -189,7 +189,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 new DatePickerDialog(EditProfileActivity.this, R.style.MyDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        setBirthday(year, monthOfYear, dayOfMonth);
+                        setBirthday(year, monthOfYear + 1, dayOfMonth);
                     }
                 }
                         , calendar.get(Calendar.YEAR)
