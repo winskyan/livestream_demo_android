@@ -135,7 +135,6 @@ public class ListDialogFragment extends BaseDialogFragment {
         });
     }
 
-
     public static class Builder {
         private BaseActivity context;
         private String title;
@@ -271,6 +270,7 @@ public class ListDialogFragment extends BaseDialogFragment {
     private void setAdapter(EaseBaseRecyclerViewAdapter adapter) {
         this.adapter = adapter;
     }
+
 
     private EaseBaseRecyclerViewAdapter getDefaultAdapter() {
         DefaultAdapter defaultAdapter = new DefaultAdapter();

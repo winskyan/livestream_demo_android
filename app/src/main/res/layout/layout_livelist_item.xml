@@ -51,11 +51,13 @@
             android:id="@+id/live_room_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/placeholder"
             android:textSize="@dimen/size_big"
             app:layout_constraintBottom_toTopOf="@id/author"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/tv_living_audience_num"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -75,7 +77,7 @@
             android:layout_marginStart="@dimen/margin_5"
             android:layout_marginRight="@dimen/margin_5"
             android:layout_marginBottom="@dimen/margin_5"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/placeholder"
             android:textSize="@dimen/size_small"

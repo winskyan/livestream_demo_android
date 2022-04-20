@@ -74,6 +74,8 @@ public class EditProfileActivity extends BaseLiveActivity {
     private Uri mCacheUri;
 
     private EditProfileViewModel mViewModel;
+    private ListDialogFragment.Builder mChangeAvatarDialogBuilder;
+    private ListDialogFragment mChangeAvatarDialog;
 
     @Override
     protected View getContentView() {
@@ -177,8 +179,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                             public void OnItemClick(View view, int position) {
                                 setGender(position + 1);
                             }
-                        })
-                        .show();
+                        }).show();
             }
         });
 
@@ -202,26 +203,33 @@ public class EditProfileActivity extends BaseLiveActivity {
         mBinding.changeAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ListDialogFragment.Builder(mContext)
-                        .setTitle(R.string.create_live_change_cover)
-                        .setGravity(Gravity.START)
-                        .setData(calls)
-                        .setCancelColorRes(R.color.black)
-                        .setWindowAnimations(R.style.animate_dialog)
-                        .setOnItemClickListener(new ListDialogFragment.OnDialogItemClickListener() {
-                            @Override
-                            public void OnItemClick(View view, int position) {
-                                switch (position) {
-                                    case 0:
-                                        selectPicFromCamera();
-                                        break;
-                                    case 1:
-                                        selectImageFromLocal();
-                                        break;
+                if (null == mChangeAvatarDialog) {
+                    mChangeAvatarDialogBuilder = new ListDialogFragment.Builder(mContext)
+                            .setTitle(R.string.create_live_change_cover)
+                            .setGravity(Gravity.START)
+                            .setData(calls)
+                            .setCancelColorRes(R.color.black)
+                            .setWindowAnimations(R.style.animate_dialog)
+                            .setOnItemClickListener(new ListDialogFragment.OnDialogItemClickListener() {
+                                @Override
+                                public void OnItemClick(View view, int position) {
+                                    switch (position) {
+                                        case 0:
+                                            selectPicFromCamera();
+                                            break;
+                                        case 1:
+                                            selectImageFromLocal();
+                                            break;
+                                    }
                                 }
-                            }
-                        })
-                        .show();
+                            });
+                    mChangeAvatarDialog = mChangeAvatarDialogBuilder.show();
+                } else {
+                    if (null != mChangeAvatarDialog.getDialog() && mChangeAvatarDialog.getDialog().isShowing()) {
+                        mChangeAvatarDialog.dismiss();
+                    }
+                    mChangeAvatarDialog = mChangeAvatarDialogBuilder.show();
+                }
             }
         });
     }
@@ -383,10 +391,17 @@ public class EditProfileActivity extends BaseLiveActivity {
         try {
             mAvatarPath = new File(new URI(mCacheUri.toString())).getPath();
             Bitmap bitmap = BitmapFactory.decodeFile(mAvatarPath);
-            mBinding.userIcon.setImageBitmap(bitmap);
-            setUserAvatar();
+            if (null == bitmap) {
+                mCacheUri = null;
+                mAvatarPath = "";
+            } else {
+                mBinding.userIcon.setImageBitmap(bitmap);
+                setUserAvatar();
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            mCacheUri = null;
+            mAvatarPath = "";
         }
     }
 

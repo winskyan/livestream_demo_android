@@ -372,9 +372,16 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
         try {
             mCoverPath = new File(new URI(mCacheUri.toString())).getPath();
             Bitmap bitmap = BitmapFactory.decodeFile(mCoverPath);
-            mBinding.coverImage.setImageBitmap(bitmap);
+            if (null == bitmap) {
+                mCoverPath = "";
+                mCacheUri = null;
+            } else {
+                mBinding.coverImage.setImageBitmap(bitmap);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            mCoverPath = "";
+            mCacheUri = null;
         }
     }
 

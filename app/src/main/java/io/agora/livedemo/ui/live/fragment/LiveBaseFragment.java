@@ -538,7 +538,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     userManagerView.setVisibility(View.INVISIBLE);
                 }
                 isMessageListInited = true;
-                updateUnreadMsgView();
                 showMemberList();
             }
         });
@@ -553,22 +552,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             return;
         }
         fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
-    }
-
-    public void updateUnreadMsgView() {
-        //if(isMessageListInited) {
-        //  for (Conversation conversation : ChatClient.getInstance()
-        //      .chatManager()
-        //      .getAllConversations()
-        //      .values()) {
-        //    if (conversation.getType() == Conversation.ConversationType.Chat
-        //        && conversation.getUnreadMsgCount() > 0) {
-        //      newMsgNotifyImage.setVisibility(View.VISIBLE);
-        //      return;
-        //    }
-        //  }
-        //  newMsgNotifyImage.setVisibility(View.INVISIBLE);
-        //}
     }
 
     private void showMemberList() {

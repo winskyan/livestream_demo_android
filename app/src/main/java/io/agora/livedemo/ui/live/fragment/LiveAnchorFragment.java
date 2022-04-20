@@ -373,7 +373,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                     if (!reChangeLiveStatus) {
                         //开始直播，则开始统计点赞及礼物统计，实际开发中，应该由服务器进行统计，此处仅为展示用
                         DemoHelper.saveLikeNum(data.getId(), 0);
-                        DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                        if (null != DemoHelper.getReceiveGiftDao()) {
+                            DemoHelper.getReceiveGiftDao().clearData(DemoMsgHelper.getInstance().getCurrentRoomId());
+                        }
                         startAnchorLive(liveRoom);
                     }
                 }
@@ -518,12 +520,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     public void onBackPressed() {
         if (isOnGoing) {
-            showDialog(new OnConfirmClickListener() {
-                @Override
-                public void onConfirmClick(View view, Object bean) {
-                    mContext.onBackPressed();
-                }
-            });
+            showDialog(this.mStopLiveClickListener);
         } else {
             mContext.onBackPressed();
         }

@@ -271,7 +271,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
                     callBack.onError(messageId, code, error);
                 }
                 deleteMuteMsg(messageId, code);
-                mContext.showToast("errorCode = " + code + "; errorMsg = " + error);
             }
 
             @Override

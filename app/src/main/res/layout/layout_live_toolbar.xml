@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_5"
             android:layout_marginTop="@dimen/margin_5"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             android:maxEms="6"
             android:singleLine="true"
             android:textColor="@color/common_white"

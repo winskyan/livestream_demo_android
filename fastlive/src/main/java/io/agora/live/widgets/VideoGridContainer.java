@@ -164,9 +164,15 @@ public class VideoGridContainer extends RelativeLayout implements Runnable {
 
     private void layout(int size) {
         LayoutParams[] params = getParams(size);
-        for (int i = 0; i < size; i++) {
-            addView(mUserViewList.get(mUidList.get(i)), params[i]);
+        try {
+            for (int i = 0; i < size; i++) {
+                removeView(mUserViewList.get(mUidList.get(i)));
+                addView(mUserViewList.get(mUidList.get(i)), params[i]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private LayoutParams[] getParams(int size) {
