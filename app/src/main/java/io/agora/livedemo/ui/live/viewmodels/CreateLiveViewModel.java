@@ -16,6 +16,7 @@ import io.agora.livedemo.common.enums.Status;
 import io.agora.livedemo.common.reponsitories.AppServerRepository;
 import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
+import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
 
 public class CreateLiveViewModel extends AndroidViewModel {
@@ -72,7 +73,7 @@ public class CreateLiveViewModel extends AndroidViewModel {
     public void createLiveRoom(String name, String description, String localPath, String videoType) {
         LiveData<Resource<LiveRoom>> liveData = null;
         if (TextUtils.isEmpty(localPath)) {
-            LiveRoom liveRoom = getLiveRoom(name, description, videoType, DemoHelper.getAvatarUrl());
+            LiveRoom liveRoom = getLiveRoom(name, description, videoType, UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId()).getAvatar());
             liveData = repository.createLiveRoom(liveRoom);
         } else {
             liveData = Transformations.switchMap(clientRepository.updateRoomCover(localPath), input -> {

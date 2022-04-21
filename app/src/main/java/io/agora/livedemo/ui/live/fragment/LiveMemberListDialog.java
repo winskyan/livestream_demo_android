@@ -16,19 +16,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.ChatRoomManager;
-import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
@@ -180,37 +177,12 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
         mUserListData.addAll(mAdminListData);
         mUserListData.addAll(mChatRoom.getMemberList());
 
-
-        if (mUserListData.size() == 0) {
-            mUserListAdapter.setData(mUserListData);
-        } else {
-            ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(mUserListData.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
-                @Override
-                public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                    if (null != LiveMemberListDialog.this.getActivity()) {
-                        LiveMemberListDialog.this.getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mUserListAdapter.setStringUserInfoMap(stringUserInfoMap);
-                                mUserListAdapter.setData(mUserListData);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onError(int i, String s) {
-
-                }
-            });
-        }
-
+        mUserListAdapter.setData(mUserListData);
     }
 
     private static class UserListAdapter extends EaseBaseRecyclerViewAdapter<String> {
         private static List<String> adminList;
         private static List<String> muteList;
-        private static Map<String, UserInfo> stringUserInfoMap;
 
         public UserListAdapter() {
         }
@@ -219,17 +191,10 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
             this.adminList = adminList;
         }
 
-        public void setStringUserInfoMap(Map<String, UserInfo> stringUserInfoMap) {
-            this.stringUserInfoMap = stringUserInfoMap;
-        }
-
         public void setMuteList(List<String> muteList) {
             this.muteList = muteList;
         }
 
-        public Map<String, UserInfo> getStringUserInfoMap() {
-            return stringUserInfoMap;
-        }
 
         @Override
         public UserListViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -259,12 +224,9 @@ public class LiveMemberListDialog extends BaseLiveDialogFragment {
 
             @Override
             public void setData(String item, int position) {
-                tvUserName.setText(item);
-                try {
-                    Glide.with(context).load(stringUserInfoMap.get(item).getAvatarUrl()).placeholder(R.drawable.avatar_default).error(R.drawable.avatar_default).into(ivUserAvatar);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                EaseUserUtils.setUserNick(item, tvUserName);
+                EaseUserUtils.setUserAvatar(context, item, ivUserAvatar);
+
                 if (null != adminList && adminList.contains(item)) {
                     tvRoleType.setText(context.getResources().getString(R.string.role_type_moderator));
                     tvRoleType.setBackgroundResource(R.drawable.ease_live_moderator_bg);

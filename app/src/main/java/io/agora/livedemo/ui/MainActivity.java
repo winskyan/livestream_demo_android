@@ -16,13 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.io.Serializable;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -57,7 +55,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
     protected void initView() {
         super.initView();
         mBinding.title.setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
-        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.ivHomeSet);
+        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.ivHomeSet);
     }
 
     @Override
@@ -93,7 +91,7 @@ public class MainActivity extends BaseLiveActivity implements View.OnClickListen
 
         LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
                 .observe(mContext, response -> {
-                    Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.ivHomeSet);
+                    EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.ivHomeSet);
                 });
     }
 

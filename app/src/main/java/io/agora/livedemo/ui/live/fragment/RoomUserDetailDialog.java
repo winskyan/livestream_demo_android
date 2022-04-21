@@ -18,24 +18,25 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.ChatRoomManager;
-import io.agora.chat.UserInfo;
+import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;
@@ -43,6 +44,8 @@ import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
 import io.agora.livedemo.ui.widget.ArrowItemView;
 import io.agora.livedemo.ui.widget.SwitchItemView;
 import io.agora.livedemo.utils.Utils;
+import io.reactivex.rxjava3.functions.Consumer;
+import kotlin.Unit;
 
 public class RoomUserDetailDialog extends BaseLiveDialogFragment implements SwitchItemView.OnCheckedChangeListener {
     private EaseImageView userIcon;
@@ -70,7 +73,6 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
     private String roomId;
     protected ChatRoomManager mChatRoomManager;
     protected ChatRoom mChatRoom;
-
 
     public static RoomUserDetailDialog getNewInstance(String chatroomId, String username) {
         RoomUserDetailDialog dialog = new RoomUserDetailDialog();
@@ -118,55 +120,29 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
         banItem = findViewById(R.id.item_ban);
         unbanItem = findViewById(R.id.item_unban);
 
-        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{username}, new ValueCallBack<Map<String, UserInfo>>() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                if (null != RoomUserDetailDialog.this.getActivity()) {
-                    RoomUserDetailDialog.this.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
-                                if (username.equals(user.getKey())) {
-                                    Glide.with(RoomUserDetailDialog.this).load(user.getValue().getAvatarUrl()).apply(RequestOptions.placeholderOf(R.drawable.avatar_default)).into(userIcon);
-                                    int gender = user.getValue().getGender();
-                                    if (1 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_male_icon);
-                                    } else if (2 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_female_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_female_icon);
-                                    } else if (3 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_other_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_other_icon);
-                                    } else {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_secret_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_secret_icon);
-                                        ageTv.setVisibility(View.GONE);
-                                    }
-                                    String birth = user.getValue().getBirth();
-                                    if (!TextUtils.isEmpty(birth)) {
-                                        ageTv.setText(String.valueOf(Utils.getAgeByBirthday(user.getValue().getBirth())));
-                                    }
+        EaseUser user = UserRepository.getInstance().getUserInfo(username);
 
-                                    if (TextUtils.isEmpty(user.getValue().getNickname())) {
-                                        userNameTv.setText(username);
-                                    } else {
-                                        userNameTv.setText(user.getValue().getNickname());
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
+        EaseUserUtils.setUserNick(username, userNameTv);
+        EaseUserUtils.setUserAvatar(mContext, username, userIcon);
+        int gender = user.getGender();
+        if (1 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_male_icon);
+        } else if (2 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_female_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_female_icon);
+        } else if (3 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_other_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_other_icon);
+        } else {
+            sexLayout.setBackgroundResource(R.drawable.sex_secret_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_secret_icon);
+            ageTv.setVisibility(View.GONE);
+        }
+        String birth = user.getBirth();
+        if (!TextUtils.isEmpty(birth)) {
+            ageTv.setText(String.valueOf(Utils.getAgeByBirthday(user.getBirth())));
+        }
     }
 
 
@@ -382,128 +358,141 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
         List<String> list = new ArrayList<>(1);
         list.add(username);
 
-        moveToAllowedListItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.addToChatRoomWhiteList(roomId, list);
-                showToast("move to allowed list");
-            }
-        });
-
-        removeFromAllowedListItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.removeFromChatRoomWhiteList(roomId, list);
-                showToast("remove from allowed list");
-            }
-        });
-
-
-        assignAsModeratorItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.addChatRoomAdmin(roomId, username);
-                showToast("assign as moderator");
-                viewModel.fetchChatRoom(roomId);
-            }
-        });
-
-        removeAsModeratorItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.removeChatRoomAdmin(roomId, username);
-                showToast("remove as moderator");
-            }
-        });
-
-        timeoutItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                final View view = LayoutInflater.from(mContext).inflate(R.layout.modify_info_dialog, null);
-                TextView title = view.findViewById(R.id.title);
-                TextView contentTip = view.findViewById(R.id.content_tip);
-                EditText editContent = view.findViewById(R.id.edit_content);
-                TextView countTip = view.findViewById(R.id.count_tip);
-                Button confirmBtn = view.findViewById(R.id.confirm);
-                Button cancelBtn = view.findViewById(R.id.cancel);
-
-                title.setText(mContext.getResources().getString(R.string.room_manager_timeout));
-                contentTip.setText(mContext.getString(R.string.room_manager_timeout_tip, username));
-                editContent.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editContent.setSelection(editContent.getText().toString().length());
-
-                countTip.setVisibility(View.GONE);
-
-                final Dialog dialog = builder.create();
-                dialog.show();
-                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-                dialog.getWindow().setGravity(Gravity.CENTER);
-                dialog.getWindow().setContentView(view);
-
-                confirmBtn.setOnClickListener(new View.OnClickListener() {
+        RxView.clicks(moveToAllowedListItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
                     @Override
-                    public void onClick(View v) {
-                        if (!TextUtils.isEmpty(editContent.getText().toString())) {
-                            viewModel.muteChatRoomMembers(roomId, list, Integer.parseInt(editContent.getText().toString()));
-                            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(mContext.getString(R.string.room_manager_timeout_attention_tip, username, editContent.getText().toString()));
-                            dialog.cancel();
-                        }
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("move to allowed list");
+                        viewModel.addToChatRoomWhiteList(roomId, list);
                     }
                 });
-                cancelBtn.setOnClickListener(new View.OnClickListener() {
+
+        RxView.clicks(removeFromAllowedListItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
                     @Override
-                    public void onClick(View v) {
-                        dialog.cancel();
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("remove from allowed list");
+                        viewModel.removeFromChatRoomWhiteList(roomId, list);
                     }
                 });
 
 
-            }
-        });
+        RxView.clicks(assignAsModeratorItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("assign as moderator");
+                        viewModel.addChatRoomAdmin(roomId, username);
+                        viewModel.fetchChatRoom(roomId);
+                    }
+                });
 
-        muteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.muteChatRoomMembers(roomId, list, Integer.MAX_VALUE);
-                showToast("mute");
-            }
-        });
+        RxView.clicks(removeAsModeratorItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("remove as moderator");
+                        viewModel.removeChatRoomAdmin(roomId, username);
+                    }
+                });
 
-        unmuteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.unMuteChatRoomMembers(roomId, list);
-                showToast("unmute");
-            }
-        });
+        RxView.clicks(timeoutItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        final View view = LayoutInflater.from(mContext).inflate(R.layout.modify_info_dialog, null);
+                        TextView title = view.findViewById(R.id.title);
+                        TextView contentTip = view.findViewById(R.id.content_tip);
+                        EditText editContent = view.findViewById(R.id.edit_content);
+                        TextView countTip = view.findViewById(R.id.count_tip);
+                        Button confirmBtn = view.findViewById(R.id.confirm);
+                        Button cancelBtn = view.findViewById(R.id.cancel);
 
-        banItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SimpleDialogFragment.Builder(mContext)
-                        .setTitle(mContext.getString(R.string.room_manager_ban_tip, username))
-                        .setConfirmButtonTxt(R.string.ok)
-                        .setConfirmColor(R.color.em_color_warning)
-                        .setOnConfirmClickListener(new OnConfirmClickListener() {
+                        title.setText(mContext.getResources().getString(R.string.room_manager_timeout));
+                        contentTip.setText(mContext.getString(R.string.room_manager_timeout_tip, username));
+                        editContent.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        editContent.setSelection(editContent.getText().toString().length());
+
+                        countTip.setVisibility(View.GONE);
+
+                        final Dialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                        dialog.getWindow().setGravity(Gravity.CENTER);
+                        dialog.getWindow().setContentView(view);
+
+                        confirmBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onConfirmClick(View view, Object bean) {
-                                viewModel.banChatRoomMembers(roomId, list);
-                                LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(mContext.getString(R.string.room_manager_ban_attention_tip, username));
+                            public void onClick(View v) {
+                                if (!TextUtils.isEmpty(editContent.getText().toString())) {
+                                    viewModel.muteChatRoomMembers(roomId, list, Integer.parseInt(editContent.getText().toString()));
+                                    AttentionBean attention = new AttentionBean();
+                                    attention.setShowTime(10);
+                                    attention.setShowContent(mContext.getString(R.string.room_manager_timeout_attention_tip, username, editContent.getText().toString()));
+                                    LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(attention);
+                                    dialog.cancel();
+                                }
                             }
-                        })
-                        .build()
-                        .show(getChildFragmentManager(), "dialog");
+                        });
+                        cancelBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.cancel();
+                            }
+                        });
+                    }
+                });
+
+        RxView.clicks(muteItem).throttleFirst(3, TimeUnit.SECONDS).subscribe(new Consumer<Unit>() {
+            @Override
+            public void accept(Unit unit) throws Throwable {
+                showToast("mute");
+                viewModel.muteChatRoomMembers(roomId, list, Integer.MAX_VALUE);
             }
         });
 
-        unbanItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewModel.unbanChatRoomMembers(roomId, list);
-                showToast("unban");
-            }
-        });
+        RxView.clicks(unmuteItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("unmute");
+                        viewModel.unMuteChatRoomMembers(roomId, list);
+                    }
+                });
+
+        RxView.clicks(banItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        new SimpleDialogFragment.Builder(mContext)
+                                .setTitle(mContext.getString(R.string.room_manager_ban_tip, username))
+                                .setConfirmButtonTxt(R.string.ok)
+                                .setConfirmColor(R.color.em_color_warning)
+                                .setOnConfirmClickListener(new OnConfirmClickListener() {
+                                    @Override
+                                    public void onConfirmClick(View view, Object bean) {
+                                        viewModel.banChatRoomMembers(roomId, list);
+                                        AttentionBean attention = new AttentionBean();
+                                        attention.setShowTime(10);
+                                        attention.setShowContent(mContext.getString(R.string.room_manager_ban_attention_tip, username));
+                                        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(attention);
+                                    }
+                                })
+                                .build()
+                                .show(getChildFragmentManager(), "dialog");
+                    }
+                });
+
+
+        RxView.clicks(unbanItem).throttleFirst(3, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) throws Throwable {
+                        showToast("unban");
+                        viewModel.unbanChatRoomMembers(roomId, list);
+                    }
+                });
     }
 
     @Override
@@ -525,15 +514,19 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
     @Override
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         if (buttonView.getId() == R.id.ban_all) {
+            AttentionBean attention = new AttentionBean();
             if (isChecked) {
                 viewModel.muteAllMembers(roomId);
                 viewModel.muteChatRoomMembers(roomId, mChatRoom.getMemberList(), Integer.MAX_VALUE);
-                LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(RoomUserDetailDialog.this.getResources().getString(R.string.attention_ban_all));
+                attention.setShowTime(-1);
+                attention.setShowContent(RoomUserDetailDialog.this.getResources().getString(R.string.attention_ban_all));
             } else {
                 viewModel.unMuteAllMembers(roomId);
                 viewModel.unMuteChatRoomMembers(roomId, mChatRoom.getMemberList());
-                LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue("");
+                attention.setShowTime(-1);
+                attention.setShowContent("");
             }
+            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(attention);
             LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER_STATE).postValue(true);
         }
     }

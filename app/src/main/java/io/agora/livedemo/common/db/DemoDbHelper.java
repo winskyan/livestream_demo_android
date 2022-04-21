@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
+import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.utils.MD5;
 import io.agora.util.EMLog;
 
@@ -69,6 +70,14 @@ public class DemoDbHelper {
             return mDatabase.receiveGiftDao();
         }
         EMLog.i(TAG, "get ReceiveGiftDao failed, should init db first");
+        return null;
+    }
+
+    public UserDao getUserDao() {
+        if(mDatabase != null) {
+            return mDatabase.userDao();
+        }
+        EMLog.i(TAG, "get userDao failed, should init db first");
         return null;
     }
 

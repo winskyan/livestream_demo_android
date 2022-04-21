@@ -5,7 +5,6 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
-import io.agora.chat.uikit.lives.OnLiveMessageReceiveListener;
 
 
 public class DemoMsgHelper {
@@ -34,27 +33,10 @@ public class DemoMsgHelper {
      */
     public void init(String chatroomId) {
         this.chatroomId = chatroomId;
-        setCustomMsgListener();
-        //Set the relevant live room information
-        EaseLiveMessageHelper.getInstance().setChatRoomInfo(chatroomId);
     }
 
     public String getCurrentRoomId() {
         return this.chatroomId;
-    }
-
-    /**
-     * Set up custom message listeners
-     */
-    public void setCustomMsgListener() {
-        EaseLiveMessageHelper.getInstance().init();
-    }
-
-    /**
-     * Remove custom message listeners
-     */
-    public void removeCustomMsgListener() {
-        EaseLiveMessageHelper.getInstance().removeListener();
     }
 
     /**
@@ -110,7 +92,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendGiftMsg(String giftId, int num, OnLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendGiftMsg(giftId, num, new OnLiveMessageCallBack() {
+        EaseLiveMessageHelper.getInstance().sendGiftMsg(chatroomId, giftId, num, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveGiftInfo(message);
@@ -145,7 +127,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendLikeMsg(int num, OnLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendPraiseMsg(num, new OnLiveMessageCallBack() {
+        EaseLiveMessageHelper.getInstance().sendPraiseMsg(chatroomId, num, new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 DemoHelper.saveLikeInfo(message);
@@ -179,7 +161,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendBarrageMsg(String content, OnLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendBarrageMsg(content, callBack);
+        EaseLiveMessageHelper.getInstance().sendBarrageMsg(chatroomId, content, callBack);
     }
 
     /**
@@ -251,9 +233,5 @@ public class DemoMsgHelper {
      */
     public boolean isBarrageMsg(ChatMessage msg) {
         return EaseLiveMessageHelper.getInstance().isBarrageMsg(msg);
-    }
-
-    public void setOnCustomMsgReceiveListener(OnLiveMessageReceiveListener listener) {
-        EaseLiveMessageHelper.getInstance().setOnCustomMsgReceiveListener(listener);
     }
 }

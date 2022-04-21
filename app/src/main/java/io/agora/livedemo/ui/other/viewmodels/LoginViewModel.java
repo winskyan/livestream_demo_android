@@ -16,6 +16,7 @@ import io.agora.livedemo.common.reponsitories.ErrorCode;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.User;
+import io.agora.util.EMLog;
 
 public class LoginViewModel extends AndroidViewModel {
     private final ClientRepository repository;

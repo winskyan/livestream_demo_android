@@ -22,7 +22,7 @@
             android:layout_marginTop="50dp"
             android:ellipsize="end"
             android:maxEms="15"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="@dimen/size_normal"
             android:textStyle="bold"

@@ -32,13 +32,11 @@ import androidx.camera.core.PreviewConfig;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.io.File;
 import java.net.URI;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -93,7 +91,8 @@ public class CreateLiveRoomActivity extends BaseLiveActivity {
             }
         });
 
-        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.coverImage);
+        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.coverImage);
+
         setEditTextEnable(false, mBinding.liveName);
 
         mBinding.liveName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(LIVE_NAME_MAX_LENGTH)});

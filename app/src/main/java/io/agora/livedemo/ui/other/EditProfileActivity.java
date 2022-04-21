@@ -30,17 +30,14 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.io.File;
 import java.net.URI;
 import java.util.Calendar;
-import java.util.Map;
 
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoConstants;
@@ -49,6 +46,7 @@ import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.reponsitories.Resource;
+import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.databinding.ActivityEditProfileBinding;
 import io.agora.livedemo.ui.base.BaseLiveActivity;
 import io.agora.livedemo.ui.live.fragment.ListDialogFragment;
@@ -77,6 +75,8 @@ public class EditProfileActivity extends BaseLiveActivity {
     private ListDialogFragment.Builder mChangeAvatarDialogBuilder;
     private ListDialogFragment mChangeAvatarDialog;
 
+    private EaseUser mUser;
+
     @Override
     protected View getContentView() {
         mBinding = ActivityEditProfileBinding.inflate(getLayoutInflater());
@@ -86,10 +86,14 @@ public class EditProfileActivity extends BaseLiveActivity {
     @Override
     protected void initView() {
         super.initView();
-
-        Glide.with(this).load(DemoHelper.getAvatarUrl()).into(mBinding.userIcon);
-        EaseUserUtils.setUserNick(DemoHelper.getNickName(), mBinding.itemUsername.getTvContent());
+        mUser = UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId());
+        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.userIcon);
+        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
         mBinding.titlebarTitle.setTypeface(Utils.getRobotoTypeface(this.getApplicationContext()));
+
+        mGenderArray = getResources().getStringArray(R.array.gender_types);
+        updateGender(mUser.getGender());
+        updateBirthday(mUser.getBirth());
     }
 
     @Override
@@ -120,7 +124,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 Button cancelBtn = view.findViewById(R.id.cancel);
 
                 title.setText(mContext.getResources().getString(R.string.setting_username_title));
-                editContent.setText(DemoHelper.getNickName());
+                EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), editContent);
                 editContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_USERNAME_LENGTH)});
                 editContent.setSelection(editContent.getText().toString().length());
                 editContent.addTextChangedListener(new TextWatcher() {
@@ -141,7 +145,7 @@ public class EditProfileActivity extends BaseLiveActivity {
                 });
 
 
-                countTip.setText(DemoHelper.getNickName().length() + "/" + MAX_USERNAME_LENGTH);
+                countTip.setText(mUser.getNickname().length() + "/" + MAX_USERNAME_LENGTH);
 
                 final Dialog dialog = builder.create();
                 dialog.show();
@@ -237,8 +241,9 @@ public class EditProfileActivity extends BaseLiveActivity {
     @Override
     protected void initData() {
         super.initData();
+
         mViewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
-        mGenderArray = getResources().getStringArray(R.array.gender_types);
+
 
         mViewModel.getUploadAvatarObservable().observe(mContext, new Observer<Resource<String>>() {
             @Override
@@ -246,12 +251,18 @@ public class EditProfileActivity extends BaseLiveActivity {
                 EditProfileActivity.this.parseResource(stringResource, new OnResourceParseCallback<String>() {
                     @Override
                     public void onSuccess(String data) {
-                        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.AVATAR_URL, DemoHelper.getAvatarUrl(), new ValueCallBack<String>() {
+                        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.AVATAR_URL, data, new ValueCallBack<String>() {
                             @Override
                             public void onSuccess(String value) {
-                                DemoHelper.getCurrentDemoUser().setAvatarUrl(data);
-                                DemoHelper.saveCurrentUser();
-                                LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE).postValue(true);
+                                EditProfileActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mUser.setAvatar(data);
+                                        UserRepository.getInstance().saveUserInfoToDb(mUser);
+                                        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), mBinding.userIcon);
+                                        LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE).postValue(true);
+                                    }
+                                });
                             }
 
                             @Override
@@ -263,40 +274,6 @@ public class EditProfileActivity extends BaseLiveActivity {
                 });
             }
         });
-
-
-        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{ChatClient.getInstance().getCurrentUser()}, new ValueCallBack<Map<String, UserInfo>>() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                EditProfileActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
-                            Log.i(TAG, "user=" + user.getKey() + "," + user.getValue().getNickname() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth() + "," + user.getValue().getAvatarUrl());
-                            if (ChatClient.getInstance().getCurrentUser().equals(user.getKey())) {
-                                updateUserAvatar(user.getValue().getAvatarUrl());
-                                updateNickname(user.getValue().getNickname());
-                                updateGender(user.getValue().getGender());
-                                updateBirthday(user.getValue().getBirth());
-                                break;
-                            }
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-
-    }
-
-    private void updateUserAvatar(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            Glide.with(this).load(url).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(mBinding.userIcon);
-        }
     }
 
     private void selectImageFromLocal() {
@@ -409,11 +386,6 @@ public class EditProfileActivity extends BaseLiveActivity {
         mViewModel.uploadAvatar(mAvatarPath);
     }
 
-    private void updateNickname(String nickname) {
-        if (!TextUtils.isEmpty(nickname)) {
-            EaseUserUtils.setUserNick(nickname, mBinding.itemUsername.getTvContent());
-        }
-    }
 
     private void setNickname(final String nickname) {
         if (TextUtils.isEmpty(nickname)) {
@@ -425,9 +397,9 @@ public class EditProfileActivity extends BaseLiveActivity {
                 EditProfileActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        DemoHelper.getCurrentDemoUser().setNickName(nickname);
-                        DemoHelper.saveCurrentUser();
-                        EaseUserUtils.setUserNick(DemoHelper.getNickName(), mBinding.itemUsername.getTvContent());
+                        mUser.setNickname(nickname);
+                        UserRepository.getInstance().saveUserInfoToDb(mUser);
+                        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), mBinding.itemUsername.getTvContent());
                         LiveDataBus.get().with(DemoConstants.NICKNAME_CHANGE).postValue(nickname);
                     }
                 });
@@ -457,6 +429,8 @@ public class EditProfileActivity extends BaseLiveActivity {
                 EditProfileActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mUser.setGender(gender);
+                        UserRepository.getInstance().saveUserInfoToDb(mUser);
                         updateGender(gender);
                     }
                 });
@@ -485,6 +459,8 @@ public class EditProfileActivity extends BaseLiveActivity {
                 EditProfileActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mUser.setBirth(birthday);
+                        UserRepository.getInstance().saveUserInfoToDb(mUser);
                         updateBirthday(birthday);
                     }
                 });

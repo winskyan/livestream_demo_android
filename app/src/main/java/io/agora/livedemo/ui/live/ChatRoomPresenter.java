@@ -20,9 +20,9 @@ import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
-import io.agora.util.EMLog;
 
 public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListener {
     private BaseActivity mContext;
@@ -80,51 +80,57 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
     @Override
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
-        if (mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_in_mute_list));
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onMuteListAdded(chatRoomId, mutes,expireTime);
         }
     }
 
     @Override
     public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
-        if (mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_out_mute_list));
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onMuteListRemoved(chatRoomId, mutes);
         }
     }
 
     @Override
     public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
-        if (whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_anchor_add_white));
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onWhiteListAdded(chatRoomId, whitelist);
         }
     }
 
     @Override
     public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
-        if (whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_anchor_remove_from_white));
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onWhiteListRemoved(chatRoomId, whitelist);
         }
     }
 
     @Override
     public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+        AttentionBean attention = new AttentionBean();
         if (isMuted) {
-            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(mContext.getString(R.string.live_anchor_mute_all_attention_tip, ownerNickname));
+            attention.setShowTime(-1);
+            attention.setShowContent(mContext.getString(R.string.live_anchor_mute_all_attention_tip, ownerNickname));
         } else {
-            LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue("");
+            attention.setShowTime(-1);
+            attention.setShowContent("");
         }
+        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(attention);
     }
 
     @Override
     public void onAdminAdded(String chatRoomId, String admin) {
-        EMLog.i("lives", "onAdminAdded admin=" + admin);
-        onAdminChange(admin);
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onAdminAdded(chatRoomId, admin);
+        }
     }
 
     @Override
     public void onAdminRemoved(String chatRoomId, String admin) {
-        EMLog.i("lives", "onAdminRemoved admin=" + admin);
-        onAdminChange(admin);
+        if (onChatRoomListener != null) {
+            onChatRoomListener.onAdminRemoved(chatRoomId, admin);
+        }
     }
 
     @Override
@@ -157,7 +163,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
             }
             if (username.equals(chatroomId)) {
                 if (onChatRoomListener != null) {
-                    onChatRoomListener.onMessageReceived();
+                    onChatRoomListener.onMessageReceived(messages);
                 }
             }
         }
@@ -213,13 +219,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         }
     }
 
-    private void onAdminChange(String admin) {
-        if (onChatRoomListener != null) {
-            onChatRoomListener.onAdminChanged();
-        }
-    }
-
-
     public void sendPraiseMessage(int praiseCount) {
         DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnLiveMessageCallBack() {
             @Override
@@ -250,7 +249,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     }
 
     public void sendGiftMsg(GiftBean bean, OnLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendGiftMsg(bean.getId(), bean.getNum(), new OnLiveMessageCallBack() {
+        EaseLiveMessageHelper.getInstance().sendGiftMsg(chatroomId, bean.getId(), bean.getNum(), new OnLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
@@ -324,13 +323,23 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
         void onChatRoomMemberExited(String participant);
 
-        void onMessageReceived();
+        void onMessageReceived(List<ChatMessage> messages);
 
         void onMessageSelectLast();
 
         void onMessageChanged();
 
-        void onAdminChanged();
+        void onAdminAdded(String chatRoomId, String admin);
+
+        void onAdminRemoved(String chatRoomId, String admin);
+
+        void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime);
+
+        void onMuteListRemoved(String chatRoomId, List<String> mutes);
+
+        void onWhiteListAdded(String chatRoomId, List<String> whitelist);
+
+        void onWhiteListRemoved(String chatRoomId, List<String> whitelist);
 
     }
 }

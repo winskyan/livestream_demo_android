@@ -27,15 +27,18 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.CustomMessageBody;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.lives.EaseChatRoomMessagesView;
+import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
+import io.agora.chat.uikit.lives.EaseLiveMessageType;
 import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
-import io.agora.chat.uikit.lives.OnLiveMessageReceiveListener;
+import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
@@ -44,7 +47,10 @@ import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.DemoMsgHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.OnUpdateUserInfoListener;
 import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.model.User;
@@ -60,11 +66,12 @@ import io.agora.livedemo.utils.NumberUtils;
 import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
-public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnLiveMessageReceiveListener {
+public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener {
     private static final int MAX_SIZE = 10;
     protected static final String TAG = "lives";
     protected static final int CYCLE_REFRESH = 100;
     protected static final int CYCLE_REFRESH_TIME = 30000;
+    protected static final int ATTENTION_REFRESH = 101;
     @BindView(R.id.iv_icon)
     EaseImageView ivIcon;
     @BindView(R.id.message_view)
@@ -145,6 +152,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected String mAvatarUrl;
     private boolean mShowMessageListView;
 
+    protected EaseUser mLiveStreamerUser;
+
 
     @Override
     protected void initArgument() {
@@ -164,71 +173,46 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         anchorId = liveRoom.getOwner();
         DemoMsgHelper.getInstance().init(chatroomId);
 
-
-        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(new String[]{anchorId}, new ValueCallBack<Map<String, UserInfo>>() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                if (null != LiveBaseFragment.this.getActivity()) {
-                    LiveBaseFragment.this.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Map.Entry<String, UserInfo> user : stringUserInfoMap.entrySet()) {
-                                Log.i(TAG, "user=" + user.getKey() + ",value=" + user.getValue().getGender() + "," + user.getValue().getBirth() + "," + user.getValue().getNickname());
-                                if (anchorId.equals(user.getKey())) {
-                                    usernameView.setText(user.getValue().getNickname());
-                                    int gender = user.getValue().getGender();
-                                    if (1 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_male_icon);
-                                    } else if (2 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_female_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_female_icon);
-                                    } else if (3 == gender) {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_other_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_other_icon);
-                                    } else {
-                                        sexLayout.setBackgroundResource(R.drawable.sex_secret_bg_shape);
-                                        sexIcon.setImageResource(R.drawable.sex_secret_icon);
-                                        ageTv.setVisibility(View.GONE);
-                                    }
-                                    String birth = user.getValue().getBirth();
-                                    if (!TextUtils.isEmpty(birth)) {
-                                        ageTv.setText(String.valueOf(Utils.getAgeByBirthday(user.getValue().getBirth())));
-                                    }
-
-                                    if (TextUtils.isEmpty(user.getValue().getNickname())) {
-                                        usernameView.setText(anchorId);
-                                        presenter.setOwnerNickname(anchorId);
-                                    } else {
-                                        usernameView.setText(user.getValue().getNickname());
-                                        presenter.setOwnerNickname(user.getValue().getNickname());
-                                    }
-
-                                    mAvatarUrl = user.getValue().getAvatarUrl();
-                                    updateAvatar();
-                                    break;
-                                }
-
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-
         watchedCount = liveRoom.getAudienceNum();
         tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
 
         presenter = new ChatRoomPresenter(mContext, chatroomId);
+
+        initLiveStreamerUser();
     }
 
-    protected void updateAvatar() {
+    protected abstract void initLiveStreamerUser();
 
+    protected void initLiveStreamView() {
+        if (null == mLiveStreamerUser) {
+            return;
+        }
+        EaseUserUtils.setUserAvatar(mContext, mLiveStreamerUser.getUsername(), ivIcon);
+        EaseUserUtils.setUserNick(mLiveStreamerUser.getUsername(), usernameView);
+
+        int gender = mLiveStreamerUser.getGender();
+        if (1 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_male_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_male_icon);
+        } else if (2 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_female_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_female_icon);
+        } else if (3 == gender) {
+            sexLayout.setBackgroundResource(R.drawable.sex_other_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_other_icon);
+        } else {
+            sexLayout.setBackgroundResource(R.drawable.sex_secret_bg_shape);
+            sexIcon.setImageResource(R.drawable.sex_secret_icon);
+            ageTv.setVisibility(View.GONE);
+        }
+        String birth = mLiveStreamerUser.getBirth();
+        if (!TextUtils.isEmpty(birth)) {
+            ageTv.setText(String.valueOf(Utils.getAgeByBirthday(mLiveStreamerUser.getBirth())));
+        }
+
+        if (null != presenter) {
+            presenter.setOwnerNickname(mLiveStreamerUser.getNickname());
+        }
     }
 
     @Override
@@ -274,8 +258,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         layoutMemberNum.setOnClickListener(this);
         liveReceiveGift.setOnClickListener(this);
         presenter.setOnChatRoomListener(this);
-        DemoMsgHelper.getInstance().setOnCustomMsgReceiveListener(this);
-
     }
 
     @Override
@@ -290,6 +272,23 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 .observe(getViewLifecycleOwner(), response -> {
                     if (!TextUtils.isEmpty(response)) {
                         showUserDetailsDialog(response);
+                    }
+                });
+        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION, AttentionBean.class)
+                .observe(getViewLifecycleOwner(), response -> {
+                    if (null == response) {
+                        layoutAttention.setVisibility(View.GONE);
+                    } else {
+                        handler.removeMessages(ATTENTION_REFRESH);
+                        if (TextUtils.isEmpty(response.getShowContent())) {
+                            layoutAttention.setVisibility(View.GONE);
+                        } else {
+                            layoutAttention.setVisibility(View.VISIBLE);
+                            tvAttention.setText(response.getShowContent());
+                            if (-1 != response.getShowTime()) {
+                                handler.sendEmptyMessageDelayed(ATTENTION_REFRESH, response.getShowTime() * 1000);
+                            }
+                        }
                     }
                 });
     }
@@ -352,6 +351,9 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     isStartCycleRefresh = true;
                     viewModel.getRoomMemberNumber(chatroomId);
                 }
+                break;
+            case ATTENTION_REFRESH:
+                layoutAttention.setVisibility(View.GONE);
                 break;
         }
     }
@@ -443,7 +445,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    private void notifyDataSetChanged() {
+    protected void notifyDataSetChanged() {
         mMemberIconList.clear();
         if (memberList.size() > 2) {
             mMemberIconList.add(memberList.get(memberList.size() - 1));
@@ -455,27 +457,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             avatarAdapter.setData(mMemberIconList);
             return;
         }
-        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(mMemberIconList.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> stringUserInfoMap) {
-                if (null != LiveBaseFragment.this.getActivity()) {
-                    LiveBaseFragment.this.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            avatarAdapter.setStringUserInfoMap(stringUserInfoMap);
-                            avatarAdapter.setData(mMemberIconList);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-
-
+        avatarAdapter.setData(mMemberIconList);
     }
 
 
@@ -674,8 +656,21 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @Override
     public void onChatRoomMemberAdded(String participant) {
-        LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
-        onRoomMemberAdded(participant);
+        List<String> userIdList = new ArrayList<>(1);
+        userIdList.add(participant);
+        UserRepository.getInstance().fetchUserInfo(userIdList, new OnUpdateUserInfoListener() {
+            @Override
+            public void onSuccess(Map<String, UserInfo> userInfoMap) {
+                LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
+                onRoomMemberAdded(participant);
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                LiveDataBus.get().with(DemoConstants.REFRESH_MEMBER).postValue(true);
+                onRoomMemberAdded(participant);
+            }
+        });
     }
 
     @Override
@@ -685,8 +680,47 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
-    public void onMessageReceived() {
+    public void onMessageReceived(List<ChatMessage> messages) {
         messageView.refreshSelectLast();
+
+        for (ChatMessage message : messages) {
+            // 先判断是否自定义消息
+            if (message.getType() != ChatMessage.Type.CUSTOM) {
+                continue;
+            }
+
+            if (message.getChatType() != ChatMessage.ChatType.GroupChat && message.getChatType() != ChatMessage.ChatType.ChatRoom) {
+                continue;
+            }
+            String username = message.getTo();
+
+            if (!TextUtils.equals(username, chatroomId)) {
+                continue;
+            }
+
+            CustomMessageBody body = (CustomMessageBody) message.getBody();
+            String event = body.event();
+
+            if (TextUtils.isEmpty(event)) {
+                continue;
+            }
+            EaseLiveMessageType msgType = EaseLiveMessageHelper.getInstance().getCustomMsgType(event);
+            if (msgType == null) {
+                continue;
+            }
+
+            switch (msgType) {
+                case CHATROOM_GIFT:
+                    onReceiveGiftMsg(message);
+                    break;
+                case CHATROOM_PRAISE:
+                    onReceivePraiseMsg(message);
+                    break;
+                case CHATROOM_BARRAGE:
+                    onReceiveBarrageMsg(message);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -703,8 +737,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         }
     }
 
-    @Override
-    public void onReceiveGiftMsg(ChatMessage message) {
+    private void onReceiveGiftMsg(ChatMessage message) {
         if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveGiftInfo(message);
         }
@@ -728,8 +761,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         });
     }
 
-    @Override
-    public void onReceivePraiseMsg(ChatMessage message) {
+    private void onReceivePraiseMsg(ChatMessage message) {
         if (message.getMsgTime() >= joinTime) {
             DemoHelper.saveLikeInfo(message);
         }
@@ -741,8 +773,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
 
-    @Override
-    public void onReceiveBarrageMsg(ChatMessage message) {
+    private void onReceiveBarrageMsg(ChatMessage message) {
         ThreadManager.getInstance().runOnMainThread(() -> {
             barrageView.addData(message);
         });
@@ -755,7 +786,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             barrageLayout.destroy();
         }
         RoomUserDetailsDialog.sAttentionClicked = false;
-        DemoMsgHelper.getInstance().removeCustomMsgListener();
     }
 
     private static class MemberIconSpacesItemDecoration extends RecyclerView.ItemDecoration {

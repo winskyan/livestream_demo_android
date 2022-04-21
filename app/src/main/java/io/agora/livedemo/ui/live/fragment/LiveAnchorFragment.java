@@ -15,8 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +24,7 @@ import butterknife.Unbinder;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
@@ -34,6 +34,7 @@ import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.ThreadManager;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
+import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.other.fragment.SimpleDialogFragment;
@@ -88,7 +89,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(ivIcon);
+        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), ivIcon);
         viewGroup.setVisibility(View.GONE);
         btEnd.setVisibility(View.VISIBLE);
         countdownView.setTypeface(Utils.getRobotoTypeface(getActivity().getApplicationContext()));
@@ -104,6 +105,13 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         int likeNum = DemoHelper.getLikeNum(liveId);
         tvLikeNum.setText(getString(R.string.live_anchor_like_info, NumberUtils.amountConversion(likeNum)));
     }
+
+    @Override
+    protected void initLiveStreamerUser() {
+        mLiveStreamerUser = UserRepository.getInstance().getUserInfo(DemoHelper.getAgoraId());
+        initLiveStreamView();
+    }
+
 
     @Override
     protected void initListener() {
@@ -142,17 +150,6 @@ public class LiveAnchorFragment extends LiveBaseFragment {
                         stopLiving();
                     }
                 });
-
-        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION, String.class)
-                .observe(getViewLifecycleOwner(), response -> {
-                    if (TextUtils.isEmpty(response)) {
-                        layoutAttention.setVisibility(View.GONE);
-                    } else {
-                        layoutAttention.setVisibility(View.VISIBLE);
-                        tvAttention.setText(response);
-                    }
-                });
-
 
         startLive();
     }
@@ -224,7 +221,32 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     @Override
-    public void onAdminChanged() {
+    public void onAdminAdded(String chatRoomId, String admin) {
+
+    }
+
+    @Override
+    public void onAdminRemoved(String chatRoomId, String admin) {
+
+    }
+
+    @Override
+    public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+
+    }
+
+    @Override
+    public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+
+    }
+
+    @Override
+    public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
 
     }
 

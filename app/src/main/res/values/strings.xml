@@ -89,6 +89,10 @@
 
     <string name="live_in_mute_list">you have muted</string>
     <string name="live_out_mute_list">you have unumted</string>
+    <string name="live_in_admin_list">you have been assigned as Moderator</string>
+    <string name="live_out_admin_list">you have been removed from Moderator</string>
+    <string name="live_in_white_list">you have been moved to allowed list</string>
+    <string name="live_out_white_list">you have been removed from allowed list</string>
     <string name="live_anchor_add_white">move to allowed list</string>
     <string name="live_anchor_remove_from_white">remove from allowed list</string>
     <string name="live_anchor_mute_all_attention_tip">%1$s has set Banned on all Chats</string>

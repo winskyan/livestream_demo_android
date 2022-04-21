@@ -14,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.ThreadManager;
@@ -86,7 +85,7 @@ public class ShowGiveGiftView extends LinearLayout {
         addView(newGiftView);
 
 
-        TranslateAnimation inAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.gift_in); // 礼物进入时动画
+        TranslateAnimation inAnim = (TranslateAnimation) AnimationUtils.loadAnimation(context, R.anim.gift_in);
         newGiftView.startAnimation(inAnim);
         final MagicTextView mtv_giftNum = newGiftView.findViewById(R.id.tv_gift_num);
         inAnim.setAnimationListener(new Animation.AnimationListener() {
@@ -233,8 +232,8 @@ public class ShowGiveGiftView extends LinearLayout {
         EaseImageView ivIcon = giftView.findViewById(R.id.iv_icon);
         User user = gift.getUser();
         if (user != null) {
-            tvName.setText(user.getNickName());
-            Glide.with(context).load(user.getAvatarUrl()).placeholder(R.drawable.avatar_default).error(R.drawable.avatar_default).into(ivIcon);
+            EaseUserUtils.setUserNick(user.getId(), tvName);
+            EaseUserUtils.setUserAvatar(context, user.getId(), ivIcon);
         }
 
         TextView giftContent = giftView.findViewById(R.id.send_gift_content);

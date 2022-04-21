@@ -39,7 +39,7 @@ import io.agora.util.EMLog;
 
 
 public class SplashActivity extends BaseLiveActivity {
-    private final static String TAG = SplashActivity.class.getSimpleName();
+    private final static String TAG = "lives";
     private LoginViewModel viewModel;
     private ActivitySplashBinding mBinding;
     private boolean mIsSyncUserInfo;
@@ -69,6 +69,7 @@ public class SplashActivity extends BaseLiveActivity {
     protected void initData() {
         super.initData();
         PreferenceManager.init(mContext);
+        DemoHelper.init();
         UserRepository.getInstance().init(mContext);
         mIsSyncUserInfo = null == UserRepository.getInstance().getCurrentUser();
 
@@ -76,6 +77,8 @@ public class SplashActivity extends BaseLiveActivity {
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         mHandler.sendEmptyMessageDelayed(0, 1000 * 3);//3s
+
+
     }
 
     private final Handler mHandler = new Handler(new Handler.Callback() {
@@ -89,7 +92,7 @@ public class SplashActivity extends BaseLiveActivity {
     private void skipToTarget() {
         if (ChatClient.getInstance().isLoggedInBefore()) {
             DemoHelper.saveCurrentUser();
-            DemoHelper.initDb();
+
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
@@ -122,6 +125,7 @@ public class SplashActivity extends BaseLiveActivity {
                     try {
                         int resCode = response.first;
                         if (resCode == 200) {
+
                             String ImageStr = response.second.replace(" ", "");
                             JSONObject object = new JSONObject(ImageStr);
                             JSONObject headImageObject = object.optJSONObject("headImageList");
@@ -175,7 +179,7 @@ public class SplashActivity extends BaseLiveActivity {
                             }
                         });
 
-                        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.AVATAR_URL, DemoHelper.getAvatarUrl(), new ValueCallBack<String>() {
+                        ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.AVATAR_URL, data.getAvatarUrl(), new ValueCallBack<String>() {
                             @Override
                             public void onSuccess(String value) {
                                 EMLog.i(TAG, "sync avatar url success");

@@ -18,9 +18,6 @@ public class PreferenceManager {
     private static final String KEY_CAN_REGISTER = "key_can_register";
     private static final String KEY_AGORA_ID = "key_agora_id";
     private static final String KEY_PWD = "key_pwd";
-    private static final String KEY_NICK_NAME = "key_nick_name";
-    private static final String KEY_AVATAR_DEFAULT_RESOURCE = "key_avatar_default_resource";
-    private static final String KEY_AVATAR_URL = "key_avatar_url";
 
     @SuppressLint("CommitPrefEdits")
     private PreferenceManager(Context cxt) {
@@ -140,45 +137,6 @@ public class PreferenceManager {
     public String getPwd() {
         if (null != mSharedPreferences) {
             return mSharedPreferences.getString(KEY_PWD, null);
-        } else {
-            return "";
-        }
-    }
-
-    public void saveNickname(String nickname) {
-        editor.putString(KEY_NICK_NAME, nickname);
-        editor.apply();
-    }
-
-    public String getNickname() {
-        if (null != mSharedPreferences) {
-            return mSharedPreferences.getString(KEY_NICK_NAME, "");
-        } else {
-            return "";
-        }
-    }
-
-    public void saveAvatarDefaultResource(int res) {
-        editor.putInt(KEY_AVATAR_DEFAULT_RESOURCE, res);
-        editor.apply();
-    }
-
-    public int getAvatarDefaultResource() {
-        if (null != mSharedPreferences) {
-            return mSharedPreferences.getInt(KEY_AVATAR_DEFAULT_RESOURCE, -1);
-        } else {
-            return -1;
-        }
-    }
-
-    public void saveAvatarUrl(String url) {
-        editor.putString(KEY_AVATAR_URL, url);
-        editor.apply();
-    }
-
-    public String getAvatarUrl() {
-        if (null != mSharedPreferences) {
-            return mSharedPreferences.getString(KEY_AVATAR_URL, "");
         } else {
             return "";
         }

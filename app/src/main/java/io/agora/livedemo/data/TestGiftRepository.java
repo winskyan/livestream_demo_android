@@ -32,8 +32,6 @@ public class TestGiftRepository {
             bean.setValue(giftValues[i]);
             user = new User();
             user.setId(DemoHelper.getAgoraId());
-            user.setNickName(DemoHelper.getNickName());
-            user.setAvatarUrl(DemoHelper.getAvatarUrl());
             bean.setUser(user);
             bean.setLeftTime(0);
             gifts.add(bean);

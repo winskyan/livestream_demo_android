@@ -12,8 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -25,6 +27,7 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
@@ -33,7 +36,9 @@ import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnConfirmClickListener;
 import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.OnUpdateUserInfoListener;
 import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.util.EMLog;
@@ -57,6 +62,9 @@ public class LiveAudienceFragment extends LiveBaseFragment {
      * Whether it is an operation of switching the owner, if it is an operation of switching the owner, the logic of exiting the chat room will not be called. Prevent the new page from joining the live broadcast room, and the page being destroyed calls the operation of exiting the live broadcast room, resulting in an exception in the chat room.
      */
     private boolean isSwitchOwner;
+    private boolean isAdmin;
+    private boolean isInWhiteList;
+    private boolean isInMuteList;
 
     @Override
     protected int getLayoutId() {
@@ -79,10 +87,57 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     @Override
-    protected void updateAvatar() {
-        super.updateAvatar();
-        Glide.with(this).load(mAvatarUrl).apply(RequestOptions.placeholderOf(R.drawable.avatar_default)).into(ivIcon);
+    protected void initLiveStreamerUser() {
+        List<String> memberList = new ArrayList<>(1);
+        memberList.add(anchorId);
+        UserRepository.getInstance().fetchUserInfo(memberList, new OnUpdateUserInfoListener() {
+            @Override
+            public void onSuccess(Map<String, UserInfo> userInfoMap) {
+                LiveAudienceFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLiveStreamerUser = UserRepository.getInstance().getUserInfo(anchorId);
+                        initLiveStreamView();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+
+            }
+        });
     }
+
+    private void updateAudienceUserInfo() {
+        List<String> memberList = chatroom.getMemberList();
+        memberList.addAll(chatroom.getAdminList());
+        EMLog.i(TAG, "update member list user info memberList=" + memberList);
+        UserRepository.getInstance().fetchUserInfo(memberList, new OnUpdateUserInfoListener() {
+            @Override
+            public void onSuccess(Map<String, UserInfo> userInfoMap) {
+                LiveAudienceFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EMLog.i(TAG, "update member list user info");
+                        LiveAudienceFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+
+            }
+        });
+
+    }
+
 
     @Override
     protected void initListener() {
@@ -222,8 +277,57 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     @Override
-    public void onAdminChanged() {
-        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatroomId);
+    public void onAdminAdded(String chatRoomId, String admin) {
+        if (!isAdmin && admin.equals(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_in_admin_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
+    }
+
+    @Override
+    public void onAdminRemoved(String chatRoomId, String admin) {
+        if (isAdmin && admin.equals(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_out_admin_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
+    }
+
+    @Override
+    public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+        if (!isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_in_mute_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
+    }
+
+    @Override
+    public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+        if (isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_out_mute_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
+    }
+
+    @Override
+    public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+        if (!isInWhiteList && whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_in_white_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
+    }
+
+    @Override
+    public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+        if (isInWhiteList && whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
+            mContext.showToast(mContext.getString(R.string.live_out_white_list));
+        }
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
+        updateUserState();
     }
 
     private void showGiftDialog() {
@@ -304,7 +408,10 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         addChatRoomChangeListener();
                         onMessageListInit();
                         startCycleRefresh();
+                        updateUserState();
+                        updateAudienceUserInfo();
                     }
+
 
                     @Override
                     public void onError(int i, String s) {
@@ -328,6 +435,13 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
         ChatClient.getInstance().chatManager().addMessageListener(presenter);
+    }
+
+    private void updateUserState() {
+        String currentUser = ChatClient.getInstance().getCurrentUser();
+        isAdmin = chatroom.getAdminList().contains(currentUser);
+        isInWhiteList = chatroom.getWhitelist().contains(currentUser);
+        isInMuteList = chatroom.getMuteList().containsKey(currentUser);
     }
 
     @Override

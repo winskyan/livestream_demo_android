@@ -2,6 +2,8 @@ package io.agora.livedemo.common;
 
 import android.text.TextUtils;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,13 +12,17 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.MessageBody;
+import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.lives.EaseLiveMessageConstant;
 import io.agora.chat.uikit.lives.EaseLiveMessageType;
+import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.live.FastLiveHelper;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
+import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 import io.agora.livedemo.data.TestGiftRepository;
 import io.agora.livedemo.data.UserRepository;
@@ -25,6 +31,8 @@ import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.model.User;
 
 public class DemoHelper {
+
+    private static Map<String, EaseUser> userList;
 
     /**
      * is living
@@ -93,9 +101,6 @@ public class DemoHelper {
     public static void saveCurrentUser() {
         PreferenceManager.getInstance().saveAgoraId(getCurrentDemoUser().getId());
         PreferenceManager.getInstance().savePwd(getCurrentDemoUser().getPwd());
-        PreferenceManager.getInstance().saveNickname(getCurrentDemoUser().getNickName());
-        PreferenceManager.getInstance().saveAvatarDefaultResource(getCurrentDemoUser().getAvatarDefaultResource());
-        PreferenceManager.getInstance().saveAvatarUrl(getCurrentDemoUser().getAvatarUrl());
     }
 
     /**
@@ -104,9 +109,6 @@ public class DemoHelper {
     public static void clearUser() {
         PreferenceManager.getInstance().saveAgoraId("");
         PreferenceManager.getInstance().savePwd("");
-        PreferenceManager.getInstance().saveNickname("");
-        PreferenceManager.getInstance().saveAvatarDefaultResource(-1);
-        PreferenceManager.getInstance().saveAvatarUrl("");
     }
 
     public static String getAgoraId() {
@@ -115,18 +117,6 @@ public class DemoHelper {
 
     public static String getPwd() {
         return PreferenceManager.getInstance().getPwd();
-    }
-
-    public static String getNickName() {
-        return PreferenceManager.getInstance().getNickname();
-    }
-
-    public static int getAvatarDefaultResource() {
-        return PreferenceManager.getInstance().getAvatarDefaultResource();
-    }
-
-    public static String getAvatarUrl() {
-        return PreferenceManager.getInstance().getAvatarUrl();
     }
 
     /**
@@ -139,7 +129,18 @@ public class DemoHelper {
         return TestGiftRepository.getGiftById(giftId);
     }
 
-    public static void initDb() {
+    public static void init() {
+        initDb();
+        EaseUIKit.getInstance()
+                .setUserProvider(new EaseUserProfileProvider() {
+                    @Override
+                    public EaseUser getUser(String userID) {
+                        return UserRepository.getInstance().getUserInfo(userID);
+                    }
+                });
+    }
+
+    private static void initDb() {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
     }
 
@@ -242,5 +243,51 @@ public class DemoHelper {
 
     public static boolean isVod(String videoType) {
         return TextUtils.equals(videoType, LiveRoom.Type.vod.name()) || TextUtils.equals(videoType, LiveRoom.Type.agora_vod.name());
+    }
+
+    /**
+     * Determine if you have logged in before
+     *
+     * @return
+     */
+    public static boolean isLoggedIn() {
+        return getChatClient().isLoggedInBefore();
+    }
+
+    /**
+     * Get ChatClient's entity
+     *
+     * @return
+     */
+    public static ChatClient getChatClient() {
+        return ChatClient.getInstance();
+    }
+
+    public static Map<String, EaseUser> getUserList() {
+        // Fetching data directly from the local database without considering too many complex scenarios
+        if (isLoggedIn()) {
+            userList = getAllUserList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if (userList == null) {
+            return new Hashtable<String, EaseUser>();
+        }
+        return userList;
+    }
+
+    public static Map<String, EaseUser> getAllUserList() {
+        UserDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
+        if (dao == null) {
+            return new HashMap<>();
+        }
+        Map<String, EaseUser> map = new HashMap<>();
+        List<EaseUser> users = dao.loadAllEaseUsers();
+        if (users != null && !users.isEmpty()) {
+            for (EaseUser user : users) {
+                map.put(user.getUsername(), user);
+            }
+        }
+        return map;
     }
 }

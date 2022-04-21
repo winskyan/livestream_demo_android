@@ -6,9 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
@@ -19,6 +16,7 @@ import io.agora.livedemo.ui.base.BaseLiveFragment;
 import io.agora.livedemo.ui.other.AboutActivity;
 import io.agora.livedemo.ui.widget.ArrowItemView;
 import io.agora.livedemo.utils.Utils;
+import io.agora.util.EMLog;
 
 public class AboutMeFragment extends BaseLiveFragment {
     private EaseImageView userIcon;
@@ -37,8 +35,9 @@ public class AboutMeFragment extends BaseLiveFragment {
         username = findViewById(R.id.username);
         itemAbout = findViewById(R.id.item_about);
 
-        Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(userIcon);
-        EaseUserUtils.setUserNick(DemoHelper.getNickName(), username);
+        EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), userIcon);
+
+        EaseUserUtils.setUserNick(DemoHelper.getAgoraId(), username);
 
         itemAbout.setContent("V" + Utils.getAppVersionName(mContext));
     }
@@ -66,7 +65,8 @@ public class AboutMeFragment extends BaseLiveFragment {
                 });
         LiveDataBus.get().with(DemoConstants.AVATAR_CHANGE, Boolean.class)
                 .observe(getViewLifecycleOwner(), response -> {
-                    Glide.with(this).load(DemoHelper.getAvatarUrl()).apply(RequestOptions.placeholderOf(DemoHelper.getAvatarDefaultResource())).into(userIcon);
+                    EMLog.i("lives","AVATAR_CHANGE");
+                    EaseUserUtils.setUserAvatar(mContext, DemoHelper.getAgoraId(), userIcon);
                 });
     }
 }
