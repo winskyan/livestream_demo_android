@@ -7,14 +7,13 @@ import java.util.List;
 
 import io.agora.ChatRoomChangeListener;
 import io.agora.Error;
-import io.agora.MessageListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
-import io.agora.chat.CmdMessageBody;
 import io.agora.chat.Conversation;
 import io.agora.chat.TextMessageBody;
+import io.agora.chat.uikit.lives.EaseLiveMessageConstant;
 import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
-import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
+import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoMsgHelper;
@@ -24,7 +23,7 @@ import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
 
-public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListener {
+public class ChatRoomPresenter implements ChatRoomChangeListener {
     private BaseActivity mContext;
     private String chatroomId;
     private String currentUser;
@@ -32,10 +31,13 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     private Conversation conversation;
     private String ownerNickname;
 
+
     public ChatRoomPresenter(BaseActivity context, String chatroomId) {
         this.mContext = context;
         this.chatroomId = chatroomId;
         currentUser = ChatClient.getInstance().getCurrentUser();
+
+
     }
 
     public void setOwnerNickname(String ownerNickname) {
@@ -81,7 +83,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     @Override
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
         if (onChatRoomListener != null) {
-            onChatRoomListener.onMuteListAdded(chatRoomId, mutes,expireTime);
+            onChatRoomListener.onMuteListAdded(chatRoomId, mutes, expireTime);
         }
     }
 
@@ -149,61 +151,6 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
 
 //===========================================  EMChatRoomChangeListener end =================================
 
-//===========================================  ChatMessageListener start =================================
-
-    @Override
-    public void onMessageReceived(List<ChatMessage> messages) {
-        for (ChatMessage message : messages) {
-            String username = null;
-            if (message.getChatType() == ChatMessage.ChatType.GroupChat
-                    || message.getChatType() == ChatMessage.ChatType.ChatRoom) {
-                username = message.getTo();
-            } else {
-                username = message.getFrom();
-            }
-            if (username.equals(chatroomId)) {
-                if (onChatRoomListener != null) {
-                    onChatRoomListener.onMessageReceived(messages);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onCmdMessageReceived(List<ChatMessage> messages) {
-        ChatMessage message = messages.get(messages.size() - 1);
-        if (DemoConstants.CMD_GIFT.equals(((CmdMessageBody) message.getBody()).action())) {
-            //showLeftGiftView(message.getFrom());
-        } else if (DemoConstants.CMD_PRAISE.equals(((CmdMessageBody) message.getBody()).action())) {
-            if (onChatRoomListener != null) {
-                // onChatRoomListener.onReceivePraiseMsg(message.getIntAttribute(DemoConstants.EXTRA_PRAISE_COUNT, 1));
-            }
-        }
-    }
-
-    @Override
-    public void onMessageRead(List<ChatMessage> messages) {
-
-    }
-
-    @Override
-    public void onMessageDelivered(List<ChatMessage> messages) {
-
-    }
-
-    @Override
-    public void onMessageRecalled(List<ChatMessage> messages) {
-
-    }
-
-    @Override
-    public void onMessageChanged(ChatMessage message, Object change) {
-        if (onChatRoomListener != null) {
-            onChatRoomListener.onMessageChanged();
-        }
-    }
-
-//===========================================  ChatMessageListener end =================================
 
     public void showMemberChangeEvent(String username, String event) {
         ChatMessage message = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
@@ -212,7 +159,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         TextMessageBody textMessageBody = new TextMessageBody(event);
         message.addBody(textMessageBody);
         message.setChatType(ChatMessage.ChatType.ChatRoom);
-        message.setAttribute("member_add", true);
+        message.setAttribute(EaseLiveMessageConstant.LIVE_MESSAGE_KEY_MEMBER_JOIN, true);
         ChatClient.getInstance().chatManager().saveMessage(message);
         if (onChatRoomListener != null) {
             onChatRoomListener.onMessageSelectLast();
@@ -220,7 +167,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
     }
 
     public void sendPraiseMessage(int praiseCount) {
-        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnLiveMessageCallBack() {
+        DemoMsgHelper.getInstance().sendLikeMsg(praiseCount, new OnSendLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 Log.e("TAG", "send praise message success");
@@ -248,8 +195,8 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         this.onChatRoomListener = listener;
     }
 
-    public void sendGiftMsg(GiftBean bean, OnLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendGiftMsg(chatroomId, bean.getId(), bean.getNum(), new OnLiveMessageCallBack() {
+    public void sendGiftMsg(GiftBean bean, OnSendLiveMessageCallBack callBack) {
+        EaseLiveMessageHelper.getInstance().sendGiftMsg(chatroomId, bean.getId(), bean.getNum(), new OnSendLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
@@ -281,8 +228,8 @@ public class ChatRoomPresenter implements ChatRoomChangeListener, MessageListene
         });
     }
 
-    public void sendTxtMsg(String content, boolean isBarrageMsg, OnLiveMessageCallBack callBack) {
-        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnLiveMessageCallBack() {
+    public void sendTxtMsg(String content, boolean isBarrageMsg, OnSendLiveMessageCallBack callBack) {
+        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnSendLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {

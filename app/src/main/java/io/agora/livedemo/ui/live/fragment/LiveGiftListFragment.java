@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.utils.EaseUtils;
@@ -88,7 +89,7 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     protected void initData() {
         super.initData();
         giftPosition = -1;
-        selectGiftLeftTimeMap = new HashMap<>();
+        selectGiftLeftTimeMap = new ConcurrentHashMap<>();
         adapter.setData(TestGiftRepository.getDefaultGifts());
         updateGiftLeftTime();
     }

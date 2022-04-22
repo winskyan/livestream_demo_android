@@ -24,6 +24,7 @@ import butterknife.Unbinder;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
@@ -507,7 +508,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onResume();
         if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
-        ChatClient.getInstance().chatManager().addMessageListener(presenter);
+        EaseLiveMessageHelper.getInstance().setLiveMessageListener(this);
     }
 
     @Override
@@ -515,7 +516,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        ChatClient.getInstance().chatManager().removeMessageListener(presenter);
+        EaseLiveMessageHelper.getInstance().onStop();
 
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);

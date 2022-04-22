@@ -28,7 +28,8 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.UserInfo;
-import io.agora.chat.uikit.lives.OnLiveMessageCallBack;
+import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
+import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
@@ -108,36 +109,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             }
         });
     }
-
-    private void updateAudienceUserInfo() {
-        List<String> memberList = chatroom.getMemberList();
-        memberList.addAll(chatroom.getAdminList());
-        EMLog.i(TAG, "update member list user info memberList=" + memberList);
-        UserRepository.getInstance().fetchUserInfo(memberList, new OnUpdateUserInfoListener() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> userInfoMap) {
-                LiveAudienceFragment.this.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EMLog.i(TAG, "update member list user info");
-                        LiveAudienceFragment.this.getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyDataSetChanged();
-                            }
-                        });
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
-            }
-        });
-
-    }
-
 
     @Override
     protected void initListener() {
@@ -343,7 +314,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
             @Override
             public void onConfirmClick(View view, Object bean) {
                 if (bean instanceof GiftBean) {
-                    presenter.sendGiftMsg((GiftBean) bean, new OnLiveMessageCallBack() {
+                    presenter.sendGiftMsg((GiftBean) bean, new OnSendLiveMessageCallBack() {
+
                         @Override
                         public void onSuccess(ChatMessage message) {
                             ThreadManager.getInstance().runOnMainThread(() -> {
@@ -409,9 +381,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         onMessageListInit();
                         startCycleRefresh();
                         updateUserState();
-                        updateAudienceUserInfo();
                     }
-
 
                     @Override
                     public void onError(int i, String s) {
@@ -434,7 +404,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         super.onResume();
         if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
-        ChatClient.getInstance().chatManager().addMessageListener(presenter);
+        EaseLiveMessageHelper.getInstance().init(chatroomId);
     }
 
     private void updateUserState() {
@@ -449,8 +419,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        ChatClient.getInstance().chatManager().removeMessageListener(presenter);
-
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
             if (isMessageListInited && !isSwitchOwner) {
@@ -476,6 +444,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void setOnLiveListener(OnLiveListener liveListener) {
         this.liveListener = liveListener;
     }
+
+
 
     public interface OnLiveListener {
         void onLiveOngoing(LiveRoom data);

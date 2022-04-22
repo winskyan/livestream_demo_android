@@ -31,6 +31,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation files('libs/agora-rtc-sdk.jar')
-    //api "io.agora.rtc:full-sdk:3.5.0"
-    //api 'io.agora.rtc:agora-special-full:3.6.200.203'
+    //api 'io.agora.rtc:agora-full-beta:4.0.0-beta.1'
 }

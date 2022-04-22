@@ -4,9 +4,11 @@ buildscript {
     repositories {
 //    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
 //    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven { url 'https://www.jitpack.io' }
         google()
         mavenCentral()
         jcenter()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
@@ -21,9 +23,11 @@ allprojects {
     repositories {
 //    maven{ url'http://maven.aliyun.com/nexus/content/groups/public/' }
 //    maven{ url'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven { url 'https://www.jitpack.io' }
         google()
         mavenCentral()
         jcenter()
+
 
         configurations.all {
             resolutionStrategy {

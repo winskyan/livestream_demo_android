@@ -17,16 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
 import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.OnUpdateUserInfoListener;
 import io.agora.livedemo.common.reponsitories.Resource;
+import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.base.BaseFragment;
@@ -115,11 +120,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                     public void onSuccess(ResponseModule<List<LiveRoom>> data) {
                         cursor = data.cursor;
                         hasMoreData = data.data.size() >= pageSize;
-                        if (isLoadMore) {
-                            setAdapterData(data.data, true);
-                        } else {
-                            setAdapterData(data.data, false);
-                        }
+                        setAdapterData(data.data, isLoadMore);
                     }
 
                     @Override
@@ -225,20 +226,55 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     }
 
     protected void setAdapterData(List<LiveRoom> data, boolean isAdd) {
-        if (isAdd) {
-            if (null == adapter.getData() || adapter.getData().size() == 0) {
-                recyclerView.setLayoutManager(gridLayoutManager);
-            }
-            adapter.addData(data);
-        } else {
-            if (null == data || 0 == data.size()) {
-                recyclerView.setLayoutManager(linearLayoutManager);
-            } else {
-                if (null == adapter.getData() || adapter.getData().size() == 0) {
-                    recyclerView.setLayoutManager(gridLayoutManager);
-                }
-                adapter.setData(data);
-            }
+        if (data == null) {
+            return;
         }
+        List<String> anchorList = new ArrayList<>(data.size());
+        for (LiveRoom liveRoom : data) {
+            anchorList.add(liveRoom.getOwner());
+        }
+
+        if (anchorList.size() == 0) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            adapter.setData(data);
+        } else {
+            UserRepository.getInstance().fetchUserInfo(anchorList, new OnUpdateUserInfoListener() {
+                @Override
+                public void onSuccess(Map<String, UserInfo> userInfoMap) {
+                    LiveListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAdd) {
+                                if (null == adapter.getData() || adapter.getData().size() == 0) {
+                                    recyclerView.setLayoutManager(gridLayoutManager);
+                                }
+                                adapter.setData(data);
+                            } else {
+                                if (0 == data.size()) {
+                                    recyclerView.setLayoutManager(linearLayoutManager);
+                                } else {
+                                    if (null == adapter.getData() || adapter.getData().size() == 0) {
+                                        recyclerView.setLayoutManager(gridLayoutManager);
+                                    }
+                                    adapter.setData(data);
+                                }
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+
+                }
+            });
+        }
+
+
     }
+
+    private void updateAdapterDataUserInfo(final List<LiveRoom> data) {
+
+    }
+
 }

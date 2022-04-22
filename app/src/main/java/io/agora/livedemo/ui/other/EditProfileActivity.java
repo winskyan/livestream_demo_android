@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import io.agora.ValueCallBack;
@@ -452,7 +453,8 @@ public class EditProfileActivity extends BaseLiveActivity {
     }
 
     private void setBirthday(int year, int month, int day) {
-        final String birthday = year + "-" + month + "-" + day;
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+        final String birthday = year + "-" + decimalFormat.format(month) + "-" + decimalFormat.format(day);
         ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.BIRTH, birthday, new ValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {

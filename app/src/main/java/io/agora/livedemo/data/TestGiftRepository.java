@@ -28,7 +28,7 @@ public class TestGiftRepository {
             int resId = context.getResources().getIdentifier(giftResNames[i], "drawable", context.getPackageName());
             bean.setResource(resId);
             bean.setName(giftNames[i]);
-            bean.setId("gift_" + i);
+            bean.setId("gift_" + (i + 1));
             bean.setValue(giftValues[i]);
             user = new User();
             user.setId(DemoHelper.getAgoraId());

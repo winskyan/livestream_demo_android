@@ -37,8 +37,8 @@ public class FastLiveHelper {
     private AgoraEngine mAgoraEngine;
     private StatsManager mStatsManager;
     private EngineConfig mGlobalConfig;
-    private boolean isPaused;//是否暂停了
-    private boolean isLiving;//是否正在直播
+    private boolean isPaused;
+    private boolean isLiving;
     private int lastUid = -1;
     private final VideoEncoderConfiguration encoderConfiguration = new VideoEncoderConfiguration(
             VD_640x360,
@@ -267,12 +267,10 @@ public class FastLiveHelper {
     }
 
     public void startCdnBroadcast(VideoGridContainer container, int uid, String url, IDirectCdnStreamingEventHandler handler) {
-        Log.i(TAG,"startCdnBroadcast");
         rtcEngine().enableAudio();
         rtcEngine().enableVideo();
         setClientRole(Constants.CLIENT_ROLE_BROADCASTER);
         SurfaceView surfaceView = prepareRtcVideo(uid, true);
-        Log.i(TAG,"startCdnBroadcast surfaceView="+surfaceView);
         surfaceView.setZOrderMediaOverlay(true);
         container.addUserVideoSurface(uid, surfaceView, true);
         rtcEngine().startPreview();
@@ -281,6 +279,7 @@ public class FastLiveHelper {
         DirectCdnStreamingMediaOptions directCdnStreamingMediaOptions = new DirectCdnStreamingMediaOptions();
         directCdnStreamingMediaOptions.publishCameraTrack = true;
         directCdnStreamingMediaOptions.publishMicrophoneTrack = true;
+        Log.i(TAG, "startCdnBroadcast url=" + url);
         rtcEngine().startDirectCdnStreaming(iDirectCdnStreamingEventHandler, url, directCdnStreamingMediaOptions);
         isLiving = true;
     }
@@ -344,6 +343,11 @@ public class FastLiveHelper {
 
                 @Override
                 public void onPlayerInfoUpdated(PlayerUpdatedInfo playerUpdatedInfo) {
+
+                }
+
+                @Override
+                public void onAudioVolumeIndication(int volume) {
 
                 }
 

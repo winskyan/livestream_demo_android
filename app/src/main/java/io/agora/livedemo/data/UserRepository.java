@@ -137,19 +137,28 @@ public class UserRepository {
             }
             return;
         }
+        //avoid fetch self info
+        usernameList.remove(DemoHelper.getAgoraId());
+
         getUserInfoFromServer(usernameList, listener);
     }
 
     public void saveUserInfoToDb(EaseUser easeUser) {
+        if (null == DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao()) {
+            return;
+        }
         DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(UserEntity.parseParent(easeUser));
     }
 
     private void getUserInfoFromServer(final List<String> usernameList,
                                        final OnUpdateUserInfoListener listener) {
+        if (usernameList.size() == 0) {
+            return;
+        }
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(usernameList.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> value) {
-                Log.i("lives", "getUserInfoById success ");
+                Log.i("lives", "getUserInfoById success");
                 if (null != listener) {
                     listener.onSuccess(value);
                 }
@@ -171,6 +180,9 @@ public class UserRepository {
     }
 
     private void addDefaultAvatar(EaseUser item, List<String> localUsers) {
+        if (null == DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao()) {
+            return;
+        }
         if (localUsers == null) {
             localUsers = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().loadAllUsers();
         }
@@ -180,12 +192,12 @@ public class UserRepository {
                 if (!TextUtils.isEmpty(avatar)) {
                     item.setAvatar(avatar);
                 } else {
-                    if (mHeadImageList.size() > 0) {
+                    if (null != mHeadImageList && mHeadImageList.size() > 0) {
                         item.setAvatar(mHeadImageList.get(0).getUrl());
                     }
                 }
             } else {
-                if (mHeadImageList.size() > 0) {
+                if (null != mHeadImageList && mHeadImageList.size() > 0) {
                     item.setAvatar(mHeadImageList.get(0).getUrl());
                 }
             }
