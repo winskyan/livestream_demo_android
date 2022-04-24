@@ -508,6 +508,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onResume();
         if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
+        EaseLiveMessageHelper.getInstance().init(chatroomId);
         EaseLiveMessageHelper.getInstance().setLiveMessageListener(this);
     }
 
@@ -516,7 +517,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        EaseLiveMessageHelper.getInstance().onStop();
+        EaseLiveMessageHelper.getInstance().removeMessageListener();
 
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);

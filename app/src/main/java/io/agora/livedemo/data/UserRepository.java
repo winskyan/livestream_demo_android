@@ -78,11 +78,11 @@ public class UserRepository {
         } else {
             mCurrentUser.setAvatarDefaultResource(R.drawable.ease_default_avatar);
         }
-        initCurrentUserInfo();
+        saveCurrentUserInfoToDb();
         return mCurrentUser;
     }
 
-    private void initCurrentUserInfo() {
+    private void saveCurrentUserInfoToDb() {
         EaseUser easeUser = new EaseUser(mCurrentUser.getId());
         easeUser.setNickname(mCurrentUser.getNickName());
         easeUser.setAvatar(mCurrentUser.getAvatarUrl());
@@ -158,7 +158,7 @@ public class UserRepository {
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(usernameList.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> value) {
-                Log.i("lives", "getUserInfoById success");
+                Log.e("lives", "getUserInfoById success size=" + value.size());
                 if (null != listener) {
                     listener.onSuccess(value);
                 }

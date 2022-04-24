@@ -28,12 +28,9 @@ import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
 import io.agora.livedemo.common.DemoHelper;
 import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.OnResourceParseCallback;
 import io.agora.livedemo.common.OnUpdateUserInfoListener;
-import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
-import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.base.GridMarginDecoration;
 import io.agora.livedemo.ui.live.adapter.LiveListAdapter;
@@ -112,7 +109,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     protected void initViewModel() {
         viewModel = new ViewModelProvider(this).get(LiveListViewModel.class);
-        viewModel.getAllObservable().observe(getViewLifecycleOwner(), new Observer<Resource<ResponseModule<List<LiveRoom>>>>() {
+/*        viewModel.getAllObservable().observe(getViewLifecycleOwner(), new Observer<Resource<ResponseModule<List<LiveRoom>>>>() {
             @Override
             public void onChanged(Resource<ResponseModule<List<LiveRoom>>> response) {
                 LiveListFragment.this.parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
@@ -130,7 +127,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                     }
                 });
             }
-        });
+        });*/
     }
 
     private void initListener() {
@@ -231,7 +228,9 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         }
         List<String> anchorList = new ArrayList<>(data.size());
         for (LiveRoom liveRoom : data) {
-            anchorList.add(liveRoom.getOwner());
+            if (!anchorList.contains(liveRoom.getOwner())) {
+                anchorList.add(liveRoom.getOwner());
+            }
         }
 
         if (anchorList.size() == 0) {
@@ -241,26 +240,28 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
             UserRepository.getInstance().fetchUserInfo(anchorList, new OnUpdateUserInfoListener() {
                 @Override
                 public void onSuccess(Map<String, UserInfo> userInfoMap) {
-                    LiveListFragment.this.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAdd) {
-                                if (null == adapter.getData() || adapter.getData().size() == 0) {
-                                    recyclerView.setLayoutManager(gridLayoutManager);
-                                }
-                                adapter.setData(data);
-                            } else {
-                                if (0 == data.size()) {
-                                    recyclerView.setLayoutManager(linearLayoutManager);
-                                } else {
+                    if (null != LiveListFragment.this.getActivity()) {
+                        LiveListFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isAdd) {
                                     if (null == adapter.getData() || adapter.getData().size() == 0) {
                                         recyclerView.setLayoutManager(gridLayoutManager);
                                     }
                                     adapter.setData(data);
+                                } else {
+                                    if (0 == data.size()) {
+                                        recyclerView.setLayoutManager(linearLayoutManager);
+                                    } else {
+                                        if (null == adapter.getData() || adapter.getData().size() == 0) {
+                                            recyclerView.setLayoutManager(gridLayoutManager);
+                                        }
+                                        adapter.setData(data);
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
 
                 @Override
@@ -272,9 +273,4 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
 
     }
-
-    private void updateAdapterDataUserInfo(final List<LiveRoom> data) {
-
-    }
-
 }

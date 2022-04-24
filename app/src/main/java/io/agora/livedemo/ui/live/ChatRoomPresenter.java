@@ -270,11 +270,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
 
         void onChatRoomMemberExited(String participant);
 
-        void onMessageReceived(List<ChatMessage> messages);
-
         void onMessageSelectLast();
-
-        void onMessageChanged();
 
         void onAdminAdded(String chatRoomId, String admin);
 

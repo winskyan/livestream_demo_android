@@ -91,8 +91,6 @@ public class SplashActivity extends BaseLiveActivity {
 
     private void skipToTarget() {
         if (ChatClient.getInstance().isLoggedInBefore()) {
-            DemoHelper.saveCurrentUser();
-
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {

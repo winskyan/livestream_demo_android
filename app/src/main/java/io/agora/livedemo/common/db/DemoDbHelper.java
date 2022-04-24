@@ -1,21 +1,19 @@
 package io.agora.livedemo.common.db;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.dao.UserDao;
-import io.agora.livedemo.utils.MD5;
 import io.agora.util.EMLog;
 
 public class DemoDbHelper {
     private static final String TAG = DemoDbHelper.class.getSimpleName();
+    private final static String DB_NAME = "live_stream";
     private static DemoDbHelper instance;
     private Context mContext;
-    private String currentUser;
     private AppDatabase mDatabase;
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
@@ -36,22 +34,9 @@ public class DemoDbHelper {
 
     /**
      * init db
-     *
-     * @param user
      */
-    public void initDb(String user) {
-        if (currentUser != null) {
-            if (TextUtils.equals(currentUser, user)) {
-                EMLog.i(TAG, "you have opened the db");
-                return;
-            }
-            closeDb();
-        }
-        this.currentUser = user;
-        String userMd5 = MD5.encrypt2MD5(user);
-        String dbName = String.format("em_%1$s.db", userMd5);
-        EMLog.i(TAG, "db name = " + dbName);
-        mDatabase = Room.databaseBuilder(mContext, AppDatabase.class, dbName)
+    public void initDb() {
+        mDatabase = Room.databaseBuilder(mContext, AppDatabase.class, DB_NAME)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
@@ -62,7 +47,6 @@ public class DemoDbHelper {
         if (mDatabase != null) {
             mDatabase.close();
         }
-        currentUser = null;
     }
 
     public ReceiveGiftDao getReceiveGiftDao() {
@@ -74,7 +58,7 @@ public class DemoDbHelper {
     }
 
     public UserDao getUserDao() {
-        if(mDatabase != null) {
+        if (mDatabase != null) {
             return mDatabase.userDao();
         }
         EMLog.i(TAG, "get userDao failed, should init db first");

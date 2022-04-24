@@ -28,7 +28,6 @@ import io.agora.livedemo.data.TestGiftRepository;
 import io.agora.livedemo.data.UserRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
-import io.agora.livedemo.data.model.User;
 
 public class DemoHelper {
 
@@ -87,20 +86,11 @@ public class DemoHelper {
     }
 
     /**
-     * get current user
-     *
-     * @return
-     */
-    public static User getCurrentDemoUser() {
-        return UserRepository.getInstance().getCurrentUser();
-    }
-
-    /**
      * save current user
      */
     public static void saveCurrentUser() {
-        PreferenceManager.getInstance().saveAgoraId(getCurrentDemoUser().getId());
-        PreferenceManager.getInstance().savePwd(getCurrentDemoUser().getPwd());
+        PreferenceManager.getInstance().saveAgoraId(UserRepository.getInstance().getCurrentUser().getId());
+        PreferenceManager.getInstance().savePwd(UserRepository.getInstance().getCurrentUser().getPwd());
     }
 
     /**
@@ -141,7 +131,7 @@ public class DemoHelper {
     }
 
     private static void initDb() {
-        DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb();
     }
 
     /**

@@ -405,6 +405,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
         if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
         EaseLiveMessageHelper.getInstance().init(chatroomId);
+        EaseLiveMessageHelper.getInstance().setLiveMessageListener(this);
     }
 
     private void updateUserState() {
@@ -418,6 +419,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onStop() {
         super.onStop();
         // unregister this event listener when this activity enters the
+        EaseLiveMessageHelper.getInstance().removeMessageListener();
         // background
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);

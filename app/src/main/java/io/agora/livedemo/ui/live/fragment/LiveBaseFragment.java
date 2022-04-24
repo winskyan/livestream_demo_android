@@ -34,7 +34,6 @@ import io.agora.chat.Conversation;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.lives.EaseChatRoomMessagesView;
-import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.lives.OnLiveMessageListener;
 import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
 import io.agora.chat.uikit.models.EaseUser;
@@ -438,16 +437,18 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             presenter.showMemberChangeEvent(name, mContext.getResources().getString(R.string.live_msg_member_add));
             EMLog.d(TAG, name + " added");
 
-            LiveBaseFragment.this.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    tvMemberNum.setText(String.valueOf(watchedCount));
-                    if (name.equals(chatroom.getOwner())) {
-                        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
+            if (this.getActivity() != null) {
+                this.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvMemberNum.setText(String.valueOf(watchedCount));
+                        if (name.equals(chatroom.getOwner())) {
+                            LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
+                        }
+                        notifyDataSetChanged();
                     }
-                    notifyDataSetChanged();
-                }
-            });
+                });
+            }
         }
     }
 
@@ -720,7 +721,6 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             } else {
                 username = message.getFrom();
             }
-
             if (username.equals(chatroomId)) {
                 messageView.refreshSelectLast();
             }
