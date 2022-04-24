@@ -159,10 +159,10 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
             roleType.setText(this.getResources().getString(R.string.role_type_moderator));
             roleType.setBackgroundResource(R.drawable.live_moderator_bg);
         } else {
-            roleType.setVisibility(View.GONE);
+            roleType.setVisibility(View.INVISIBLE);
         }
 
-        if (!mChatRoom.getMemberList().contains(username) && !mChatRoom.getAdminList().contains(username) && !username.equals(mChatRoom.getOwner())) {
+        if (!mChatRoom.getMemberList().contains(username) && !mChatRoom.getAdminList().contains(username) && !username.equals(mChatRoom.getOwner()) && !mChatRoom.getBlacklist().contains(username)) {
             return;
         }
 
@@ -174,6 +174,7 @@ public class RoomUserDetailDialog extends BaseLiveDialogFragment implements Swit
 
         if (mChatRoom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
             if (mChatRoom.getOwner().equals(username)) {
+                banAll.getSwitch().setEnabled(mChatRoom.getMemberList().size() != 0 || mChatRoom.getAdminList().size() != 0);
                 banAll.setVisibility(View.VISIBLE);
                 if (initView) {
                     banAll.setOnCheckedChangeListener(null);

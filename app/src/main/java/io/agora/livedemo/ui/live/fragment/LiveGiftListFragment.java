@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +24,6 @@ import io.agora.livedemo.data.TestGiftRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseLiveFragment;
 import io.agora.livedemo.ui.live.adapter.GiftListAdapter;
-import io.agora.util.EMLog;
 
 public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClickListener, View.OnClickListener, LiveGiftInputNumDialog.OnConfirmClickListener {
     private RecyclerView rvList;
@@ -114,7 +112,6 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
             adapter.setSelectedPosition(-1);
             tvGiftTotalValues.setText(mContext.getString(R.string.gift_send_total_values, String.valueOf(0)));
         }
-
     }
 
     public void setOnConfirmClickListener(OnConfirmClickListener listener) {
@@ -139,8 +136,10 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
                 updateNumAndValues(giftNum);
                 break;
             case R.id.btn_send:
-                giftNum = getNum();
-                onGiftNum(giftNum);
+                if (null != giftBean) {
+                    giftNum = getNum();
+                    onGiftNum(giftNum);
+                }
                 break;
             case R.id.tv_gift_num:
                 showInputNumDialog();
@@ -190,6 +189,7 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
         dialog.setOnConfirmClickListener(new OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view, Object bean) {
+                giftBean = null;
                 updateGiftList();
                 if (listener != null) {
                     listener.onConfirmClick(view, bean);
@@ -248,7 +248,6 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
     private void updateGiftLeftTime() {
         boolean needNotify = false;
         for (Map.Entry<Integer, Integer> entry : selectGiftLeftTimeMap.entrySet()) {
-            EMLog.i("lives", entry.getKey() + "," + entry.getValue());
             if (entry.getValue() > 0) {
                 adapter.getItem(entry.getKey()).setLeftTime(entry.getValue() - 1);
                 entry.setValue(entry.getValue() - 1);

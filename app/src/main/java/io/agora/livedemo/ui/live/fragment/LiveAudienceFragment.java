@@ -126,16 +126,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     protected void initData() {
         super.initData();
         EaseUserUtils.showUserAvatar(mContext, liveRoom.getOwner(), ivIcon);
-        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION, String.class)
-                .observe(getViewLifecycleOwner(), response -> {
-                    if (TextUtils.isEmpty(response)) {
-                        layoutAttention.setVisibility(View.GONE);
-                    } else {
-                        layoutAttention.setVisibility(View.VISIBLE);
-                        tvAttention.setText(response);
-                    }
-                });
-
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
             if (liveRoom != null
                     && !TextUtils.isEmpty(liveRoom.getVideo_type())
@@ -446,7 +436,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void setOnLiveListener(OnLiveListener liveListener) {
         this.liveListener = liveListener;
     }
-
 
 
     public interface OnLiveListener {
