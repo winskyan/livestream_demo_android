@@ -147,9 +147,6 @@ public class VideoGridContainer extends RelativeLayout implements Runnable {
         }
     }
 
-    /**
-     * 移除所有的视图
-     */
     public void removeAllVideo() {
         removeAllViews();
         mUserViewList.clear();

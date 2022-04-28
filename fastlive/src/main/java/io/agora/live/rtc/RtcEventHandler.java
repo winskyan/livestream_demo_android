@@ -7,29 +7,20 @@ import io.agora.rtc2.IRtcEngineEventHandler;
 public interface RtcEventHandler {
     String TAG = "fast";
 
-    /**
-     * 发生警告回调。
-     *
-     * @param warn
-     */
     default void onRtcWarning(int warn) {
     }
 
-    /**
-     * 发生错误回调。
-     *
-     * @param err
-     */
+
     default void onRtcError(int err) {
     }
 
     /**
-     * 已显示远端视频首帧回调。 第一帧远端视频显示在视图上时，触发此调用。App 可在此调用中获知出图时间（elapsed）。
+     * The callback of the first frame of the remote video has been displayed. This call is fired when the first frame of the remote video is displayed on the view. The app can know the plot time (elapsed) in this call.
      *
-     * @param uid     用户 ID，指定是哪个用户的视频流
-     * @param width   视频流宽（像素）
-     * @param height  视频流高（像素）
-     * @param elapsed 从本地用户调用 joinChannel 加入频道开始到发生此事件过去的时间（毫秒）
+     * @param uid     user ID, specifying which user's video stream
+     * @param width   video stream width (pixels)
+     * @param height  video stream height (pixels)
+     * @param elapsed The time (in milliseconds) that has elapsed since the local user called joinChannel to join the channel until this event occurs
      */
     default void onRtcFirstRemoteVideoFrame(int uid, int width, int height, int elapsed) {
         Log.e(TAG, "onRtcFirstRemoteVideoFrame uid: " + uid + " elapsed: " + elapsed);

@@ -21,8 +21,8 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.live.FastLiveHelper;
-import io.agora.livedemo.common.livedata.LiveDataBus;
 import io.agora.livedemo.common.callback.UserActivityLifecycleCallbacks;
+import io.agora.livedemo.common.livedata.LiveDataBus;
 import io.agora.livedemo.ui.MainActivity;
 import io.agora.util.EMLog;
 
@@ -50,7 +50,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     }
 
     private void initAgora() {
-        FastLiveHelper.getInstance().init(this, getString(R.string.agora_app_id));
+        FastLiveHelper.getInstance().init(this, BuildConfig.AGORA_APP_ID);
         FastLiveHelper.getInstance().getEngineConfig().setLowLatency(false);
     }
 

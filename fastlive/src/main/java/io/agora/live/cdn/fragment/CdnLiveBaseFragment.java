@@ -37,9 +37,9 @@ public abstract class CdnLiveBaseFragment extends CdnBaseFragment implements Rtc
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         helper = FastLiveHelper.getInstance();
-        //注册事件回调
+        //register rtc callback
         helper.registerRtcHandler(this);
-        //给config设置channel
+        //set channel
         helper.getEngineConfig().setChannelName(channel);
     }
 
@@ -68,11 +68,9 @@ public abstract class CdnLiveBaseFragment extends CdnBaseFragment implements Rtc
     @Override
     public void onRtcConnectionStateChanged(int state, int reason) {
         Log.i("fast", "onRtcConnectionStateChanged state: " + state + " reason: " + reason);
-        //如果token无效
         if (reason == Constants.CONNECTION_CHANGED_INVALID_TOKEN) {
             Log.i("fast", "connection_changed_invalid_token");
         } else if (reason == Constants.CONNECTION_CHANGED_TOKEN_EXPIRED) {
-            //token过期
             onTokenExpired();
         }
     }
@@ -82,9 +80,6 @@ public abstract class CdnLiveBaseFragment extends CdnBaseFragment implements Rtc
         onTokenPrivilegeWillExpire(token);
     }
 
-    /**
-     * token失效
-     */
     protected abstract void onTokenPrivilegeWillExpire(String token);
 
     /**
@@ -92,11 +87,6 @@ public abstract class CdnLiveBaseFragment extends CdnBaseFragment implements Rtc
      */
     protected abstract void onTokenExpired();
 
-    /**
-     * 加入channel
-     *
-     * @param token
-     */
     public void joinRtcChannel(String token) {
         Log.i("fast", "joinRtcChannel");
         helper.joinRtcChannel(role, token, uid);

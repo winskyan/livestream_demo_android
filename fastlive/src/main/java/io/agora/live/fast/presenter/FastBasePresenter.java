@@ -50,29 +50,14 @@ public abstract class FastBasePresenter implements LifecycleObserver {
         isDestroy = true;
     }
 
-    /**
-     * 生命周期正在销毁
-     *
-     * @return
-     */
     public boolean isDestroy() {
         return isDestroy;
     }
 
-    /**
-     * 生命周期仍在活跃
-     *
-     * @return
-     */
     public boolean isActive() {
         return !isDestroy;
     }
 
-    /**
-     * 执行UI线程
-     *
-     * @param runnable
-     */
     public void runOnUI(Runnable runnable) {
         mMainThreadHandler.post(runnable);
     }

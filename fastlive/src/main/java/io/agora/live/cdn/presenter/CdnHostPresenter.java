@@ -20,17 +20,17 @@ public abstract class CdnHostPresenter extends CdnTokenPresenter {
     }
 
     /**
-     * 开始推流
+     * start push stream
      */
     public abstract void onStartCamera();
 
     /**
-     * 切换摄像头
+     * switch camera
      */
     public abstract void switchCamera();
 
     /**
-     * 离开频道
+     * leave channel
      */
     public abstract void leaveChannel();
 

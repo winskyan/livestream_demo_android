@@ -19,19 +19,10 @@ public abstract class FastHostPresenter extends FastTokenPresenter {
         detachView();
     }
 
-    /**
-     * 开始推流
-     */
     public abstract void onStartCamera();
 
-    /**
-     * 切换摄像头
-     */
     public abstract void switchCamera();
 
-    /**
-     * 离开频道
-     */
     public abstract void leaveChannel();
 
     public abstract void deleteRoom(String chatroomId);

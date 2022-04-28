@@ -1,8 +1,6 @@
 package io.agora.live;
 
 
-import io.agora.live.FastConstants;
-
 public class EngineConfig {
     // private static final int DEFAULT_UID = 0;
     // private int mUid = DEFAULT_UID;
@@ -13,11 +11,11 @@ public class EngineConfig {
     private int mMirrorLocalIndex;
     private int mMirrorRemoteIndex;
     private int mMirrorEncodeIndex;
-    private boolean mIsLowLatency;//设置观众是否低延迟
+    private boolean mIsLowLatency;//Set whether the viewer has low latency
     private String appId;
     // rtc configurations
-    private boolean mVideoMuted;//主播是否停止推流
-    private boolean mAudioMuted;//主播是否设置静音
+    private boolean mVideoMuted;//Whether the anchor has stopped pushing the stream
+    private boolean mAudioMuted;//Whether the host is muted
 
 
     public int getVideoDimenIndex() {

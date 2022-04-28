@@ -6,7 +6,7 @@ import java.util.List;
 import io.agora.rtc2.IRtcEngineEventHandler;
 
 /**
- * Agora {@link IRtcEngineEventHandler}接口参考文档：
+ * Agora {@link IRtcEngineEventHandler}api reference:
  * https://docs.agora.io/cn/live-streaming/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler.html#a452db6df4938c8dd598d470a06bbccb6
  */
 public class AgoraRtcHandler extends IRtcEngineEventHandler {

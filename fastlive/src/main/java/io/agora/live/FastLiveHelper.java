@@ -28,9 +28,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.video.VideoEncoderConfiguration;
 
-/**
- * Agora极速直播的帮助类
- */
 public class FastLiveHelper {
     private static final String TAG = "lives";
     private Context mContext;
@@ -80,10 +77,10 @@ public class FastLiveHelper {
     }
 
     /**
-     * 初始化
-     * （1）初始化对象{@link AgoraEngine},并在其中将{@link RtcEngine#setChannelProfile(int)}设置为了直播模式{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
-     * （2）初始化对象{@link StatsManager},用于展示各状态信息
-     * (3) 初始化配置对象{@link EngineConfig}
+     * initialize
+     * (1) Initialize the object {@link AgoraEngine}, and set {@link RtcEngine#setChannelProfile(int)} to the live mode in it {@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
+     * (2) Initialize the object {@link StatsManager}, which is used to display various status information
+     * (3) Initialize the configuration object {@link EngineConfig}
      *
      * @param context
      * @param appId
@@ -97,7 +94,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 是否在直播页面展示视频参数等状态
+     * Whether to display video parameters and other status on the live page
      *
      * @param showStats
      */
@@ -106,7 +103,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 获取直播状态管理类
+     * Get live broadcast status management class
      *
      * @return
      */
@@ -115,7 +112,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 获取rtcEngine
+     * get rtcEngine
      *
      * @return
      */
@@ -124,7 +121,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 获取极速直播中的配置
+     * Get the configuration in the fast live broadcast
      *
      * @return
      */
@@ -132,36 +129,19 @@ public class FastLiveHelper {
         return mGlobalConfig;
     }
 
-    /**
-     * 获取极速直播中的SP
-     *
-     * @return
-     */
     public SharedPreferences getFastSPreferences() {
         return FastPrefManager.getPreferences(mContext);
     }
 
-    /**
-     * 注册rtc事件
-     *
-     * @param handler
-     */
     public void registerRtcHandler(RtcEventHandler handler) {
         mAgoraEngine.registerRtcHandler(handler);
     }
 
-    /**
-     * 移除rtc事件
-     *
-     * @param handler
-     */
+
     public void removeRtcHandler(RtcEventHandler handler) {
         mAgoraEngine.removeRtcHandler(handler);
     }
 
-    /**
-     * 生命周期可见时调用
-     */
     public void onResume() {
         if (isPaused) {
             isPaused = false;
@@ -171,9 +151,7 @@ public class FastLiveHelper {
         }
     }
 
-    /**
-     * 生命周期pause时调用
-     */
+
     public void onPause() {
         if (isLiving) {
             isLiving = false;
@@ -183,11 +161,6 @@ public class FastLiveHelper {
         }
     }
 
-    /**
-     * 结束直播的时候调用
-     *
-     * @param handler
-     */
     public void onDestroy(RtcEventHandler handler) {
         Log.i("fast", "removeRtcHandler and leave channel");
         removeRtcHandler(handler);
@@ -195,11 +168,7 @@ public class FastLiveHelper {
         rtcEngine().leaveChannel();
     }
 
-    /**
-     * 设置用户角色
-     *
-     * @param role
-     */
+
     public void setClientRole(int role) {
         if (role == Constants.CLIENT_ROLE_AUDIENCE) {
             // ClientRoleOptions clientRoleOptions = new ClientRoleOptions();
@@ -211,12 +180,12 @@ public class FastLiveHelper {
     }
 
     /**
-     * 加入channel
+     * join channel
      *
-     * @param role  用户角色
-     * @param token 传入用于鉴权的 Token。一般在你的服务器端生成的 Token。
-     * @param uid   uid为本地用户的 ID。数据类型为整型，且频道内每个用户的 uid 必须是唯一的。
-     *              若将 uid 设为 0，则 SDK 会自动分配一个 uid，并在 {@link AgoraRtcHandler#onJoinChannelSuccess(String, int, int)}回调中报告。
+     * @param role  user role
+     * @param token Pass in the Token used for authentication. Tokens are generally generated on your server side.
+     * @param uid   uid is the ID of the local user. The data type is integer, and the uid of each user within the channel must be unique.
+     *              If the uid is set to 0, the SDK will automatically assign a uid and report it in the {@link AgoraRtcHandler#onJoinChannelSuccess(String, int, int)} callback.
      */
     public void joinRtcChannel(int role, String token, int uid) {
         setClientRole(role);
@@ -231,7 +200,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 更新token
+     * update token
      *
      * @param token
      */
@@ -251,7 +220,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 主播开始直播
+     * start live stream
      *
      * @param container
      */
@@ -390,7 +359,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 设置视频是否停止推流
+     * Set whether to stop streaming video
      *
      * @param muted
      */
@@ -400,7 +369,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 设置是否静音
+     * Set whether to mute
      *
      * @param muted
      */
@@ -410,9 +379,9 @@ public class FastLiveHelper {
     }
 
     /**
-     * 设置远端主播视图
+     * setup remote video view
      *
-     * @param uid 远端用户的 UID
+     * @param uid remote user UID
      */
     public void setupRemoteVideo(int uid, VideoGridContainer container) {
         SurfaceView surface = prepareRtcVideo(uid, false);
@@ -420,7 +389,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 只展示一个主播视图
+     * Show only one streamer view
      *
      * @param uid
      * @param container
@@ -441,7 +410,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 移除远端主播视图
+     * Remove remote host view
      *
      * @param uid
      * @param container
@@ -451,15 +420,13 @@ public class FastLiveHelper {
         container.removeUserVideo(uid, false);
     }
 
-    /**
-     * 切换摄像头
-     */
+
     public void switchCamera() {
         rtcEngine().switchCamera();
     }
 
     /**
-     * 准备rtc直播
+     * prepare rtc live stream
      *
      * @param uid
      * @param local
@@ -492,7 +459,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 移除rtc video
+     * remove rtc video
      *
      * @param uid
      * @param local
@@ -506,7 +473,7 @@ public class FastLiveHelper {
     }
 
     /**
-     * 当进程结束，或者需要的时候调用此方法
+     * This method is called when the process ends, or when needed
      */
     public void release() {
         mAgoraEngine.release();
