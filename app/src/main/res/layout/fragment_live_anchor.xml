@@ -33,7 +33,7 @@
         app:ease_live_input_edit_margin_end="160dp"
         app:ease_live_message_list_margin_end="20dp"
         app:ease_live_message_nick_name_ellipsize="end"
-        app:ease_live_message_nick_name_max_ems="18"
+        app:ease_live_message_nick_name_max_ems="15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

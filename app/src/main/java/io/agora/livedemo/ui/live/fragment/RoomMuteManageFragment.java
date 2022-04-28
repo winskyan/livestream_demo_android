@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
 
 public class RoomMuteManageFragment extends RoomUserManagementFragment {
 

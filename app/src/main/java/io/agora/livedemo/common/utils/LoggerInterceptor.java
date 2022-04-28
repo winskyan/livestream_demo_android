@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.utils;
 
 import android.text.TextUtils;
 import android.util.Log;

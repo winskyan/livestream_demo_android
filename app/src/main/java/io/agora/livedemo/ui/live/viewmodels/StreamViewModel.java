@@ -12,10 +12,10 @@ import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.model.LiveRoomUrlBean;
 
 public class StreamViewModel extends AndroidViewModel {
-    private AppServerRepository repository;
-    private MediatorLiveData<Resource<LiveRoomUrlBean>> publishUrlObservable;
-    private MediatorLiveData<Resource<LiveRoomUrlBean>> newPublishUrlObservable;
-    private MediatorLiveData<Resource<LiveRoomUrlBean>> playUrlObservable;
+    private final AppServerRepository repository;
+    private final MediatorLiveData<Resource<LiveRoomUrlBean>> publishUrlObservable;
+    private final MediatorLiveData<Resource<LiveRoomUrlBean>> newPublishUrlObservable;
+    private final MediatorLiveData<Resource<LiveRoomUrlBean>> playUrlObservable;
 
     public StreamViewModel(@NonNull Application application) {
         super(application);

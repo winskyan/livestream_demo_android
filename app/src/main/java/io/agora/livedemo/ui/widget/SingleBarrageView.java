@@ -14,7 +14,7 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoMsgHelper;
+import io.agora.livedemo.common.utils.DemoMsgHelper;
 import io.agora.livedemo.data.model.MessageBean;
 import io.agora.livedemo.ui.widget.barrage.BarrageAdapter;
 import io.agora.livedemo.ui.widget.barrage.BarrageView;

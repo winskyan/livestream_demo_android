@@ -13,8 +13,8 @@ import io.agora.live.FastLiveHelper;
 import io.agora.live.cdn.fragment.CdnLiveAudienceFragment;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.LiveDataBus;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.cdn.presenter.CdnLiveAudiencePresenterImpl;
 import io.agora.livedemo.ui.live.LiveBaseActivity;
@@ -25,25 +25,25 @@ import io.agora.rtc2.video.VideoCanvas;
 import io.agora.util.EMLog;
 
 /**
- * 观看视频直播的流程如下：
- * （1）初始化 RtcEngine。一般放置在程序入口处即可，见DemoApplication中的initAgora()方法，具体调用为{@link FastLiveHelper#init(Context, String)}
- * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
- * 直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
- * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
- * （4）加入channel并设置角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
- * 加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}。
- * 设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}。
- * （5）监听{@link IRtcEngineEventHandler#onRemoteVideoStateChanged(int, int, int, int)}方法，在state返回{@link Constants#REMOTE_VIDEO_STATE_STARTING}时，
- * 添加远端视图，调用方法为{@link io.agora.rtc2.RtcEngine#setupRemoteVideo(VideoCanvas)}。
- * 声网官方API介绍（https://docs.agora.io/cn/live-streaming/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler.html#ac7144e0124c3d8f75e0366b0246fbe3b）
- * 注：调用{@link io.agora.rtc2.RtcEngine#setupRemoteVideo(VideoCanvas)}方法时声网官方API文档中有如下介绍：
- * 如果 App 不能事先知道对方的用户 ID，可以在 APP 收到 onUserJoined 事件时设置。如果启用了视频录制功能，
- * 视频录制服务会做为一个哑客户端加入频道，因此其他客户端也会收到它的 onUserJoined 事件，App 不应给它绑定视图（因为它不会发送视频流），
- * 如果 App 不能识别哑客户端，可以在 onFirstRemoteVideoDecoded 事件时再绑定视图。解除某个用户的绑定视图可以把 view 设置为空。
- * 退出频道后，SDK 会把远程用户的绑定关系清除掉。
+ * The process of watching live video is as follows:
+ * (1) Initialize RtcEngine. Generally, it can be placed at the entrance of the program. See the initAgora() method in DemoApplication. The specific call is {@link FastLiveHelper#init(Context, String)}
+ * (2) Set the channel scene. This logic in this demo is in {@link FastLiveHelper#init(Context, String)}, specifically in {@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
+ * Live scene set to {@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
+ * (3) Obtain agora token. This generally calls the app server related interface and obtains it from the server. This step can be omitted if it is set to not verify the token in the sound network console.
+ * (4) Join the channel and set the role. This involves the generation of the channel. In this demo, the channel is returned from the server with the room information.
+ * The calling method to join a channel is {@link FastLiveHelper#joinRtcChannel(int, String, int)}.
+ * Set user role method {@link io.agora.rtc2.RtcEngine#setClientRole(int)}.
+ * (5) Monitor {@link IRtcEngineEventHandler#onRemoteVideoStateChanged(int, int, int, int)} method, when state returns {@link Constants#REMOTE_VIDEO_STATE_STARTING},
+ * To add a remote view, the call method is {@link io.agora.rtc2.RtcEngine#setupRemoteVideo(VideoCanvas)}.
+ * Introduction to the official API of SoundNet (https://docs.agora.io/cn/live-streaming/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_i_rtc_engine_event_handler.html#ac7144e0124c3d8f75e0366b0246fbe3b)
+ * Note: When calling the {@link io.agora.rtc2.RtcEngine#setupRemoteVideo(VideoCanvas)} method, the official API documentation of SoundNet has the following introduction:
+ * If the app cannot know the user ID of the other party in advance, it can be set when the app receives the onUserJoined event. If video recording is enabled,
+ * The video recording service will join the channel as a dumb client, so other clients will also receive its onUserJoined event, the app should not bind a view to it (because it will not send video streams),
+ * If the App does not recognize the dumb client, you can bind the view in the onFirstRemoteVideoDecoded event. To unbind a user from a view can set the view to be empty.
+ * After exiting the channel, the SDK will clear the binding relationship of the remote user.
  * <p>
- * 这里需要注意的是{@link IRtcEngineEventHandler#onFirstRemoteVideoDecoded(int, int, int, int)}已在2.9.0版本后废弃，
- * 需要调用{@link IRtcEngineEventHandler#onRemoteVideoStateChanged(int, int, int, int)}。具体详见第（5）点用法。
+ * It should be noted here that {@link IRtcEngineEventHandler#onFirstRemoteVideoDecoded(int, int, int, int)} has been deprecated after version 2.9.0,
+ * Need to call {@link IRtcEngineEventHandler#onRemoteVideoStateChanged(int, int, int, int)}. For details, please refer to the usage of point (5).
  */
 public class CdnLiveAudienceActivity extends LiveBaseActivity implements LiveAudienceFragment.OnLiveListener {
     private static final String TAG = CdnLiveAudienceActivity.class.getSimpleName();

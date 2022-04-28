@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
 import io.agora.livedemo.ui.live.fragment.LiveGiftListFragment;
 
 public class GiftFragmentAdapter extends FragmentStateAdapter {

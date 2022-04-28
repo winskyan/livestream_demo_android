@@ -13,11 +13,11 @@ import io.agora.livedemo.data.model.LiveRoom;
 
 
 public class LivingViewModel extends AndroidViewModel {
-    private AppServerRepository repository;
-    private MediatorLiveData<Resource<LiveRoom>> changeObservable;
-    private MediatorLiveData<Resource<LiveRoom>> roomDetailObservable;
-    private MediatorLiveData<Resource<LiveRoom>> closeObservable;
-    private MediatorLiveData<Resource<LiveRoom>> memberNumberObservable;
+    private final AppServerRepository repository;
+    private final MediatorLiveData<Resource<LiveRoom>> changeObservable;
+    private final MediatorLiveData<Resource<LiveRoom>> roomDetailObservable;
+    private final MediatorLiveData<Resource<LiveRoom>> closeObservable;
+    private final MediatorLiveData<Resource<LiveRoom>> memberNumberObservable;
 
     public LivingViewModel(@NonNull Application application) {
         super(application);

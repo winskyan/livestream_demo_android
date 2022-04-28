@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.utils;
 
 import android.text.TextUtils;
 
@@ -24,8 +24,9 @@ import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
-import io.agora.livedemo.data.TestGiftRepository;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.data.repository.GiftRepository;
+import io.agora.livedemo.data.repository.UserRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
 
@@ -73,19 +74,6 @@ public class DemoHelper {
     }
 
     /**
-     * is can register
-     *
-     * @return
-     */
-    public static boolean isCanRegister() {
-        return PreferenceManager.isCanRegister();
-    }
-
-    public static void setCanRegister(boolean canRegister) {
-        PreferenceManager.setCanRegister(canRegister);
-    }
-
-    /**
      * save current user
      */
     public static void saveCurrentUser() {
@@ -116,7 +104,7 @@ public class DemoHelper {
      * @return
      */
     public static GiftBean getGiftById(String giftId) {
-        return TestGiftRepository.getGiftById(giftId);
+        return GiftRepository.getGiftById(giftId);
     }
 
     public static void init() {

@@ -10,19 +10,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import io.agora.chat.ChatClient;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.SingleSourceLiveData;
 import io.agora.livedemo.common.enums.Status;
+import io.agora.livedemo.common.livedata.SingleSourceLiveData;
 import io.agora.livedemo.common.reponsitories.AppServerRepository;
 import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.data.model.LiveRoom;
+import io.agora.livedemo.data.repository.UserRepository;
 
 public class CreateLiveViewModel extends AndroidViewModel {
-    private AppServerRepository repository;
-    private ClientRepository clientRepository;
-    private SingleSourceLiveData<Resource<LiveRoom>> createObservable;
+    private final AppServerRepository repository;
+    private final ClientRepository clientRepository;
+    private final SingleSourceLiveData<Resource<LiveRoom>> createObservable;
 
     public CreateLiveViewModel(@NonNull Application application) {
         super(application);

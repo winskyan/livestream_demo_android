@@ -1,7 +1,5 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.utils;
 
-import io.agora.CallBack;
-import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
@@ -61,27 +59,7 @@ public class DemoMsgHelper {
      * @param callBack
      */
     public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack) {
-        ChatMessage message = ChatMessage.createTxtSendMessage(content, chatroomId);
-        message.setChatType(ChatMessage.ChatType.ChatRoom);
-        message.setMessageStatusCallback(new CallBack() {
-            @Override
-            public void onSuccess() {
-                callBack.onSuccess();
-                callBack.onSuccess(message);
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                callBack.onError(i, s);
-                callBack.onError(message.getMsgId(), i, s);
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-                callBack.onProgress(i, s);
-            }
-        });
-        ChatClient.getInstance().chatManager().sendMessage(message);
+        EaseLiveMessageHelper.getInstance().sendTxtMsg(content, callBack);
     }
 
     /**

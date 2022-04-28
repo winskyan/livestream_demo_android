@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.BuildConfig;
-import io.agora.livedemo.common.LoggerInterceptor;
+import io.agora.livedemo.common.utils.LoggerInterceptor;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.CdnUrlBean;
 import okhttp3.Interceptor;

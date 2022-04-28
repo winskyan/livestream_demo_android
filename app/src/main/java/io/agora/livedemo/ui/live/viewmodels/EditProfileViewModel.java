@@ -11,8 +11,8 @@ import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class EditProfileViewModel extends AndroidViewModel {
-    private ClientRepository clientRepository;
-    private MediatorLiveData<Resource<String>> uploadAvatarObservable;
+    private final ClientRepository clientRepository;
+    private final MediatorLiveData<Resource<String>> uploadAvatarObservable;
 
     public EditProfileViewModel(@NonNull Application application) {
         super(application);

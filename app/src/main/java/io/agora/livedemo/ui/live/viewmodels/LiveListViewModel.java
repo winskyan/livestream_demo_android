@@ -15,12 +15,12 @@ import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 
 public class LiveListViewModel extends AndroidViewModel {
-    private AppServerRepository repository;
-    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> AllObservable;
-    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> livingRoomsObservable;
-    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> vodRoomsObservable;
-    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastRoomsObservable;
-    private MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastVodRoomsObservable;
+    private final AppServerRepository repository;
+    private final MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> AllObservable;
+    private final MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> livingRoomsObservable;
+    private final MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> vodRoomsObservable;
+    private final MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastRoomsObservable;
+    private final MediatorLiveData<Resource<ResponseModule<List<LiveRoom>>>> fastVodRoomsObservable;
 
 
     public LiveListViewModel(@NonNull Application application) {

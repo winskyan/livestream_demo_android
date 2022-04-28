@@ -11,11 +11,11 @@ import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.data.model.LiveRoom;
 import okhttp3.RequestBody;
 
-public class UpdateRoomViewmodel extends AndroidViewModel {
+public class UpdateRoomViewModel extends AndroidViewModel {
     private AppServerRepository repository;
     private MediatorLiveData<Resource<LiveRoom>> updateObservable;
 
-    public UpdateRoomViewmodel(@NonNull Application application) {
+    public UpdateRoomViewModel(@NonNull Application application) {
         super(application);
         repository = new AppServerRepository();
         updateObservable = new MediatorLiveData<>();

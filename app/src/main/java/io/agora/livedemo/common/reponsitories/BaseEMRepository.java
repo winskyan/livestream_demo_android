@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
 import io.agora.chat.ChatRoomManager;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.ThreadManager;
 
 public class BaseEMRepository {
 

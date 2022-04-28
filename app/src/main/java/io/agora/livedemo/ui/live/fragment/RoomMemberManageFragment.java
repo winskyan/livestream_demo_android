@@ -12,8 +12,8 @@ import java.util.List;
 import io.agora.chat.ChatClient;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 
 

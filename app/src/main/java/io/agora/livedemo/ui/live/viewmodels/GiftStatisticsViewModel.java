@@ -8,14 +8,14 @@ import androidx.lifecycle.MediatorLiveData;
 
 import java.util.List;
 
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.DemoMsgHelper;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.utils.DemoMsgHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 
 public class GiftStatisticsViewModel extends AndroidViewModel {
-    private MediatorLiveData<List<ReceiveGiftEntity>> giftObservable;
-    private MediatorLiveData<Integer> senderNumObservable;
+    private final MediatorLiveData<List<ReceiveGiftEntity>> giftObservable;
+    private final MediatorLiveData<Integer> senderNumObservable;
     private final ReceiveGiftDao giftDao;
 
     public GiftStatisticsViewModel(@NonNull Application application) {

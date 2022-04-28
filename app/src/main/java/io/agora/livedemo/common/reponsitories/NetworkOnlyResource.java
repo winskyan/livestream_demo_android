@@ -1,13 +1,14 @@
 package io.agora.livedemo.common.reponsitories;
 
+import android.util.Log;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import io.agora.livedemo.common.DemoLog;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.data.model.BaseBean;
 
 /**
@@ -65,7 +66,7 @@ public abstract class NetworkOnlyResource<ResultType, RequestType> {
                                 try {
                                     saveCallResult(processResponse(resultType));
                                 } catch (Exception e) {
-                                    DemoLog.e(TAG, "save call result failed: " + e.toString());
+                                    Log.e(TAG, "save call result failed: " + e.toString());
                                 }
                                 result.postValue(Resource.success(resultType));
                             });

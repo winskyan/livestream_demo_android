@@ -26,10 +26,10 @@ import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.OnUpdateUserInfoListener;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
+import io.agora.livedemo.data.repository.UserRepository;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.base.GridMarginDecoration;
@@ -41,7 +41,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     private RecyclerView recyclerView;
     private ProgressBar loadMorePB;
 
-    protected static final int pageSize = 10;
+    protected static int pageSize;
     protected String cursor;
     protected boolean hasMoreData;
     private boolean isLoading;
@@ -65,18 +65,8 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         super.onViewCreated(view, savedInstanceState);
         initView();
         initViewModel();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         initListener();
         initData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         refreshList();
     }
 
@@ -109,25 +99,6 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
 
     protected void initViewModel() {
         viewModel = new ViewModelProvider(this).get(LiveListViewModel.class);
-/*        viewModel.getAllObservable().observe(getViewLifecycleOwner(), new Observer<Resource<ResponseModule<List<LiveRoom>>>>() {
-            @Override
-            public void onChanged(Resource<ResponseModule<List<LiveRoom>>> response) {
-                LiveListFragment.this.parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
-                    @Override
-                    public void onSuccess(ResponseModule<List<LiveRoom>> data) {
-                        cursor = data.cursor;
-                        hasMoreData = data.data.size() >= pageSize;
-                        setAdapterData(data.data, isLoadMore);
-                    }
-
-                    @Override
-                    public void hideLoading() {
-                        super.hideLoading();
-                        hideLoadingView(isLoadMore);
-                    }
-                });
-            }
-        });*/
     }
 
     private void initListener() {
@@ -174,8 +145,8 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
     }
 
     protected void initData() {
+        pageSize = 10;
         swipeRefreshLayout.setRefreshing(true);
-        showLiveList(false);
     }
 
     protected void showLiveList(final boolean isLoadMore) {
@@ -222,7 +193,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
         Toast.makeText(mContext, R.string.live_list_warning, Toast.LENGTH_SHORT).show();
     }
 
-    protected void setAdapterData(List<LiveRoom> data, boolean isAdd) {
+    protected void setAdapterData(List<LiveRoom> data) {
         if (data == null) {
             return;
         }
@@ -244,21 +215,8 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
                         LiveListFragment.this.getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (isAdd) {
-                                    if (null == adapter.getData() || adapter.getData().size() == 0) {
-                                        recyclerView.setLayoutManager(gridLayoutManager);
-                                    }
-                                    adapter.setData(data);
-                                } else {
-                                    if (0 == data.size()) {
-                                        recyclerView.setLayoutManager(linearLayoutManager);
-                                    } else {
-                                        if (null == adapter.getData() || adapter.getData().size() == 0) {
-                                            recyclerView.setLayoutManager(gridLayoutManager);
-                                        }
-                                        adapter.setData(data);
-                                    }
-                                }
+                                recyclerView.setLayoutManager(gridLayoutManager);
+                                adapter.setData(data);
                             }
                         });
                     }

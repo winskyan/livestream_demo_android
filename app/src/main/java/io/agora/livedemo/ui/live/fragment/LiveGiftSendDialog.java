@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.DemoDialogFragment;
 

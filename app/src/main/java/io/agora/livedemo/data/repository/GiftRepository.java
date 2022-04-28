@@ -1,4 +1,4 @@
-package io.agora.livedemo.data;
+package io.agora.livedemo.data.repository;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -8,12 +8,12 @@ import java.util.List;
 
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
+import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.User;
 
 
-public class TestGiftRepository {
+public class GiftRepository {
 
     public static List<GiftBean> getDefaultGifts() {
         Context context = DemoApplication.getInstance().getApplicationContext();

@@ -42,13 +42,13 @@ import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.DemoMsgHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.common.OnUpdateUserInfoListener;
-import io.agora.livedemo.common.ThreadManager;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.utils.DemoMsgHelper;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
+import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
+import io.agora.livedemo.common.utils.ThreadManager;
+import io.agora.livedemo.data.repository.UserRepository;
 import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
@@ -812,6 +812,13 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         ThreadManager.getInstance().runOnMainThread(() -> {
             barrageView.addData(message);
         });
+    }
+
+    protected void showAttention(int time, String message) {
+        AttentionBean attention = new AttentionBean();
+        attention.setShowTime(time);
+        attention.setShowContent(message);
+        LiveDataBus.get().with(DemoConstants.REFRESH_ATTENTION).postValue(attention);
     }
 
 

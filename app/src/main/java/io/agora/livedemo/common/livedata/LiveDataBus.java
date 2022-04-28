@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.livedata;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

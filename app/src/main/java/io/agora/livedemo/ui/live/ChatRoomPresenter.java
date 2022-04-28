@@ -16,17 +16,17 @@ import io.agora.chat.uikit.lives.EaseLiveMessageHelper;
 import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoMsgHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.DemoMsgHelper;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.data.model.AttentionBean;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseActivity;
 
 public class ChatRoomPresenter implements ChatRoomChangeListener {
-    private BaseActivity mContext;
-    private String chatroomId;
-    private String currentUser;
+    private final BaseActivity mContext;
+    private final String chatroomId;
+    private final String currentUser;
     private OnChatRoomListener onChatRoomListener;
     private Conversation conversation;
     private String ownerNickname;

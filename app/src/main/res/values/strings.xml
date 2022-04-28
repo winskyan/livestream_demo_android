@@ -113,5 +113,6 @@
     <string name="gift_show_send">send %1$s</string>
 
     <string name="live_stream_end_tip">The Live Stream has ended</string>
+    <string name="share">share</string>
 
 </resources>

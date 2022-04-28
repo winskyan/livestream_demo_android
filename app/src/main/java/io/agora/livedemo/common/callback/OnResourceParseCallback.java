@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.callback;
 
 /**
  * Used to parse Sources <T>to reduce duplicate code

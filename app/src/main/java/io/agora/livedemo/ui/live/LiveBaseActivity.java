@@ -13,7 +13,7 @@ import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.base.BaseActivity;
 
 public abstract class LiveBaseActivity extends BaseActivity {
-    protected static final String TAG = "LiveActivity";
+    protected static final String TAG = LiveBaseActivity.class.getSimpleName();
     protected ImageView coverImage;
     protected LiveRoom liveRoom;
 

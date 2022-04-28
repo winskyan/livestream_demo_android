@@ -20,7 +20,7 @@ import java.util.TimerTask;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.utils.Utils;

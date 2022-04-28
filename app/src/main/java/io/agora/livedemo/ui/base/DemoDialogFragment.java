@@ -11,7 +11,7 @@ import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.Group;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DialogSet;
+import io.agora.livedemo.common.inf.DialogSet;
 
 public class DemoDialogFragment extends BaseDialogFragment implements View.OnClickListener, DialogSet {
     public TextView mTvDialogTitle;

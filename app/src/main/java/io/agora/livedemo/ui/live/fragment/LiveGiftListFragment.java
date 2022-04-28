@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.data.TestGiftRepository;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
+import io.agora.livedemo.data.repository.GiftRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.ui.base.BaseLiveFragment;
 import io.agora.livedemo.ui.live.adapter.GiftListAdapter;
@@ -88,7 +88,7 @@ public class LiveGiftListFragment extends BaseLiveFragment implements OnItemClic
         super.initData();
         giftPosition = -1;
         selectGiftLeftTimeMap = new ConcurrentHashMap<>();
-        adapter.setData(TestGiftRepository.getDefaultGifts());
+        adapter.setData(GiftRepository.getDefaultGifts());
         updateGiftLeftTime();
     }
 

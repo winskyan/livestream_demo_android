@@ -10,8 +10,8 @@ import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-import io.agora.livedemo.common.OnCancelClickListener;
-import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.common.inf.OnCancelClickListener;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
 import io.agora.livedemo.ui.base.BaseActivity;
 import io.agora.livedemo.ui.base.DemoDialogFragment;
 

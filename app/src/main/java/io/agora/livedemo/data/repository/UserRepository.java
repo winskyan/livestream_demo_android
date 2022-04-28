@@ -1,4 +1,4 @@
-package io.agora.livedemo.data;
+package io.agora.livedemo.data.repository;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -16,8 +16,8 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.OnUpdateUserInfoListener;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
 import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.common.db.entity.UserEntity;
@@ -27,6 +27,7 @@ import io.agora.livedemo.utils.Utils;
 
 public class UserRepository {
     private static volatile UserRepository mInstance;
+    private static final String DEFAULT_AVATAR_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/IMDemo/avatar/Image1.png";
 
     private Context mContext;
     private User mCurrentUser;
@@ -72,12 +73,7 @@ public class UserRepository {
         mCurrentUser.setId(Utils.getStringRandom(8));
         mCurrentUser.setPwd(Utils.getStringRandom(8));
         mCurrentUser.setNickName(mCurrentUser.getId());
-        if (null != mHeadImageList) {
-            int index = (int) Math.round(Math.random() * mHeadImageList.size() + 1);
-            mCurrentUser.setAvatarUrl(mHeadImageList.get(index).getUrl());
-        } else {
-            mCurrentUser.setAvatarDefaultResource(R.drawable.ease_default_avatar);
-        }
+        mCurrentUser.setAvatarUrl(DEFAULT_AVATAR_URL);
         saveCurrentUserInfoToDb();
         return mCurrentUser;
     }

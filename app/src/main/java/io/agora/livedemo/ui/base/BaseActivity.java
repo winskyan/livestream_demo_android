@@ -16,8 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.common.enums.Status;
 import io.agora.livedemo.common.reponsitories.Resource;
 import io.agora.livedemo.utils.StatusBarCompat;

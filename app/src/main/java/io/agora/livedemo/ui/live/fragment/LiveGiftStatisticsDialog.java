@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.LiveDataBus;
+import io.agora.livedemo.common.livedata.LiveDataBus;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.adapter.LiveGiftStatisticsAdapter;
 import io.agora.livedemo.ui.live.viewmodels.GiftStatisticsViewModel;

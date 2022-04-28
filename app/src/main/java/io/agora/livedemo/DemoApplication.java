@@ -21,8 +21,8 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.live.FastLiveHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.UserActivityLifecycleCallbacks;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.callback.UserActivityLifecycleCallbacks;
 import io.agora.livedemo.ui.MainActivity;
 import io.agora.util.EMLog;
 

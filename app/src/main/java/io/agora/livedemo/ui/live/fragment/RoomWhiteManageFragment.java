@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class RoomWhiteManageFragment extends RoomUserManagementFragment {

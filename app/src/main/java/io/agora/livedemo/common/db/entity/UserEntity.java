@@ -14,7 +14,7 @@ import java.util.Set;
 import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.data.repository.UserRepository;
 
 
 @Entity(tableName = "users", primaryKeys = {"username"},

@@ -13,12 +13,12 @@ import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class UserManageViewModel extends AndroidViewModel {
-    private ClientRepository repository;
-    private MediatorLiveData<Resource<List<String>>> observable;
-    private MediatorLiveData<Resource<List<String>>> whitesObservable;
-    private MediatorLiveData<Resource<List<String>>> muteObservable;
-    private MediatorLiveData<Resource<ChatRoom>> chatRoomObservable;
-    private MediatorLiveData<Resource<Boolean>> checkInWhiteObservable;
+    private final ClientRepository repository;
+    private final MediatorLiveData<Resource<List<String>>> observable;
+    private final MediatorLiveData<Resource<List<String>>> whitesObservable;
+    private final MediatorLiveData<Resource<List<String>>> muteObservable;
+    private final MediatorLiveData<Resource<ChatRoom>> chatRoomObservable;
+    private final MediatorLiveData<Resource<Boolean>> checkInWhiteObservable;
 
     public UserManageViewModel(@NonNull Application application) {
         super(application);

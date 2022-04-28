@@ -12,7 +12,7 @@ import io.agora.live.FastLiveHelper;
 import io.agora.live.cdn.fragment.CdnLiveHostFragment;
 import io.agora.live.widgets.VideoGridContainer;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.ui.cdn.presenter.CdnLiveHostPresenterImpl;
 import io.agora.livedemo.ui.fast.FastLiveAudienceActivity;
@@ -22,18 +22,18 @@ import io.agora.rtc2.Constants;
 import io.agora.util.EMLog;
 
 /**
- * 一、主播开始直播的流程如下：
- * （1）初始化 RtcEngine。一般放置在程序入口处即可，见DemoApplication中的initAgora()方法，具体调用为{@link FastLiveHelper#init(Context, String)}
- * （2）设置频道场景。本demo中此逻辑在{@link FastLiveHelper#init(Context, String)}中，具体在{@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
- * 直播场景设置为{@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
- * （3）获取声网token。这个一般调用app server相关接口，从服务器获取。如果在声网console中设置为不校验token可以不进行此步。
- * （4）加入channel并设置用户角色。这里涉及到channel的生成，本demo中channel是从服务端随房间信息返回的。
- * 加入channel的调用方法为{@link FastLiveHelper#joinRtcChannel(int, String, int)}，设置用户角色方法{@link io.agora.rtc2.RtcEngine#setClientRole(int)}
- * （5）在满足下面的开播的两个条件后，可以开始直播{@link FastLiveHelper#startBroadcast(VideoGridContainer, int)} 。
- * 上述方法中的有如下逻辑：（1）设置用户角色。（2）设置本地视图。
- * 二、开始直播的两个条件：
- * （1）加入直播间并将状态置为直播状态，回调方法为{@link #onStartCamera()}
- * (2) 获取声网token(如果需要的话)成功，并加入channel
+ * 1. The process for the host to start the live broadcast is as follows:
+ * (1) Initialize RtcEngine. Generally, it can be placed at the entrance of the program. See the initAgora() method in DemoApplication. The specific call is {@link FastLiveHelper#init(Context, String)}
+ * (2) Set the channel scene. This logic in this demo is in {@link FastLiveHelper#init(Context, String)}, specifically in {@link io.agora.rtc2.RtcEngine#setChannelProfile(int)},
+ * Live scene set to {@link Constants#CHANNEL_PROFILE_LIVE_BROADCASTING}
+ * (3) Obtain agora token. This generally calls the app server related interface and obtains it from the server. This step can be omitted if it is set to not verify the token in the sound network console.
+ * (4) Join the channel and set the user role. This involves the generation of the channel. In this demo, the channel is returned from the server with the room information.
+ * The calling method for joining a channel is {@link FastLiveHelper#joinRtcChannel(int, String, int)}, and the method for setting user roles is {@link io.agora.rtc2.RtcEngine#setClientRole(int)}
+ * (5) After the two conditions below are met, the live broadcast can be started {@link FastLiveHelper#startBroadcast(VideoGridContainer, int)}.
+ * The above method has the following logic: (1) Set the user role. (2) Set the local view.
+ * 2. Two conditions for starting live broadcast:
+ * (1) Join the live room and set the state to the live state, the callback method is {@link #onStartCamera()}
+ * (2) Obtain the sound network token (if necessary) successfully and join the channel
  */
 public class CdnLiveHostActivity extends LiveBaseActivity implements LiveAnchorFragment.OnCameraListener, OnConfirmClickListener {
     private static final String TAG = CdnLiveHostActivity.class.getSimpleName();

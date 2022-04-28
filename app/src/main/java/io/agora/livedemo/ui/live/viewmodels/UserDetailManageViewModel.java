@@ -13,9 +13,9 @@ import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class UserDetailManageViewModel extends AndroidViewModel {
-    private ClientRepository repository;
-    private MediatorLiveData<Resource<ChatRoom>> whiteObservable;
-    private MediatorLiveData<Resource<ChatRoom>> muteObservable;
+    private final ClientRepository repository;
+    private final MediatorLiveData<Resource<ChatRoom>> whiteObservable;
+    private final MediatorLiveData<Resource<ChatRoom>> muteObservable;
 
     public UserDetailManageViewModel(@NonNull Application application) {
         super(application);

@@ -26,10 +26,10 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
 import io.agora.cloud.EMHttpClient;
 import io.agora.exceptions.ChatException;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.common.PreferenceManager;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
+import io.agora.livedemo.common.utils.PreferenceManager;
+import io.agora.livedemo.data.repository.UserRepository;
 import io.agora.livedemo.data.model.HeadImageInfo;
 import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.databinding.ActivitySplashBinding;
@@ -94,12 +94,10 @@ public class SplashActivity extends BaseLiveActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            if (mIsSyncUserInfo) {
-                String srcUrl = mAvatarBaseUrl + "headImage.conf";
-                getHeadImageSrc(srcUrl);
-            } else {
-                login();
-            }
+            //not need random user avatar url
+//            String srcUrl = mAvatarBaseUrl + "headImage.conf";
+//            getHeadImageSrc(srcUrl);
+            login();
         }
     }
 

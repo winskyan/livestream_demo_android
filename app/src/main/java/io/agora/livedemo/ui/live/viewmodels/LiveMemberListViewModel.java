@@ -12,8 +12,8 @@ import io.agora.livedemo.common.reponsitories.ClientRepository;
 import io.agora.livedemo.common.reponsitories.Resource;
 
 public class LiveMemberListViewModel extends AndroidViewModel {
-    private ClientRepository repository;
-    private MediatorLiveData<Resource<List<String>>> membersObservable;
+    private final ClientRepository repository;
+    private final MediatorLiveData<Resource<List<String>>> membersObservable;
 
     public LiveMemberListViewModel(@NonNull Application application) {
         super(application);

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
+import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
 import io.agora.livedemo.data.model.GiftBean;
 

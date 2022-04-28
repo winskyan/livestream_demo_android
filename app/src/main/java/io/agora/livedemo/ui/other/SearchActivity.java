@@ -142,7 +142,7 @@ public class SearchActivity extends BaseLiveActivity {
         resultList.clear();
         Utils.hideKeyboard(editText);
         for (LiveRoom liveRoom : allDataList) {
-            if (liveRoom.getName().contains(searchText)) {
+            if (liveRoom.getName().toLowerCase().contains(searchText.toLowerCase())) {
                 resultList.add(liveRoom);
             }
         }

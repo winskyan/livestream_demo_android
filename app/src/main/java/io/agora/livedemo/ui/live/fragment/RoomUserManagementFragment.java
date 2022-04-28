@@ -31,7 +31,7 @@ import io.agora.chat.ChatRoomManager;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.exceptions.ChatException;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
 import io.agora.livedemo.ui.base.BaseFragment;
 import io.agora.livedemo.ui.live.viewmodels.LivingViewModel;
 import io.agora.livedemo.ui.live.viewmodels.UserManageViewModel;

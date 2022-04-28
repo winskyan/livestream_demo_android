@@ -33,13 +33,13 @@ import io.agora.chat.uikit.lives.OnSendLiveMessageCallBack;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.livedemo.DemoConstants;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.LiveDataBus;
-import io.agora.livedemo.common.OnConfirmClickListener;
-import io.agora.livedemo.common.OnResourceParseCallback;
-import io.agora.livedemo.common.OnUpdateUserInfoListener;
-import io.agora.livedemo.common.ThreadManager;
-import io.agora.livedemo.data.UserRepository;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.livedata.LiveDataBus;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
+import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
+import io.agora.livedemo.common.utils.ThreadManager;
+import io.agora.livedemo.data.repository.UserRepository;
 import io.agora.livedemo.data.model.GiftBean;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.util.EMLog;
@@ -240,7 +240,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onAdminAdded(String chatRoomId, String admin) {
         if (!isAdmin && admin.equals(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_in_admin_list));
+            showAttention(10, mContext.getString(R.string.live_in_admin_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -249,7 +249,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onAdminRemoved(String chatRoomId, String admin) {
         if (isAdmin && admin.equals(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_out_admin_list));
+            showAttention(10, mContext.getString(R.string.live_out_admin_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -258,7 +258,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
         if (!isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_in_mute_list));
+            showAttention(10, mContext.getString(R.string.live_in_mute_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -267,7 +267,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
         if (isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_out_mute_list));
+            showAttention(10, mContext.getString(R.string.live_out_mute_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -276,7 +276,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
         if (!isInWhiteList && whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_in_white_list));
+            showAttention(10, mContext.getString(R.string.live_in_white_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -285,7 +285,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
         if (isInWhiteList && whitelist.contains(ChatClient.getInstance().getCurrentUser())) {
-            mContext.showToast(mContext.getString(R.string.live_out_white_list));
+            showAttention(10, mContext.getString(R.string.live_out_white_list));
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();

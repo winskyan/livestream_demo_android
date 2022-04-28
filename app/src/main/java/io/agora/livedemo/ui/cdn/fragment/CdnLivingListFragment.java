@@ -5,16 +5,15 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agora.livedemo.common.DemoHelper;
-import io.agora.livedemo.common.OnResourceParseCallback;
+import io.agora.livedemo.common.utils.DemoHelper;
+import io.agora.livedemo.common.callback.OnResourceParseCallback;
 import io.agora.livedemo.data.model.LiveRoom;
 import io.agora.livedemo.data.restapi.model.ResponseModule;
 import io.agora.livedemo.ui.cdn.CdnLiveAudienceActivity;
 import io.agora.livedemo.ui.live.fragment.LiveListFragment;
 
 public class CdnLivingListFragment extends LiveListFragment {
-    private List<LiveRoom> vodList;
-    private static final int MAX_VOD_COUNT = 10;
+    private List<LiveRoom> cdnLivingList;
 
     @Override
     public void onItemClick(View view, int position) {
@@ -34,35 +33,14 @@ public class CdnLivingListFragment extends LiveListFragment {
             parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
                 @Override
                 public void onSuccess(ResponseModule<List<LiveRoom>> data) {
-                    vodList = data.data;
-                    showLiveList(false);
-                }
-
-                @Override
-                public void onError(int code, String message) {
-                    super.onError(code, message);
-                    showLiveList(false);
-                }
-            });
-        });
-        viewModel.getFastRoomsObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<ResponseModule<List<LiveRoom>>>() {
-                @Override
-                public void onSuccess(ResponseModule<List<LiveRoom>> data) {
-                    cursor = data.cursor;
-                    hasMoreData = true;
-                    List<LiveRoom> livingRooms = data.data;
-                    if (livingRooms.size() < pageSize) {
-                        hasMoreData = false;
-                    }
-                    if (isLoadMore) {
-                        setAdapterData(livingRooms, true);
+                    if (!isLoadMore) {
+                        cdnLivingList.clear();
                     } else {
-                        if (vodList != null) {
-                            livingRooms.addAll(0, vodList);
-                        }
-                        setAdapterData(livingRooms, false);
+                        cursor = data.cursor;
                     }
+                    hasMoreData = data.data.size() >= pageSize;
+                    cdnLivingList.addAll(data.data);
+                    setAdapterData(cdnLivingList);
                 }
 
                 @Override
@@ -76,18 +54,13 @@ public class CdnLivingListFragment extends LiveListFragment {
 
     @Override
     protected void initData() {
-        swipeRefreshLayout.setRefreshing(true);
-        viewModel.getFastCdnRoomList(MAX_VOD_COUNT, null);
-    }
-
-    @Override
-    protected void refreshList() {
-        viewModel.getFastCdnRoomList(MAX_VOD_COUNT, null);
+        super.initData();
+        cdnLivingList = new ArrayList<>(0);
     }
 
     @Override
     protected void loadLiveList(int limit, String cursor) {
-        viewModel.getFastRoomList(limit, cursor);
+        viewModel.getFastCdnRoomList(limit, cursor);
     }
 
     public List<LiveRoom> getLiveRooms() {

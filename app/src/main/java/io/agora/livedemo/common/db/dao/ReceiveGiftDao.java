@@ -31,5 +31,5 @@ public interface ReceiveGiftDao {
     int loadGiftTotalNum(String chatRoomId);
 
     @Query("delete from em_receive_gift where `to`=:chatRoomId")
-    int clearData(String chatRoomId);
+    void clearData(String chatRoomId);
 }

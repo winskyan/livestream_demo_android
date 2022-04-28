@@ -1,7 +1,7 @@
 package io.agora.livedemo.ui.cdn.presenter;
 
 import io.agora.live.cdn.presenter.CdnAudiencePresenter;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.data.model.AgoraTokenBean;
 import io.agora.livedemo.data.model.CdnUrlBean;
 import io.agora.livedemo.data.restapi.LiveException;

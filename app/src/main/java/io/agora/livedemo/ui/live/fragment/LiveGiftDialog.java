@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.OnConfirmClickListener;
+import io.agora.livedemo.common.inf.OnConfirmClickListener;
 import io.agora.livedemo.ui.base.BaseLiveDialogFragment;
 import io.agora.livedemo.ui.live.adapter.GiftFragmentAdapter;
 

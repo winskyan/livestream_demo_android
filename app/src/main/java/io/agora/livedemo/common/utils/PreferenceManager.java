@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,7 +15,6 @@ public class PreferenceManager {
     private static SharedPreferences.Editor mDefaultEditor;
 
     private static final String KEY_LIVING_ID = "key_living_id";
-    private static final String KEY_CAN_REGISTER = "key_can_register";
     private static final String KEY_AGORA_ID = "key_agora_id";
     private static final String KEY_PWD = "key_pwd";
 
@@ -93,22 +92,6 @@ public class PreferenceManager {
     public void remove(String key) {
         editor.remove(key);
         editor.commit();
-    }
-
-    /**
-     * set whether can register page
-     *
-     * @param canRegister
-     */
-    public static void setCanRegister(boolean canRegister) {
-        getDefaultSp(DemoApplication.getInstance());
-        mDefaultEditor.putBoolean(KEY_CAN_REGISTER, canRegister);
-        mDefaultEditor.apply();
-    }
-
-    public static boolean isCanRegister() {
-        getDefaultSp(DemoApplication.getInstance());
-        return mDefaultSp.getBoolean(KEY_CAN_REGISTER, false);
     }
 
     /**

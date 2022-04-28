@@ -1,4 +1,4 @@
-package io.agora.livedemo.common;
+package io.agora.livedemo.common.callback;
 
 import android.app.Activity;
 import android.app.Application;
@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.agora.livedemo.common.inf.ActivityState;
 
 public class UserActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks, ActivityState {
     private List<Activity> activityList = new ArrayList<>();

@@ -26,7 +26,7 @@ import io.agora.cloud.HttpClientManager;
 import io.agora.cloud.HttpResponse;
 import io.agora.exceptions.ChatException;
 import io.agora.livedemo.BuildConfig;
-import io.agora.livedemo.common.ThreadManager;
+import io.agora.livedemo.common.utils.ThreadManager;
 import io.agora.livedemo.data.model.LoginBean;
 import io.agora.livedemo.data.model.User;
 
