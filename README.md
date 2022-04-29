@@ -1,237 +1,201 @@
-# 环信直播聊天室简介
+# Introduction to Agora Live Chat Room
 
-## 简介
+## Introduction
 
-**环信直播聊天室（以下简称环信聊天室）展示了环信SDK提供直播聊天室的能力。除了提供基本的聊天外，还提供了赠送礼物，点赞及弹幕消息三种自定义消息，开发者可以根据自己的实际需求添加新的自定义消息。**
+**Agora Live Chat Room (hereinafter referred to as Agora Chat Room) demonstrates the ability of Agora SDK to provide live chat rooms. In addition to providing basic chat, it also provides custom messages for gift giving, and developers can add new custom messages according to their actual needs. **
 
-**核心类介绍：**
+**Introduction to core classes:**
 
-- LiveAudienceActivity：观众直播间页面</br>
-- LiveAnchorActivity：主播直播页面</br>
-- LiveAudienceFragment：集成观众端聊天室相关逻辑</br>
-- LiveAnchorFragment：集成主播端聊天室相关逻辑</br>
+- CdnLiveAudienceActivity: Audience live room page</br>
+- CdnLiveHostActivity: host live page</br>
+- LiveAudienceFragment: Integrate audience chat room related logic</br>
+- LiveAnchorFragment: Integrate the logic related to the chat room on the anchor side</br>
 
-**其他端开源地址：**
+**Other side open source address:**
 
 - iOS:    https://github.com/easemob/livestream_demo_ios
 - App Server:     https://github.com/easemob/easemob-im-app-server
 
-## 集成环信IM SDK
+## Integrate Agora Chat SDK
 
-### 开发环境要求
+### Development Environment Requirements
 
-- Android Studio 3.2或更高版本。</br>
-- SDK targetVersion至少为26。
+- Android Studio 3.2 or higher. </br>
+- SDK targetVersion is at least 26.
 
-### 添加远程依赖
+### Add remote dependencies
 
 ```
-api 'com.hyphenate:hyphenate-chat:3.8.0'
+implementation 'io.agora.rtc:chat-sdk:1.0.3'
+implementation 'io.agora.rtc:chat-uikit:1.0.3'
 ```
 
-**集成文档：**</br>
+**Integration Documentation:**</br>
 
-- [Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)；</br>
-- [Android SDK 更新日志](http://docs-im.easemob.com/im/android/sdk/releasenote)；
+- [Android SDK import](http://docs-im.easemob.com/im/android/sdk/import)；</br>
+- [Android UIKit import](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)；
 
-## 使用Custom Message Library
+## use AgoraChat-UIKit
 
-**为了便于开发者使用自定义消息，环信聊天室中将自定义消息相关的逻辑封装到custom message library中。**
+**In order to facilitate developers to use custom messages, Agora chat room encapsulates the logic related to custom messages into the AgoraChat-UIKit-android library. **
 
-开发者可以根据自己的需求对这个library进行更改。
+Developers can make changes to this UIKit library according to their needs.
 
-### 核心类介绍
+### Core class introduction
 
-- EmCustomMsgHelper：用于监听接收自定义消息，发送自定义消息。</br>
-- EmCustomMsgType：用户定义了demo中用到的自定义消息类型（礼物消息，点赞消息及弹幕消息）。
+- EaseLiveMessageHelper: used to monitor and receive custom messages and send custom messages. </br>
+- EaseLiveMessageType: The user defines the custom message type (gift message) used in the demo. </br>
+- EaseChatRoomMessagesView: Live chat room message UI, users can customize related properties to set UI display. </br>
+- OnLiveMessageListener: Listen to chat room messages to receive related events.
 
-### 具体用法
+### Specific usage
 
-#### 1. 在程序入口或者其他合适的地方，进行初始化。
+#### 1. In the program entry or other suitable places, initialize and set room information.
 
 ```Java
-EmCustomMsgHelper.getInstance().init();
+EaseLiveMessageHelper.getInstance().init(chatroomId);
 ```
 
-#### 2. 在直播间页面初始化时，设置房间信息。
+#### 2. Set up chat room custom message monitoring
 
 ```Java
-EmCustomMsgHelper.getInstance().setChatRoomInfo(chatroomId);
-```
+EaseLiveMessageHelper.getInstance().setLiveMessageListener(new OnLiveMessageListener() {
+  @Override
+  public void onMessageReceived(List<ChatMessage> messages) {
 
-#### 3. 设置自定义消息监听
+   }
 
-```Java
-EmCustomMsgHelper.getInstance().setOnCustomMsgReceiveListener(new OnCustomMsgReceiveListener() {
-    @Override
-    public void onReceiveGiftMsg(ChatMessage message) {
-        //接收到礼物消息的处理逻辑
-    }
+  @Override
+  public void onGiftMessageReceived(ChatMessage message) {
 
-    @Override
-    public void onReceivePraiseMsg(ChatMessage message) {
-        //接收到点赞消息的处理逻辑
-    }
+  }
 
-    @Override
-    public void onReceiveBarrageMsg(ChatMessage message) {
-        //接收到弹幕消息的处理逻辑
-    }
+  @Override
+  public void onMessageChanged() {
+
+   }
 });
 ```
 
-#### 4. 发送自定义消息可以调用如下方法
+#### 3. To send a chat room message, you can call the following method
 
 ```Java
-//如果所传参数与library中相同，可以直接调用此方法
-public void sendGiftMsg(String giftId, int num, OnMsgCallBack callBack);        //礼物消息
+public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack);                                                       //文本消息
 
-public void sendPraiseMsg(int num, OnMsgCallBack callBack);                     //点赞消息
+public void sendGiftMsg(String chatRoomId, String giftId, int num, OnSendLiveMessageCallBack callBack);                           //礼物消息
 
-public void sendBarrageMsg(String content, OnMsgCallBack callBack);             //弹幕消息
-
-//有其他参数或者与demo中定义的参数不同，调用此方法
-public void sendGiftMsg(Map<String, String> params, OnMsgCallBack callBack);    //礼物消息
-
-public void sendPraiseMsg(Map<String, String> params, OnMsgCallBack callBack);  //点赞消息
-
-public void sendBarrageMsg(Map<String, String> params, OnMsgCallBack callBack); //弹幕消息
-
-//甚至也可以调用如下方法发送自定义消息
-public void sendCustomMsg(String event, Map<String, String> params, OnMsgCallBack callBack);
-
-public void sendCustomMsg(String to, ChatMessage.ChatType chatType, String event
-, Map<String, String> params, OnMsgCallBack callBack);
+public void sendCustomMsg(String chatRoomId, String event, Map<String, String> params, final OnSendLiveMessageCallBack callBack); //自定义消息
 ```
 
-#### 5. 解析自定义消息</br>
+#### 4. Parse message related parameters</br>
 
-（1）如果发送的自定义参数与library中相同，可以直接调用如下方法，获得所传的数据
+(1) If the sent custom parameters are the same as those in UIKit, you can directly call the following method to get the transmitted data
 
 ```Java
-//获取礼物消息中礼物的id
+//Get the id of the gift in the gift message
 public String getMsgGiftId(ChatMessage msg);
-//获取礼物消息中礼物的数量
+// Get the number of gifts in the gift message
 public int getMsgGiftNum(ChatMessage msg);
-//获取点赞消息中点赞的数目
-public int getMsgPraiseNum(ChatMessage msg);
-//获取弹幕消息中的文本内容
-public String getMsgBarrageTxt(ChatMessage msg);
 ```
 
-（2）如果自定义消息参数与library中不同，可以调用如下方法，获取消息中的参数
+(2) If the custom message parameters are different from those in UIKit, you can call the following method to get the parameters in the message
 
 ```Java
 public Map<String, String> getCustomMsgParams(ChatMessage message);
 ```
 
-#### 6. library中还提供了，判断自定义消息类型的方法
+#### 5. UIKit also provides a method to determine the type of custom message
 
 ```Java
-public boolean isGiftMsg(ChatMessage msg);    //礼物消息判断
-
-public boolean isPraiseMsg(ChatMessage msg);  //点赞消息判断
-
-public boolean isBarrageMsg(ChatMessage msg); //弹幕消息判断
+public boolean isGiftMsg(ChatMessage msg);    // gift message judgment
 ```
 
-## 环信直播聊天室架构介绍
+## Agora Live Chat Room Architecture Introduction
 
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)</br>
-环信聊天室中有两个repository，ChatClientRepository及AppServerRepository。其中ChatClientRepository用户处理环信SDK提供
-的相关请求，AppServerRepository用户处理app server提供的接口。每个页面有相应的ViewModel以生命周期的方式存储和管
-理与UI相关的数据。LiveData是一个具有生命周期感知特性的可观察的数据保持类，一般位于ViewModel中，用于观察数据变化。</br>
+There are two repositories in Agora chat room, ClientRepository and AppServerRepository. Where ClientRepository user handles Agora SDK provides
+For related requests, the AppServerRepository user handles the interface provided by the app server. Each page has a corresponding ViewModel to store and manage in a life cycle manner
+Manage UI-related data. LiveData is an observable data retention class with lifecycle awareness, generally located in ViewModel, for observing data changes. </br>
 
-## 集成视频直播SDK
+## Integrate Agora Live Video SDK
 
-环信聊天室提供了多种直播类型：
+Agora chat room provides Agora CDN live streaming capability (https://docs.agora.io/cn/live-streaming/landing-page?platform=Android).
 
-#### [融合CDN直播](https://docs.agora.io/cn/fusion-cdn-streaming/landing-page?platform=RESTful)
 
-超低卡顿、全链路质量透明的标准 CDN 直播
+## Documentation
 
-#### [极速直播](https://docs.agora.io/cn/live-streaming/landing-page?platform=Android)
+- [iOS open source address](https://github.com/easemob/livestream_demo_ios)
+- [App Server open source address](https://github.com/easemob/easemob-im-app-server)
+- [Introduction to Huanxin Live Chat Room Integration](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
+- [Agora SDK import](http://docs-im.easemob.com/im/android/sdk/import)
+- [Agora UIKit import](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)
 
-低延时、强同步、高质量直播，观众与主播进行低频音视频互动
+## For non-AndroidX builds ##
 
-#### [互动直播](https://docs.agora.io/cn/Interactive%20Broadcast/landing-page?platform=Android)
+### 1. Running the demo without AndroidX builds, the following work can be done:
 
-超低延时直播，观众频繁上麦与主播进行实时音视频互动
+#### 1. Comment out the following settings in gradle.properties in the demo:
 
-## 文档
+````Java
+#android.enableJetifier=true //Android plugin will automatically migrate existing third-party libraries to use AndroidX by rewriting their binaries
+         #android.useAndroidX=true //Android plugin will use the corresponding AndroidX library instead of the support library
+````
 
-- [iOS端开源地址](https://github.com/easemob/livestream_demo_ios)
-- [App Server开源地址](https://github.com/easemob/easemob-im-app-server)
-- [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
-- [环信Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)
-
-## 针对非AndroidX构建的方案 ##
-
-### 一、在非AndroidX构建的情况下运行demo，可进行如下工作：
-
-#### 1. 注释掉demo中gradle.properties的如下设置：
-
-```Java
-#android.enableJetifier=true //Android 插件会通过重写现有第三方库的二进制文件，自动将这些库迁移为使用 AndroidX
-#android.useAndroidX=true    //Android 插件会使用对应的 AndroidX 库而非支持库
-```
-
-#### 2. 将AndroidX构建工件替换为旧构建工件
+#### 2. Replace AndroidX build artifacts with old build artifacts
 
 ```Java
 dependencies {
-    ...
-    implementation "com.jakewharton:butterknife:$butterknife_version"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
-    implementation "androidx.room:room-runtime:$ax_room_version"
-    annotationProcessor "androidx.room:room-compiler:$ax_room_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    ...
-}
+        ...
+        implementation "com.jakewharton:butterknife:$butterknife_version"
+        annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+        implementation 'com.google.android.material:material:1.1.0'
+        implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+        implementation "androidx.lifecycle:lifecycle-livedata:$ax_lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-viewmodel:$ax_lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-extensions:$ax_lifecycle_version"
+        implementation "androidx.room:room-runtime:$ax_room_version"
+        annotationProcessor "androidx.room:room-compiler:$ax_room_version"
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        ...
+        }
 ```
 
-修改为：
+change into:
 
 ```Java
 dependencies {
-    ...
-    implementation "com.jakewharton:butterknife:9.0.0"
-    annotationProcessor "com.jakewharton:butterknife-compiler:9.0.0"
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "android.arch.lifecycle:livedata:$ax_lifecycle_version"
-    implementation "android.arch.lifecycle:viewmodel:$ax_lifecycle_version"
-    implementation "android.arch.lifecycle:extensions:$ax_lifecycle_version"
-    implementation "android.arch.persistence.room:runtime:$ax_room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$ax_room_version"
-    implementation 'com.android.support:support-v4:28.0.0'
-    ...
-}
+        ...
+        implementation "com.jakewharton:butterknife:9.0.0"
+        annotationProcessor "com.jakewharton:butterknife-compiler:9.0.0"
+        implementation 'com.android.support:design:28.0.0'
+        implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+        implementation "android.arch.lifecycle:livedata:$ax_lifecycle_version"
+        implementation "android.arch.lifecycle:viewmodel:$ax_lifecycle_version"
+        implementation "android.arch.lifecycle:extensions:$ax_lifecycle_version"
+        implementation "android.arch.persistence.room:runtime:$ax_room_version"
+        annotationProcessor "android.arch.persistence.room:compiler:$ax_room_version"
+        implementation 'com.android.support:support-v4:28.0.0'
+        ...
+        }
 ```
 
-注：
+Note:
 
-- butterknife因10.0.0以上支持androidX，故需降为9.0.0。
-- ax_lifecycle_version等的版本号，可以通过Android Stuido的Add Library Dependency去搜索。File ->Project Structure ->
-  app ->Dependencies ->点击右上角添加+ ->Library dependency ->输入要搜索的远程库名称，如 design。
+- Butterknife needs to be downgraded to 9.0.0 because it supports androidX above 10.0.0.
+- The version number of ax_lifecycle_version, etc., can be searched through Add Library Dependency of Android Stuido. File ->Project Structure ->
+  app ->Dependencies ->Click Add + in the upper right corner ->Library dependency ->Enter the name of the remote library to be searched, such as design.
 
-如果遇到与迁移有关的问题，请参考下面这些表来确定从支持库到对应的 AndroidX 工件和类的正确映射：</br>
+If you encounter migration-related issues, please refer to these tables to determine the correct mapping from support libraries to corresponding AndroidX artifacts and classes:</br>
 
-- [Maven 工件映射](https://developer.android.google.cn/jetpack/androidx/migrate/artifact-mappings)</br>
-- [类映射](https://developer.android.google.cn/jetpack/androidx/migrate/class-mappings)</br>
+- [Maven Artifact Mappings](https://developer.android.google.cn/jetpack/androidx/migrate/artifact-mappings)</br>
+- [Class Mappings](https://developer.android.google.cn/jetpack/androidx/migrate/class-mappings)</br>
 
-#### 3. 全局替换androidX下的控件的引用路径及xml中的控件路径，如androidx.recyclerview.widget.RecyclerView -> android.support.v7.widget.RecyclerView。</br>
+#### 3. Globally replace the reference path of the control under androidX and the control path in xml, such as androidx.recyclerview.widget.RecyclerView -> android.support.v7.widget.RecyclerView. </br>
 
-#### 4. 替换ViewPager2为ViewPager，参考：[Migrate from ViewPager to ViewPager2](https://developer.android.google.cn/training/animation/vp2-migration?hl=zh_cn)</br>
+#### 4. Replace ViewPager2 with ViewPager, refer to: [Migrate from ViewPager to ViewPager2](https://developer.android.google.cn/training/animation/vp2-migration?hl=zh_cn)</br>
 
-#### 5. 其他未提到的事项。</br>
+#### 5. Other matters not mentioned. </br>
 
-### 二、仅使用demo中的核心类
+### Second, only use the core classes in the demo
 
-> 如果只打算使用demo的核心类，建议您关注于com.easemob.livedemo.ui.live目录下相关类，核心类为LiveAnchorActivity和LiveAudienceActivity，以及他们相应的fragment。然后从这两个activity出发，逐步替换需要的类中有关androidX的控件。
-
+> If you only plan to use the core classes of the demo, it is recommended that you focus on the related classes in the io.agora.livedemo.ui.cdn directory. The core classes are CdnLiveHostActivity and CdnLiveAudienceActivity, and their corresponding fragments. Then start from these two activities, and gradually replace the androidX-related controls in the required classes.

@@ -1,37 +1,37 @@
-# Integrate fast live streaming
+# 集成CDN直播
 
-In the Easemob live chat room (hereinafter referred to as the easemob chat room), the **extreme speed live broadcast** adopts the solution of agora's extremely fast live broadcast, which shows the scene of the combination of video live broadcast and live broadcast chat room. </br>
+Agora直播聊天室（以下称Agora聊天室）中 **CDN直播** 采用的是Agora CDN直播的方案，展示了视频直播与直播聊天室结合的场景。</br>
 
 **
-The official integration document of agora Express Live Streaming: **[Extreme Speed Live Streaming](https://docs.agora.io/cn/live-streaming/start_live_standard_android?platform=Android)</br>
+Agora CDN直播官方集成文档：**[CDN直播](https://docs.agora.io/cn/live-streaming/start_live_standard_android?platform=Android)</br>
 
-## Integrated agora speed live broadcast steps
+## 集成Agora CDN直播步骤
 
-### Integration steps
+### 集成步骤
 
-> (1) Register a agora account, create a project and obtain an App ID. </br>
-> (2) Integrate agora  SDK: JCenter automatically integrates or manually copies the SDK files. </br>
-> (3) Configure relevant permissions. Such as network permissions, etc. </br>
-> (4) Initialize SDK. Usually placed in the program entry. </br>
-> (5) Set the channel scene and set the user role. </br>
-> (6) Join the channel, the host sets the local view to start the live broadcast, and the audience sets the remote video to watch the live broadcast. </br>
+> (1)注册Agora账号，创建项目并获取App ID。</br>
+> (2)集成Agora CDN直播SDK:JCenter自动集成或者手动复制SDK文件。</br>
+> (3)配置相关权限。如网络权限等。</br>
+> (4)初始化SDK。一般放在程序入口。</br>
+> (5)设置频道场景，并设置用户角色。</br>
+> (6)加入频道，主播设置本地视图开始直播，观众设置远端视频观看直播。</br>
 
-For the convenience of use, the dependencies and related auxiliary classes of agora's fast live broadcast are put into the fastlive library in the Easemob chat room for the convenience of developers. </br>
+为了便于使用，Agora聊天室中将Agora CDN直播的依赖及相关辅助类放到了fastlive library中，以方便开发者使用。</br>
 
-### Core class introduction
+### 核心类介绍
 
-- FastLiveHelper is a helper class for fast live streaming, which provides logic for initialization and setting. </br>
-- FastLiveHostFragment The anchor live fragment, which encapsulates the relevant logic of the anchor live broadcast. Through the implementation class of FastHostPresenter, functions such as pushing the stream and leaving the channel can be operated from the outside. </br>
+- FastLiveHelper是CDN直播的帮助类，提供了初始化及设置等逻辑。</br>
+- FastLiveHostFragment主播直播fragment，封装了主播直播的相关逻辑。通过FastHostPresenter的实现类，可以从外部操作推流，离开频道等功能。</br>
 -
-FastLiveAudienceFragment viewers watch the live broadcast fragment, which encapsulates the relevant logic for viewers to watch the live broadcast. Through the implementation class of FastAudiencePresenter, you can close the live broadcast, leave the channel, etc. from the outside. </br>
+FastLiveAudienceFragment观众观看直播fragment，封装了观众观看直播的相关逻辑。通过FastAudiencePresenter的实现类，可以从外部操作关闭直播，离开频道等。</br>
 
-When developers use it, they can add the corresponding fragment to the corresponding activity and provide the implementation class of the corresponding presenter.
+开发者使用时，将相应的fragment加入到相应的activity中，并提供相应的presenter的实现类即可。
 
-## Example:
+## 示例：
 
-Take the use of fastlive library as an example.
+以使用fastlive library为例介绍。
 
-### 1. Add project permissions
+### 1、添加项目权限
 
 ```
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -46,20 +46,20 @@ Take the use of fastlive library as an example.
 </manifest>
 ```
 
-**Note: Microphone, camera and storage permissions need to be applied for, please apply where you need to use them. **
+**注：麦克风，摄像头及存储权限需要申请，请在需要使用的地方进行申请。**
 
-### 2. Initialization
+### 2、初始化
 
 ```
 private void initAgora() {
-  //the second params is agora appId
+  //第二个参数为agora appId
   FastLiveHelper.getInstance().init(this, BuildConfig.AGORA_APP_ID);
 }
 ```
 
-### 3. Add FastLiveHostFragment or LiveAudienceFragment in the activity
+### 3、在activity中添加FastLiveHostFragment或者LiveAudienceFragment
 
-(1) Add FastLiveHostFragment to FastLiveHostActivity
+（1）FastLiveHostActivity中添加FastLiveHostFragment
 
 ```
  private void initVideoFragment() {
@@ -80,7 +80,7 @@ private void initAgora() {
     }
 ```
 
-(2) Add FastLiveAudienceFragment to FastLiveAudienceActivity
+（2）FastLiveAudienceActivity中添加FastLiveAudienceFragment
 
 ```
     private void initVideoFragment() {
@@ -101,9 +101,9 @@ private void initAgora() {
     }
 ```
 
-### 4. Integrate and implement FastHostPresenter and FastAudiencePresenter respectively
+### 4、分别集成并实现FastHostPresenter和FastAudiencePresenter
 
-(1) Implement FastHostPresenter
+（1）实现FastHostPresenter
 
 ```
 public class FastLiveHostPresenterImpl extends FastHostPresenter {
@@ -158,18 +158,18 @@ public class FastLiveHostPresenterImpl extends FastHostPresenter {
 
 ```
 
-**Method introduction:**
+**方法介绍：**
 
-- onStartCamera() is used by the host to start the live broadcast;</br>
-- switchCamera() is used to switch cameras;</br>
-- leaveChannel() is used to leave the current channel. </br>
-- getFastToken(String hxId, String channel, String hxAppkey, int uid) is used to pass the app
-  The server obtains agora authentication token. The parameter is hxId is the easemob id, channel is the channel to be added to the live broadcast of agora, hxAppkey is the easemob app
-  key (need to register a ring letter account application), uid is the ID of the local user (the uid of each user in the channel must be unique). </br>
+- onStartCamera()用于主播开始直播；</br>
+- switchCamera()用于切换摄像头；</br>
+- leaveChannel()用于离开当前频道。</br>
+- getFastToken(String hxId, String channel, String hxAppkey, int uid)用于通过app
+  server获取Agora验证token。其中参数为hxId为Easemob id，channel为要加入Agora cdn直播的频道，hxAppkey为Easemob app
+  key（需要注册Easemob账号申请），uid为本地用户的ID（频道内每个用户的 uid 必须是唯一的）。</br>
 
-**Note: mView is the interface class IFastHostView object implemented by FastLiveHostFragment. **
+**注：mView为FastLiveHostFragment实现的接口类IFastHostView对象。**
 
-(2) Implement FastAudiencePresenter
+（2）实现FastAudiencePresenter
 
 ```
 public class FastLiveAudiencePresenterImpl extends FastAudiencePresenter {
@@ -215,13 +215,13 @@ public class FastLiveAudiencePresenterImpl extends FastAudiencePresenter {
 
 ```
 
-**Method introduction:**
+**方法介绍：**
 
-- onLiveClosed() exits the live broadcast after receiving the host;</br>
-- leaveChannel() and getFastToken() are the same as FastLiveHostPresenterImpl.
+- onLiveClosed()为收到主播退出直播；</br>
+- leaveChannel()及getFastToken()与FastLiveHostPresenterImpl相同。
 
-**Note: mView is the interface class IFastAudienceView object implemented by FastLiveAudienceFragment. **
+**注：mView为FastLiveAudienceFragment实现的接口类IFastAudienceView对象。**
 
-**Note:**</br>
+**注意事项：**</br>
 
-- To obtain agora token, you need to build server-side logic. If it is for testing, you can use the console to generate a temporary token for testing, or use the unverified token mode</br>
+- 获取Agora token，需要搭建服务端逻辑。如果是为了测试，可以使用console生成临时token进行测试，或者使用不验证token模式</br>
