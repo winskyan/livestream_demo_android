@@ -368,10 +368,10 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     private void showInputView() {
         if (mShowMessageListView) {
-            messageView.setShow(false);
+            messageView.enableMessagesViewShow(false);
             commentIv.setImageResource(R.drawable.live_comment);
         } else {
-            messageView.setShow(true);
+            messageView.enableMessagesViewShow(true);
             commentIv.setImageResource(R.drawable.live_comment_close);
         }
         mShowMessageListView = messageView.isShowing();
@@ -523,7 +523,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     }
                 });
 
-                messageView.setShow(mShowMessageListView);
+                messageView.enableMessagesViewShow(mShowMessageListView);
                 bottomBar.setVisibility(View.VISIBLE);
                 if (!chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())
                         && !chatroom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {

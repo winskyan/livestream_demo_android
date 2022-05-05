@@ -16,11 +16,11 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.livedemo.DemoApplication;
 import io.agora.livedemo.R;
-import io.agora.livedemo.common.utils.DemoHelper;
-import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
 import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.common.db.entity.UserEntity;
+import io.agora.livedemo.common.inf.OnUpdateUserInfoListener;
+import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.data.model.HeadImageInfo;
 import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.utils.Utils;
@@ -29,7 +29,6 @@ public class UserRepository {
     private static volatile UserRepository mInstance;
     private static final String DEFAULT_AVATAR_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/IMDemo/avatar/Image1.png";
 
-    private Context mContext;
     private User mCurrentUser;
 
     private List<HeadImageInfo> mHeadImageList;
@@ -49,7 +48,6 @@ public class UserRepository {
     }
 
     public void init(Context context) {
-        this.mContext = context;
         String agoraId = DemoHelper.getAgoraId();
         String pwd = DemoHelper.getPwd();
         EaseUser user = getUserInfo(agoraId);
@@ -154,7 +152,7 @@ public class UserRepository {
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(usernameList.toArray(new String[0]), new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> value) {
-                Log.e("lives", "getUserInfoById success size=" + value.size());
+                Log.i("lives", "getUserInfoById success size=" + value.size());
                 if (null != listener) {
                     listener.onSuccess(value);
                 }
