@@ -27,7 +27,7 @@ import io.agora.livedemo.utils.Utils;
 
 public class UserRepository {
     private static volatile UserRepository mInstance;
-    private static final String DEFAULT_AVATAR_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/IMDemo/avatar/Image1.png";
+    private static final String DEFAULT_AVATAR_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/AgoraChatDemo_Resource/defaultAvatat%403x.png";
 
     private User mCurrentUser;
 
