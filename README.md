@@ -26,8 +26,8 @@
 ### Add remote dependencies
 
 ```
-implementation 'io.agora.rtc:chat-sdk:1.0.3'
-implementation 'io.agora.rtc:chat-uikit:1.0.3'
+implementation 'io.agora.rtc:chat-sdk:1.0.4'
+implementation 'io.agora.rtc:chat-uikit:1.0.4'
 ```
 
 **Integration Documentation:**</br>

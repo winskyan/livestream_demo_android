@@ -160,7 +160,7 @@ public class DemoHelper {
             entity.setTo(message.getTo());
             entity.setTimestamp(message.getMsgTime());
             entity.setGift_id(gift_id);
-            entity.setGift_num(Integer.valueOf(gift_num));
+            entity.setGift_num(Integer.parseInt(gift_num));
             List<Long> list = getReceiveGiftDao().insert(entity);
             if (list.size() <= 0) {
             } else {

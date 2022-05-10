@@ -69,7 +69,7 @@ public class UserRepository {
     public User getRandomUser() {
         mCurrentUser = new User();
         mCurrentUser.setId(Utils.getStringRandom(8));
-        mCurrentUser.setPwd(Utils.getStringRandom(8));
+        mCurrentUser.setPwd(Utils.getStringRandom(12));
         mCurrentUser.setNickName(mCurrentUser.getId());
         mCurrentUser.setAvatarUrl(DEFAULT_AVATAR_URL);
         saveCurrentUserInfoToDb();
