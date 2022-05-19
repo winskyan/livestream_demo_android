@@ -125,10 +125,10 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${camerax_version}"
 
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
-    // agora
-    implementation project(path: ':fastlive')
     // agora cdn live
+    implementation project(path: ':fastlive')
+    // agora 
     implementation project(path: ':chat-uikit')
-    //implementation 'io.agora.rtc:chat-sdk:1.0.4'
-    //implementation 'io.agora.rtc:chat-uikit:1.0.4'
+    //implementation 'io.agora.rtc:chat-sdk:1.0.6'
+    //implementation 'io.agora.rtc:chat-uikit:1.0.6'
 }

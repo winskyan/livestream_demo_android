@@ -26,8 +26,8 @@
 ### 添加远程依赖
 
 ```
-implementation 'io.agora.rtc:chat-sdk:1.0.3'
-implementation 'io.agora.rtc:chat-uikit:1.0.3'
+implementation 'io.agora.rtc:chat-sdk:1.0.6'
+implementation 'io.agora.rtc:chat-uikit:1.0.6'
 ```
 
 **集成文档：**</br>
