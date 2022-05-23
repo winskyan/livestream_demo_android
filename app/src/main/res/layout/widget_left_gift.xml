@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="5dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -39,13 +39,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:text="张小娴"
+                    android:text=""
                     android:textColor="#fff" />
 
                 <ImageView
-                    android:layout_marginLeft="4dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
 
             </LinearLayout>
 
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="送了一个校园之星"
+                android:text=""
                 android:textColor="#4d73ff" />
 
         </LinearLayout>

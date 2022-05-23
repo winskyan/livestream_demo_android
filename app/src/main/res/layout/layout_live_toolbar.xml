@@ -21,7 +21,7 @@
             android:layout_width="@dimen/item_small_avatar_size"
             android:layout_height="@dimen/item_small_avatar_size"
             android:layout_marginStart="2dp"
-            android:src="@drawable/live"
+            android:src="@drawable/ease_default_avatar"
             app:ease_shape_type="round"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

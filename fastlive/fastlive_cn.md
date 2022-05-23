@@ -35,7 +35,7 @@ FastLiveAudienceFragment观众观看直播fragment，封装了观众观看直播
 
 ```
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-   package="com.easemob.livedemo">
+   package="io.agora.livedemo">
 
    <uses-permission android:name="android.permission.INTERNET" />
    <uses-permission android:name="android.permission.RECORD_AUDIO" />

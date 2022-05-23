@@ -13,8 +13,9 @@
 
 **Other side open source address:**
 
-- iOS:    https://github.com/easemob/livestream_demo_ios
-- App Server:     https://github.com/easemob/easemob-im-app-server
+- iOS:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-ios
+- Web:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-web
+- App Server:     https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/backend
 
 ## Integrate Agora Chat SDK
 
@@ -32,8 +33,8 @@ implementation 'io.agora.rtc:chat-uikit:1.0.6'
 
 **Integration Documentation:**</br>
 
-- [Android SDK import](http://docs-im.easemob.com/im/android/sdk/import)；</br>
-- [Android UIKit import](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)；
+- [Android SDK integrated](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android);</br>
+- [Android UIKit integrated](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android);
 
 ## use AgoraChat-UIKit
 
@@ -43,48 +44,39 @@ Developers can make changes to this UIKit library according to their needs.
 
 ### Core class introduction
 
+- EaseChatRoomMessagesView: Live chat room message UI, users can customize related properties to set UI display. </br>
 - EaseLiveMessageHelper: used to monitor and receive custom messages and send custom messages. </br>
 - EaseLiveMessageType: The user defines the custom message type (gift message) used in the demo. </br>
-- EaseChatRoomMessagesView: Live chat room message UI, users can customize related properties to set UI display. </br>
 - OnLiveMessageListener: Listen to chat room messages to receive related events.
 
 ### Specific usage
 
-#### 1. In the program entry or other suitable places, initialize and set room information.
+#### 1. After the chat room is loaded, initialize it and set the room information.
 
 ```Java
 EaseLiveMessageHelper.getInstance().init(chatroomId);
 ```
 
-#### 2. Set up chat room custom message monitoring
+#### 2. add and remove chat room custom message monitoring
 
 ```Java
-EaseLiveMessageHelper.getInstance().setLiveMessageListener(new OnLiveMessageListener() {
-  @Override
-  public void onMessageReceived(List<ChatMessage> messages) {
+EaseLiveMessageHelper.getInstance().addLiveMessageListener(new OnLiveMessageListener() {
+    @Override
+    public void onGiftMessageReceived(ChatMessage message) {
 
-   }
-
-  @Override
-  public void onGiftMessageReceived(ChatMessage message) {
-
-  }
-
-  @Override
-  public void onMessageChanged() {
-
-   }
+    }
 });
+EaseLiveMessageHelper.getInstance().removeLiveMessageListener(this);
 ```
 
 #### 3. To send a chat room message, you can call the following method
 
 ```Java
-public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack);                                                       //文本消息
+public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack);                                                       //text message
 
-public void sendGiftMsg(String chatRoomId, String giftId, int num, OnSendLiveMessageCallBack callBack);                           //礼物消息
+public void sendGiftMsg(String chatRoomId, String giftId, int num, OnSendLiveMessageCallBack callBack);                           //gift message
 
-public void sendCustomMsg(String chatRoomId, String event, Map<String, String> params, final OnSendLiveMessageCallBack callBack); //自定义消息
+public void sendCustomMsg(String chatRoomId, String event, Map<String, String> params, final OnSendLiveMessageCallBack callBack); //custom message
 ```
 
 #### 4. Parse message related parameters</br>
@@ -124,11 +116,11 @@ Agora chat room provides Agora CDN live streaming capability (https://docs.agora
 
 ## Documentation
 
-- [iOS open source address](https://github.com/easemob/livestream_demo_ios)
-- [App Server open source address](https://github.com/easemob/easemob-im-app-server)
-- [Introduction to Huanxin Live Chat Room Integration](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
-- [Agora SDK import](http://docs-im.easemob.com/im/android/sdk/import)
-- [Agora UIKit import](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)
+- [iOS open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-ios)
+- [Web open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-web)
+- [App Server open source address](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/backend)
+- [Android SDK integrated](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android);</br>
+- [Android UIKit integrated](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android);
 
 ## For non-AndroidX builds ##
 
@@ -138,7 +130,7 @@ Agora chat room provides Agora CDN live streaming capability (https://docs.agora
 
 ````Java
 #android.enableJetifier=true //Android plugin will automatically migrate existing third-party libraries to use AndroidX by rewriting their binaries
-         #android.useAndroidX=true //Android plugin will use the corresponding AndroidX library instead of the support library
+#android.useAndroidX=true //Android plugin will use the corresponding AndroidX library instead of the support library
 ````
 
 #### 2. Replace AndroidX build artifacts with old build artifacts

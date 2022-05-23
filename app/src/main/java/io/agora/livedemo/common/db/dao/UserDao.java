@@ -21,25 +21,25 @@ public interface UserDao {
     List<Long> insert(List<UserEntity> users);
 
     @Query("select * from users where username = :arg0")
-    LiveData<List<EaseUser>> loadUserById(String arg0);
+    LiveData<List<UserEntity>> loadUserById(String arg0);
 
     @Query("select * from users where username = :arg0")
-    List<EaseUser> loadUserByUserId(String arg0);
+    List<UserEntity> loadUserByUserId(String arg0);
 
     @Query("select contact from users where username = :arg0")
     int getUserContactById(String arg0);
 
     @Query("select * from users where contact = 0")
-    LiveData<List<EaseUser>> loadUsers();
+    LiveData<List<UserEntity>> loadUsers();
 
     @Query("select * from users where contact = 0")
-    List<EaseUser> loadContacts();
+    List<UserEntity> loadContacts();
 
     @Query("select * from users where contact = 1")
-    LiveData<List<EaseUser>> loadBlackUsers();
+    LiveData<List<UserEntity>> loadBlackUsers();
 
     @Query("select * from users where contact = 1")
-    List<EaseUser> loadBlackEaseUsers();
+    List<UserEntity> loadBlackEaseUsers();
 
     @Query("select username from users")
     List<String> loadAllUsers();
@@ -48,10 +48,10 @@ public interface UserDao {
     List<String> loadContactUsers();
 
     @Query("select * from users")
-    List<EaseUser> loadAllEaseUsers();
+    List<UserEntity> loadAllEaseUsers();
 
     @Query("select * from users where contact = 0 or contact = 1")
-    List<EaseUser> loadAllContactUsers();
+    List<UserEntity> loadAllContactUsers();
 
     @Query("delete from users")
     int clearUsers();

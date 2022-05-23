@@ -66,8 +66,8 @@ import io.agora.livedemo.utils.Utils;
 import io.agora.util.EMLog;
 
 public abstract class LiveBaseFragment extends BaseLiveFragment implements View.OnClickListener, View.OnTouchListener, ChatRoomPresenter.OnChatRoomListener, OnLiveMessageListener {
-    private static final int MAX_SIZE = 10;
     protected static final String TAG = "lives";
+    private static final int MAX_SIZE = 10;
     protected static final int CYCLE_REFRESH = 100;
     protected static final int CYCLE_REFRESH_TIME = 30000;
     protected static final int ATTENTION_REFRESH = 101;
@@ -130,10 +130,8 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected String anchorId;
     protected int watchedCount;
     protected LinkedList<String> memberList = new LinkedList<>();
-    protected int membersCount;
     private LinearLayoutManager layoutManager;
     private MemberAvatarAdapter avatarAdapter;
-    protected boolean isMessageListInited;
     protected ChatRoomPresenter presenter;
     protected LivingViewModel viewModel;
     private UserManageViewModel userManageViewModel;
@@ -150,8 +148,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     private boolean isStartCycleRefresh;
 
     private List<String> mMemberIconList;
-    protected String mAvatarUrl;
-    private boolean mShowMessageListView;
+    private int mMessageListViewVisibility;
 
     protected EaseUser mLiveStreamerUser;
 
@@ -171,16 +168,61 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         Log.i(TAG, "live room=" + liveRoom);
         liveId = liveRoom.getId();
         chatroomId = liveRoom.getId();
+
         anchorId = liveRoom.getOwner();
         DemoMsgHelper.getInstance().init(chatroomId);
         mConversation = ChatClient.getInstance().chatManager().getConversation(chatroomId, Conversation.ConversationType.ChatRoom, true);
 
-        watchedCount = liveRoom.getAudienceNum();
-        tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
-
         presenter = new ChatRoomPresenter(mContext, chatroomId);
+        chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatroomId);
 
         initLiveStreamerUser();
+
+        watchedCount = liveRoom.getAudienceNum();
+        memberList = liveRoom.getMemberList();
+
+        initWatchedMemberView();
+    }
+
+    private void initWatchedMemberView() {
+        layoutManager = new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false);
+        horizontalRecyclerView.setLayoutManager(layoutManager);
+        avatarAdapter = new MemberAvatarAdapter();
+        avatarAdapter.hideEmptyView(true);
+        horizontalRecyclerView.setAdapter(avatarAdapter);
+        horizontalRecyclerView.addItemDecoration(new MemberIconSpacesItemDecoration((int) EaseUtils.dip2px(mContext, -10)));
+
+        avatarAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                skipToUserListDialog();
+            }
+        });
+    }
+
+    private void updateWatchedMemberView(boolean needUpdateUserInfo) {
+        if (watchedCount < memberList.size()) {
+            watchedCount = memberList.size();
+        }
+        tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
+        if (null != memberList && memberList.size() > 0 && needUpdateUserInfo) {
+            UserRepository.getInstance().fetchUserInfo(new ArrayList<>(memberList), new OnUpdateUserInfoListener() {
+                @Override
+                public void onSuccess(Map<String, UserInfo> userInfoMap) {
+                    EMLog.i(TAG, "update member list user info success");
+                    requireActivity().runOnUiThread(() -> {
+                        updateWatchedMemberIcon();
+                    });
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+
+                }
+            });
+        } else {
+            updateWatchedMemberIcon();
+        }
     }
 
     protected abstract void initLiveStreamerUser();
@@ -189,6 +231,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         if (null == mLiveStreamerUser) {
             return;
         }
+
         EaseUserUtils.setUserAvatar(mContext, mLiveStreamerUser.getUsername(), ivIcon);
         EaseUserUtils.setUserNick(mLiveStreamerUser.getUsername(), usernameView);
 
@@ -265,7 +308,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     protected void initData() {
         super.initData();
-        mShowMessageListView = true;
+        mMessageListViewVisibility = View.VISIBLE;
         joinTime = System.currentTimeMillis();
         barrageView.initBarrage();
         mMemberIconList = new ArrayList<>(2);
@@ -299,7 +342,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.layout_member_num:
-                skipToListDialog();
+                skipToUserListDialog();
                 break;
             case R.id.live_receive_gift:
                 onGiftClick();
@@ -343,9 +386,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
             handler.removeCallbacksAndMessages(null);
             isStartCycleRefresh = false;
         }
-
     }
-
 
     public void handleHandlerMessage(Message msg) {
         switch (msg.what) {
@@ -363,18 +404,18 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
 
     @OnClick(R.id.comment_image)
     void onCommentImageClick() {
-        showInputView();
+        showMessageListView();
     }
 
-    private void showInputView() {
-        if (mShowMessageListView) {
-            messageView.enableMessagesViewShow(false);
+    private void showMessageListView() {
+        if (mMessageListViewVisibility == View.VISIBLE) {
+            messageView.setVisibility(View.GONE);
             commentIv.setImageResource(R.drawable.live_comment);
         } else {
-            messageView.enableMessagesViewShow(true);
+            messageView.setVisibility(View.VISIBLE);
             commentIv.setImageResource(R.drawable.live_comment_close);
         }
-        mShowMessageListView = messageView.isShowing();
+        mMessageListViewVisibility = messageView.getVisibility();
     }
 
 
@@ -385,7 +426,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     protected void anchorClick() {
     }
 
-    protected void skipToListDialog() {
+    protected void skipToUserListDialog() {
     }
 
     protected void showUserList() {
@@ -417,42 +458,50 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     private synchronized void onRoomMemberChange(LiveRoom room) {
-        watchedCount = room.getAudienceNum();
-        memberList = room.getMemberList(MAX_SIZE);
-        ThreadManager.getInstance().runOnMainThread(() -> {
-            tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
-            notifyDataSetChanged();
-        });
+        if (watchedCount != room.getAudienceNum()) {
+            watchedCount = room.getAudienceNum();
+            memberList = room.getMemberList();
+            requireActivity().runOnUiThread(() -> {
+                updateWatchedMemberView(true);
+            });
+        }
+
+        //update chat room
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatroomId);
     }
 
     private synchronized void onRoomMemberAdded(String name) {
         EMLog.i(TAG, "onRoomMemberAdded name=" + name);
-        watchedCount++;
-        if (!memberList.contains(name)) {
-            membersCount++;
-            if (memberList.size() >= MAX_SIZE)
-                memberList.removeLast();
+        if (null != memberList && !memberList.contains(name)) {
+            watchedCount++;
             memberList.add(name);
             presenter.showMemberChangeEvent(name, mContext.getResources().getString(R.string.live_msg_member_add));
-            EMLog.d(TAG, name + " added");
 
-            if (this.getActivity() != null) {
-                this.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvMemberNum.setText(String.valueOf(watchedCount));
-                        if (name.equals(chatroom.getOwner())) {
-                            LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
-                        }
-                        notifyDataSetChanged();
-                    }
-                });
-            }
+            requireActivity().runOnUiThread(() -> {
+                if (name.equals(chatroom.getOwner())) {
+                    LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_JOIN).setValue(true);
+                }
+                updateWatchedMemberView(false);
+            });
         }
     }
 
-    protected void notifyDataSetChanged() {
+    private synchronized void onRoomMemberExited(final String name) {
+        EMLog.e(TAG, "onRoomMemberExited " + name + " exited");
+        if (null != memberList && memberList.contains(name)) {
+            watchedCount--;
+            memberList.remove(name);
+            requireActivity().runOnUiThread(() -> {
+                if (name.equals(chatroom.getOwner())) {
+                    LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
+                    LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
+                }
+                updateWatchedMemberView(false);
+            });
+        }
+    }
+
+    protected void updateWatchedMemberIcon() {
         mMemberIconList.clear();
         if (memberList.size() > 2) {
             mMemberIconList.add(memberList.get(memberList.size() - 1));
@@ -460,31 +509,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         } else {
             mMemberIconList.addAll(memberList);
         }
-        if (mMemberIconList.size() == 0) {
-            avatarAdapter.setData(mMemberIconList);
-            return;
-        }
         avatarAdapter.setData(mMemberIconList);
-    }
-
-
-    private synchronized void onRoomMemberExited(final String name) {
-        EMLog.e(TAG, name + " exited");
-        watchedCount--;
-        memberList.remove(name);
-        ThreadManager.getInstance().runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                if (null != tvMemberNum) {
-                    tvMemberNum.setText(String.valueOf(watchedCount));
-                    notifyDataSetChanged();
-                    if (name.equals(chatroom.getOwner())) {
-                        LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE).setValue(true);
-                        LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
-                    }
-                }
-            }
-        });
     }
 
     protected void onMessageListInit() {
@@ -494,21 +519,27 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                 messageView.init(chatroomId);
                 messageView.setMessageViewListener(new EaseChatRoomMessagesView.MessageViewListener() {
                     @Override
-                    public void onMessageSend(String content, boolean isBarrageMsg) {
-                        presenter.sendTxtMsg(content, isBarrageMsg, new OnSendLiveMessageCallBack() {
+                    public void onSendTextMessageError(int code, String msg) {
+                        mContext.showToast("send text message fail:" + msg);
+                    }
 
+                    @Override
+                    public void onSendBarrageMessageContent(String content) {
+                        presenter.sendBarrageMsg(content, new OnSendLiveMessageCallBack() {
                             @Override
                             public void onSuccess(ChatMessage message) {
-                                messageView.refreshSelectLast();
-                                if (isBarrageMsg) {
-                                    barrageView.addData(message);
-                                }
+                                barrageView.addData(message);
+                            }
+
+                            @Override
+                            public void onError(int code, String error) {
+
                             }
                         });
                     }
 
                     @Override
-                    public void onItemClickListener(final ChatMessage message) {
+                    public void onChatRoomMessageItemClickListener(final ChatMessage message) {
                         String clickUsername = message.getFrom();
                         showUserDetailsDialog(clickUsername);
                     }
@@ -523,14 +554,14 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
                     }
                 });
 
-                messageView.enableMessagesViewShow(mShowMessageListView);
+                messageView.setVisibility(mMessageListViewVisibility);
                 bottomBar.setVisibility(View.VISIBLE);
                 if (!chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())
                         && !chatroom.getOwner().equals(ChatClient.getInstance().getCurrentUser())) {
                     userManagerView.setVisibility(View.INVISIBLE);
                 }
-                isMessageListInited = true;
-                showMemberList();
+
+                messageView.enableInputView(!chatroom.getMuteList().containsKey(ChatClient.getInstance().getCurrentUser()));
             }
         });
     }
@@ -546,74 +577,31 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         fragment.show(getChildFragmentManager(), "RoomManageUserDialog");
     }
 
-    private void showMemberList() {
-        layoutManager = new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false);
-        horizontalRecyclerView.setLayoutManager(layoutManager);
-        avatarAdapter = new MemberAvatarAdapter();
-        avatarAdapter.hideEmptyView(true);
-        horizontalRecyclerView.setAdapter(avatarAdapter);
-        horizontalRecyclerView.addItemDecoration(new MemberIconSpacesItemDecoration((int) EaseUtils.dip2px(mContext, -10)));
-
-        avatarAdapter.setOnItemClickListener(new OnItemClickListener() {
+    protected void onWatchedMemberListInit() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
-            public void onItemClick(View view, int position) {
-                skipToListDialog();
-            }
-        });
-
-        userManageViewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(List<String> data) {
-                    boolean haveOwner = data.contains(chatroom.getOwner());
-                    memberList.clear();
-                    if (haveOwner) {
-                        data.remove(chatroom.getOwner());
-                    }
-                    updateMemberUserInfo(data);
-                    if (data.size() > MAX_SIZE) {
-                        for (int i = 0; i < MAX_SIZE; i++) {
-                            memberList.add(i, data.get(i));
+            public void run() {
+                userManageViewModel.getObservable().observe(getViewLifecycleOwner(), response -> {
+                    parseResource(response, new OnResourceParseCallback<List<String>>() {
+                        @Override
+                        public void onSuccess(List<String> data) {
+                            if (null == memberList) {
+                                memberList = new LinkedList<>();
+                            } else {
+                                memberList.clear();
+                            }
+                            boolean haveOwner = data.contains(anchorId);
+                            if (haveOwner) {
+                                data.remove(anchorId);
+                            }
+                            memberList.addAll(data);
+                            updateWatchedMemberView(true);
                         }
-                    } else {
-                        memberList.addAll(data);
-                    }
-                    int size = chatroom.getMemberCount();
-                    if (haveOwner) {
-                        size--;
-                    }
-                    if (size < data.size()) {
-                        size = data.size();
-                    }
-
-                    membersCount = size;
-                    watchedCount = membersCount;
-                    tvMemberNum.setText(NumberUtils.amountConversion(watchedCount));
-                    notifyDataSetChanged();
-
-                }
-            });
-        });
-        userManageViewModel.getMembers(chatroomId);
-    }
-
-    protected void updateMemberUserInfo(List<String> memberList) {
-        if (null == memberList || memberList.size() == 0) {
-            return;
-        }
-
-        UserRepository.getInstance().fetchUserInfo(memberList, new OnUpdateUserInfoListener() {
-            @Override
-            public void onSuccess(Map<String, UserInfo> userInfoMap) {
-                EMLog.i(TAG, "update member list user info success");
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
+                    });
+                });
+                userManageViewModel.getMembers(chatroomId);
             }
         });
-
     }
 
     private float preX, preY;
@@ -712,34 +700,12 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     }
 
     @Override
-    public void onMessageReceived(List<ChatMessage> messages) {
-        for (ChatMessage message : messages) {
-            String username = null;
-            if (message.getChatType() == ChatMessage.ChatType.GroupChat
-                    || message.getChatType() == ChatMessage.ChatType.ChatRoom) {
-                username = message.getTo();
-            } else {
-                username = message.getFrom();
-            }
-            if (username.equals(chatroomId)) {
-                messageView.refreshSelectLast();
-            }
-        }
-    }
-
-    @Override
-    public void onMessageSelectLast() {
+    public void onMessageRefresh() {
         if (mContext != null && !mContext.isFinishing()) {
-            mContext.runOnUiThread(() -> messageView.refreshSelectLast());
+            mContext.runOnUiThread(() -> messageView.refresh());
         }
     }
 
-    @Override
-    public void onMessageChanged() {
-        if (isMessageListInited) {
-            messageView.refresh();
-        }
-    }
 
     @Override
     public void onDestroyView() {
@@ -788,7 +754,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
         user.setId(message.getFrom());
         bean.setUser(user);
         bean.setNum(DemoMsgHelper.getInstance().getMsgGiftNum(message));
-        ThreadManager.getInstance().runOnMainThread(() -> {
+        requireActivity().runOnUiThread(() -> {
             barrageLayout.showGift(bean);
         });
     }
@@ -809,7 +775,7 @@ public abstract class LiveBaseFragment extends BaseLiveFragment implements View.
     @Override
     public void onBarrageMessageReceived(ChatMessage message) {
         mConversation.getMessage(message.getMsgId(), true);
-        ThreadManager.getInstance().runOnMainThread(() -> {
+        requireActivity().runOnUiThread(() -> {
             barrageView.addData(message);
         });
     }

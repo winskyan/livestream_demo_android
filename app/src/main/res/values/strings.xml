@@ -5,12 +5,9 @@
     <string name="live_type_fast_title">fast live</string>
     <string name="live_list_living">living</string>
 
-    <string name="live_anchor_self">Streamer</string>
     <string name="live_anchor_mute">mute</string>
     <string name="live_anchor_muted">muted</string>
 
-    <string name="live_anchor_remove_white">delete</string>
-    <string name="live_anchor_remove_mute">mute</string>
     <string name="live_anchor_like_info">liked %1$s</string>
     <string name="live_anchor_receive_gift_info">gift %1$s</string>
     <string name="live_user_fans">fans</string>

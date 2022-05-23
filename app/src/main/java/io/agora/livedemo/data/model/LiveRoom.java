@@ -172,15 +172,9 @@ public class LiveRoom extends BaseBean implements Serializable {
         this.channel = channel;
     }
 
-    public LinkedList<String> getMemberList(int max_size) {
+    public LinkedList<String> getMemberList() {
         if (members == null) {
             return null;
-        }
-        List<MemberBean> newList = null;
-        if (members.size() > max_size) {
-            newList = members.subList(0, max_size);
-        } else {
-            newList = members;
         }
         LinkedList<String> list = new LinkedList<>();
         for (int i = 0; i < members.size(); i++) {

@@ -208,7 +208,7 @@ public class LiveListFragment extends BaseFragment implements OnItemClickListene
             recyclerView.setLayoutManager(linearLayoutManager);
             adapter.setData(data);
         } else {
-            UserRepository.getInstance().fetchUserInfo(anchorList, new OnUpdateUserInfoListener() {
+            UserRepository.getInstance().fetchUserInfo(new ArrayList<>(anchorList), new OnUpdateUserInfoListener() {
                 @Override
                 public void onSuccess(Map<String, UserInfo> userInfoMap) {
                     if (null != LiveListFragment.this.getActivity()) {

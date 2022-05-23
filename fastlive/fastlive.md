@@ -35,7 +35,7 @@ Take the use of fastlive library as an example.
 
 ```
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-   package="com.easemob.livedemo">
+   package="io.agora.livedemo">
 
    <uses-permission android:name="android.permission.INTERNET" />
    <uses-permission android:name="android.permission.RECORD_AUDIO" />

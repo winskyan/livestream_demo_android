@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +25,12 @@ import io.agora.livedemo.common.utils.DemoHelper;
 import io.agora.livedemo.data.model.HeadImageInfo;
 import io.agora.livedemo.data.model.User;
 import io.agora.livedemo.utils.Utils;
+import io.agora.util.EMLog;
 
 public class UserRepository {
     private static volatile UserRepository mInstance;
     private static final String DEFAULT_AVATAR_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/AgoraChatDemo_Resource/defaultAvatat%403x.png";
+    private static final long USER_INFO_EXPIRED_TIME = 60 * 1000;
 
     private User mCurrentUser;
 
@@ -80,7 +83,7 @@ public class UserRepository {
         EaseUser easeUser = new EaseUser(mCurrentUser.getId());
         easeUser.setNickname(mCurrentUser.getNickName());
         easeUser.setAvatar(mCurrentUser.getAvatarUrl());
-        DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(UserEntity.parseParent(easeUser));
+        saveUserInfoToDb(easeUser);
     }
 
     public User getCurrentUser() {
@@ -92,39 +95,22 @@ public class UserRepository {
     }
 
     public EaseUser getUserInfo(String username) {
-        return getUserInfo(username, true);
+        return getUserInfoFromDb(username);
     }
 
-    public EaseUser getUserInfo(String username, boolean fetchFromServer) {
-        if (TextUtils.isEmpty(username)) {
-            return null;
-        }
-        // To get instance of EaseUser, here we get it from the user list in memory
-        // You'd better cache it if you get it from your server
-        EaseUser user = getUserInfoFromDb(username);
-        if (user == null) {
-            if (fetchFromServer) {
-                List<String> userIdList = new ArrayList<>(1);
-                userIdList.add(username);
-                getUserInfoFromServer(userIdList, null);
-            }
-            user = new EaseUser(username);
-        }
-        return user;
-    }
-
-    public EaseUser getUserInfoFromDb(String username) {
+    public UserEntity getUserInfoFromDb(String username) {
         UserDao userDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
         if (null != userDao) {
-            List<EaseUser> list = userDao.loadUserByUserId(username);
+            List<UserEntity> list = userDao.loadUserByUserId(username);
             if (null != list && list.size() > 0) {
                 return list.get(0);
             }
         }
-        return new EaseUser(username);
+        return new UserEntity(username);
     }
 
     public void fetchUserInfo(List<String> usernameList, OnUpdateUserInfoListener listener) {
+        EMLog.i("lives", "fetchUserInfo,list=" + usernameList);
         if (null == usernameList || usernameList.size() == 0) {
             if (null != listener) {
                 listener.onError(Error.GENERAL_ERROR, "");
@@ -134,14 +120,29 @@ public class UserRepository {
         //avoid fetch self info
         usernameList.remove(DemoHelper.getAgoraId());
 
-        getUserInfoFromServer(usernameList, listener);
+        Iterator<String> iterator = usernameList.iterator();
+        UserEntity user;
+        while (iterator.hasNext()) {
+            user = getUserInfoFromDb(iterator.next());
+            if (user != null && System.currentTimeMillis() - user.getUserInitialTimestamp() < USER_INFO_EXPIRED_TIME) {
+                iterator.remove();
+            }
+        }
+        EMLog.i("lives", "getUserInfoFromServer,list=" + usernameList);
+        if (usernameList.size() == 0) {
+            listener.onSuccess(null);
+        } else {
+            getUserInfoFromServer(usernameList, listener);
+        }
     }
 
     public void saveUserInfoToDb(EaseUser easeUser) {
         if (null == DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao()) {
             return;
         }
-        DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(UserEntity.parseParent(easeUser));
+        UserEntity userEntity = UserEntity.parseParent(easeUser);
+        userEntity.setUserInitialTimestamp(System.currentTimeMillis());
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(userEntity);
     }
 
     private void getUserInfoFromServer(final List<String> usernameList,

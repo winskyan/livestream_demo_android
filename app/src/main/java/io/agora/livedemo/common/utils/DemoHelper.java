@@ -24,6 +24,7 @@ import io.agora.livedemo.common.db.DemoDbHelper;
 import io.agora.livedemo.common.db.dao.ReceiveGiftDao;
 import io.agora.livedemo.common.db.dao.UserDao;
 import io.agora.livedemo.common.db.entity.ReceiveGiftEntity;
+import io.agora.livedemo.common.db.entity.UserEntity;
 import io.agora.livedemo.common.livedata.LiveDataBus;
 import io.agora.livedemo.data.repository.GiftRepository;
 import io.agora.livedemo.data.repository.UserRepository;
@@ -260,7 +261,7 @@ public class DemoHelper {
             return new HashMap<>();
         }
         Map<String, EaseUser> map = new HashMap<>();
-        List<EaseUser> users = dao.loadAllEaseUsers();
+        List<UserEntity> users = dao.loadAllEaseUsers();
         if (users != null && !users.isEmpty()) {
             for (EaseUser user : users) {
                 map.put(user.getUsername(), user);

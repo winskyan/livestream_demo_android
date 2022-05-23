@@ -38,31 +38,6 @@ public class DemoMsgHelper {
     }
 
     /**
-     * Send a text message
-     *
-     * @param content
-     * @param isBarrageMsg
-     * @param callBack
-     */
-    public void sendMsg(String content, boolean isBarrageMsg, OnSendLiveMessageCallBack callBack) {
-        if (isBarrageMsg) {
-            sendBarrageMsg(content, callBack);
-        } else {
-            sendTxtMsg(content, callBack);
-        }
-    }
-
-    /**
-     * Send a text message
-     *
-     * @param content
-     * @param callBack
-     */
-    public void sendTxtMsg(String content, OnSendLiveMessageCallBack callBack) {
-        EaseLiveMessageHelper.getInstance().sendTxtMsg(content, callBack);
-    }
-
-    /**
      * Send a gift message
      *
      * @param giftId
@@ -80,18 +55,9 @@ public class DemoMsgHelper {
             }
 
             @Override
-            public void onProgress(int i, String s) {
-                super.onProgress(i, s);
-                if (callBack != null) {
-                    callBack.onProgress(i, s);
-                }
-            }
-
-            @Override
-            public void onError(String messageId, int code, String error) {
+            public void onError(int code, String error) {
                 if (callBack != null) {
                     callBack.onError(code, error);
-                    callBack.onError(messageId, code, error);
                 }
             }
         });
@@ -114,18 +80,9 @@ public class DemoMsgHelper {
             }
 
             @Override
-            public void onProgress(int i, String s) {
-                super.onProgress(i, s);
-                if (callBack != null) {
-                    callBack.onProgress(i, s);
-                }
-            }
-
-            @Override
-            public void onError(String messageId, int code, String error) {
+            public void onError(int code, String error) {
                 if (callBack != null) {
                     callBack.onError(code, error);
-                    callBack.onError(messageId, code, error);
                 }
             }
         });

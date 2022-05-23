@@ -20,8 +20,21 @@ import io.agora.livedemo.data.repository.UserRepository;
 @Entity(tableName = "users", primaryKeys = {"username"},
         indices = {@Index(value = {"username"}, unique = true)})
 public class UserEntity extends EaseUser {
+    /**
+     * the timestamp when user init
+     */
+    private long userInitialTimestamp;
+
     public UserEntity() {
         super();
+    }
+
+    public long getUserInitialTimestamp() {
+        return userInitialTimestamp;
+    }
+
+    public void setUserInitialTimestamp(long userInitialTimestamp) {
+        this.userInitialTimestamp = userInitialTimestamp;
     }
 
     @Ignore
@@ -57,6 +70,7 @@ public class UserEntity extends EaseUser {
         entity.setPhone(user.getPhone());
         entity.setSign(user.getSign());
         entity.setExt(user.getExt());
+        entity.setLastModifyTimestamp(user.getLastModifyTimestamp());
         return entity;
     }
 
@@ -116,5 +130,13 @@ public class UserEntity extends EaseUser {
 
         }
         return users;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "UserEntity{" + super.toString() + "," +
+                "userInitialTimestamp=" + userInitialTimestamp +
+                '}';
     }
 }

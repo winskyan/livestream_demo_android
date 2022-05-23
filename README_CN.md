@@ -13,8 +13,9 @@
 
 **其他端开源地址：**
 
-- iOS:    https://github.com/easemob/livestream_demo_ios
-- App Server:     https://github.com/easemob/easemob-im-app-server
+- iOS:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-ios
+- Web:    https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-web
+- App Server:     https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/backend
 
 ## 集成Agora Chat SDK
 
@@ -32,8 +33,8 @@ implementation 'io.agora.rtc:chat-uikit:1.0.6'
 
 **集成文档：**</br>
 
-- [Android SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)；</br>
-- [Android UIKit 导入](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)；
+- [Android SDK 集成](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android)；</br>
+- [Android UIKit 集成](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)；
 
 ## 使用AgoraChat-UIKit
 
@@ -43,38 +44,29 @@ implementation 'io.agora.rtc:chat-uikit:1.0.6'
 
 ### 核心类介绍
 
+- EaseChatRoomMessagesView：直播聊天室消息UI，用户可以自定义相关属性设置UI显示。</br>
 - EaseLiveMessageHelper：用于监听接收自定义消息，发送自定义消息。</br>
 - EaseLiveMessageType：用户定义了demo中用到的自定义消息类型（礼物消息）。</br>
-- EaseChatRoomMessagesView：直播聊天室消息UI，用户可以自定义相关属性设置UI显示。</br>
 - OnLiveMessageListener：监听聊天室消息接受相关事件。
 
 ### 具体用法
 
-#### 1. 在程序入口或者其他合适的地方，进行初始化，设置房间信息。
+#### 1. 在聊天室加载后，进行初始化，设置房间信息。
 
 ```Java
 EaseLiveMessageHelper.getInstance().init(chatroomId);
 ```
 
-#### 2. 设置聊天室自定义消息监听
+#### 2. 增加和取消聊天室自定义消息监听
 
 ```Java
-EaseLiveMessageHelper.getInstance().setLiveMessageListener(new OnLiveMessageListener() {
-  @Override
-  public void onMessageReceived(List<ChatMessage> messages) {
-
-   }
-
-  @Override
-  public void onGiftMessageReceived(ChatMessage message) {
-
-  }
-
-  @Override
-  public void onMessageChanged() {
-
-   }
+EaseLiveMessageHelper.getInstance().addLiveMessageListener(new OnLiveMessageListener() {
+    @Override
+    public void onGiftMessageReceived(ChatMessage message) {
+        
+    }
 });
+EaseLiveMessageHelper.getInstance().removeLiveMessageListener(this);
 ```
 
 #### 3. 发送聊天室消息可以调用如下方法
@@ -124,11 +116,11 @@ Agora聊天室提供了Agora CDN直播能力(https://docs.agora.io/cn/live-strea
 
 ## 文档
 
-- [iOS端开源地址](https://github.com/easemob/livestream_demo_ios)
-- [App Server开源地址](https://github.com/easemob/easemob-im-app-server)
-- [环信直播聊天室集成介绍](http://docs-im.easemob.com/im/other/integrationcases/live-chatroom)
-- [Agora SDK 导入](http://docs-im.easemob.com/im/android/sdk/import)
-- [Agora UIKit 导入](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)
+- [iOS端开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-ios)
+- [Web端开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/livestream-web)
+- [App Server开源地址](https://github.com/AgoraIO-Usecase/AgoraChat-Livestream/backend)
+- [Android SDK 集成](https://docs-preprod.agora.io/cn/agora-chat/enable_agora_chat?platform=Android)；</br>
+- [Android UIKit 集成](https://github.com/AgoraIO-Usecase/AgoraChat-UIKit-android)；
 
 ## 针对非AndroidX构建的方案 ##
 
@@ -138,7 +130,7 @@ Agora聊天室提供了Agora CDN直播能力(https://docs.agora.io/cn/live-strea
 
 ```Java
 #android.enableJetifier=true //Android 插件会通过重写现有第三方库的二进制文件，自动将这些库迁移为使用 AndroidX
-        #android.useAndroidX=true    //Android 插件会使用对应的 AndroidX 库而非支持库
+#android.useAndroidX=true    //Android 插件会使用对应的 AndroidX 库而非支持库
 ```
 
 #### 2. 将AndroidX构建工件替换为旧构建工件

@@ -1,21 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
     android:background="@color/common_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".ui.other.fragment.LiveSquareFragment">
 
     <androidx.appcompat.widget.Toolbar
-        style="@style/ToolbarNormal"
         android:id="@+id/toolbar"
+        style="@style/ToolbarNormal"
         app:navigationIcon="@drawable/home_search">
 
         <TextView
             style="@style/TitleNormal"
-            android:text="广场" />
+            android:text="" />
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        android:fillViewport="true"></com.google.android.material.tabs.TabLayout>
+        android:fillViewport="true" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"

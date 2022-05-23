@@ -125,7 +125,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        EaseUserUtils.showUserAvatar(mContext, liveRoom.getOwner(), ivIcon);
         LiveDataBus.get().with(DemoConstants.EVENT_ANCHOR_FINISH_LIVE, Boolean.class).observe(mContext, event -> {
             if (liveRoom != null
                     && !TextUtils.isEmpty(liveRoom.getVideo_type())
@@ -189,8 +188,8 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     }
 
     @Override
-    protected void skipToListDialog() {
-        super.skipToListDialog();
+    protected void skipToUserListDialog() {
+        super.skipToUserListDialog();
         if (chatroom.getAdminList().contains(ChatClient.getInstance().getCurrentUser())) {
             try {
                 showUserList();
@@ -259,6 +258,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
         if (!isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
             showAttention(10, mContext.getString(R.string.live_in_mute_list));
+            messageView.enableInputView(false);
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -268,6 +268,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
         if (isInMuteList && mutes.contains(ChatClient.getInstance().getCurrentUser())) {
             showAttention(10, mContext.getString(R.string.live_out_mute_list));
+            messageView.enableInputView(true);
         }
         chatroom = ChatClient.getInstance().chatroomManager().getChatRoom(chatRoomId);
         updateUserState();
@@ -311,6 +312,11 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                             ThreadManager.getInstance().runOnMainThread(() -> {
                                 barrageLayout.showGift((GiftBean) bean);
                             });
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+
                         }
                     });
 
@@ -369,6 +375,7 @@ public class LiveAudienceFragment extends LiveBaseFragment {
                         chatroom = emChatRoom;
                         addChatRoomChangeListener();
                         onMessageListInit();
+                        onWatchedMemberListInit();
                         startCycleRefresh();
                         updateUserState();
                     }
@@ -392,10 +399,9 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
         EaseLiveMessageHelper.getInstance().init(chatroomId);
-        EaseLiveMessageHelper.getInstance().setLiveMessageListener(this);
+        EaseLiveMessageHelper.getInstance().addLiveMessageListener(this);
     }
 
     private void updateUserState() {
@@ -409,11 +415,11 @@ public class LiveAudienceFragment extends LiveBaseFragment {
     public void onStop() {
         super.onStop();
         // unregister this event listener when this activity enters the
-        EaseLiveMessageHelper.getInstance().removeMessageListener();
+        EaseLiveMessageHelper.getInstance().removeLiveMessageListener(this);
         // background
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
-            if (isMessageListInited && !isSwitchOwner) {
+            if (!isSwitchOwner) {
                 leaveRoom();
                 //postUserChangeEvent(StatisticsType.LEAVE, ChatClient.getInstance().getCurrentUser());
             }
@@ -422,7 +428,6 @@ public class LiveAudienceFragment extends LiveBaseFragment {
 
     private void leaveRoom() {
         ChatClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
-        isMessageListInited = false;
         EMLog.d(TAG, "audience leave chat room");
         mContext.finish();
     }

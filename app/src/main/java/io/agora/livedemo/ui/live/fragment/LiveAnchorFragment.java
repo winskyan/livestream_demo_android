@@ -186,8 +186,8 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     }
 
     @Override
-    protected void skipToListDialog() {
-        super.skipToListDialog();
+    protected void skipToUserListDialog() {
+        super.skipToUserListDialog();
         try {
             showUserList();
         } catch (Exception e) {
@@ -422,6 +422,7 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         DemoHelper.saveLivingId(liveRoom.getId());
         addChatRoomChangeListener();
         onMessageListInit();
+        onWatchedMemberListInit();
         mContext.showToast("live stream begin");
         if (cameraListener != null) {
             cameraListener.onStartCamera();
@@ -506,10 +507,9 @@ public class LiveAnchorFragment extends LiveBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isMessageListInited) messageView.refresh();
         // register the event listener when enter the foreground
         EaseLiveMessageHelper.getInstance().init(chatroomId);
-        EaseLiveMessageHelper.getInstance().setLiveMessageListener(this);
+        EaseLiveMessageHelper.getInstance().addLiveMessageListener(this);
     }
 
     @Override
@@ -517,13 +517,12 @@ public class LiveAnchorFragment extends LiveBaseFragment {
         super.onStop();
         // unregister this event listener when this activity enters the
         // background
-        EaseLiveMessageHelper.getInstance().removeMessageListener();
+        EaseLiveMessageHelper.getInstance().removeLiveMessageListener(this);
 
         if (mContext.isFinishing()) {
             LiveDataBus.get().with(DemoConstants.FRESH_LIVE_LIST).setValue(true);
-            if (isMessageListInited && !isSwitchOwnerToOther) {
+            if (!isSwitchOwnerToOther) {
                 ChatClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
-                isMessageListInited = false;
                 EMLog.d(TAG, "leave chat room id: " + chatroomId);
             }
         }

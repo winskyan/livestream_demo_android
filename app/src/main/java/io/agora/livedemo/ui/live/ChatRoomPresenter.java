@@ -162,7 +162,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
         message.setAttribute(EaseLiveMessageConstant.LIVE_MESSAGE_KEY_MEMBER_JOIN, true);
         ChatClient.getInstance().chatManager().saveMessage(message);
         if (onChatRoomListener != null) {
-            onChatRoomListener.onMessageSelectLast();
+            onChatRoomListener.onMessageRefresh();
         }
     }
 
@@ -173,19 +173,13 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
                 Log.e("TAG", "send praise message success");
                 ThreadManager.getInstance().runOnMainThread(() -> {
                     if (onChatRoomListener != null) {
-                        onChatRoomListener.onMessageSelectLast();
+                        onChatRoomListener.onMessageRefresh();
                     }
                 });
             }
 
             @Override
-            public void onError(String messageId, int code, String error) {
-                deleteMuteMsg(messageId, code);
-                mContext.showToast("errorCode = " + code + "; errorMsg = " + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
+            public void onError(int code, String error) {
 
             }
         });
@@ -200,36 +194,26 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
-                    callBack.onSuccess();
                     callBack.onSuccess(message);
                 }
                 ThreadManager.getInstance().runOnMainThread(() -> {
                     if (onChatRoomListener != null) {
-                        onChatRoomListener.onMessageSelectLast();
+                        onChatRoomListener.onMessageRefresh();
                     }
                 });
             }
 
             @Override
-            public void onError(String messageId, int code, String error) {
+            public void onError(int code, String error) {
                 if (callBack != null) {
                     callBack.onError(code, error);
-                    callBack.onError(messageId, code, error);
-                }
-                deleteMuteMsg(messageId, code);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                if (callBack != null) {
-                    callBack.onProgress(progress, status);
                 }
             }
         });
     }
 
-    public void sendTxtMsg(String content, boolean isBarrageMsg, OnSendLiveMessageCallBack callBack) {
-        DemoMsgHelper.getInstance().sendMsg(content, isBarrageMsg, new OnSendLiveMessageCallBack() {
+    public void sendBarrageMsg(String content, OnSendLiveMessageCallBack callBack) {
+        DemoMsgHelper.getInstance().sendBarrageMsg(content, new OnSendLiveMessageCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
                 if (callBack != null) {
@@ -238,29 +222,12 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
             }
 
             @Override
-            public void onError(String messageId, int code, String error) {
+            public void onError(int code, String error) {
                 if (callBack != null) {
-                    callBack.onError(messageId, code, error);
-                }
-                deleteMuteMsg(messageId, code);
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-                if (callBack != null) {
-                    callBack.onProgress(i, s);
+                    callBack.onError(code, error);
                 }
             }
         });
-    }
-
-    private void deleteMuteMsg(String messageId, int code) {
-        if (code == Error.USER_MUTED || code == Error.MESSAGE_ILLEGAL_WHITELIST) {
-            if (conversation == null) {
-                conversation = ChatClient.getInstance().chatManager().getConversation(chatroomId, Conversation.ConversationType.ChatRoom, true);
-            }
-            conversation.removeMessage(messageId);
-        }
     }
 
     public interface OnChatRoomListener {
@@ -270,7 +237,7 @@ public class ChatRoomPresenter implements ChatRoomChangeListener {
 
         void onChatRoomMemberExited(String participant);
 
-        void onMessageSelectLast();
+        void onMessageRefresh();
 
         void onAdminAdded(String chatRoomId, String admin);
 

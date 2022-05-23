@@ -1,9 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
-    <dimen name="button_normal_height">54dp</dimen>
-    <dimen name="item_normal_height">54dp</dimen>
-
     <dimen name="item_small_avatar_size">32dp</dimen>
 
     <dimen name="em_common_title_bar_height">44dp</dimen>
